@@ -49,8 +49,83 @@ void rot_y(Piece *p, short dir);
 */
 void rot_z(Piece *p, short dir);
 
-/*sorts array 'table'*/
-void InsertSort(short* table, short ip, short iu);
+
+
+/***********MOVES*************/
+
+/* @brief moves the upper layer clockwise */
+void m_U(Cube3* c);
+
+/* @brief moves the upper layer counterclockwise */
+void m_u(Cube3* c);
+
+/* @brief moves the lower layer clockwise */
+void m_D(Cube3* c);
+
+/* @brief moves the lower layer counterclockwise */
+void m_d(Cube3* c);
+
+/* @brief moves the right layer clockwise */
+void m_R(Cube3* c);
+
+/* @brief moves the right layer counterclockwise */
+void m_r(Cube3* c);
+
+/* @brief moves the left layer clockwise */
+void m_L(Cube3* c);
+
+/* @brief moves the left layer counterclockwise */
+void m_l(Cube3* c);
+
+/* @brief moves the front layer clockwise */
+void m_F(Cube3* c);
+
+/* @brief moves the front layer counterclockwise */
+void m_f(Cube3* c);
+
+/* @brief moves the back layer clockwise */
+void m_B(Cube3* c);
+
+/* @brief moves the back layer counterclockwise */
+void m_b(Cube3* c);
+
+
+/* @brief the layer between L and R, turn direction as L (top-down)*/
+void m_M(Cube3* c);
+
+void m_m(Cube3* c);
+
+/* @brief the layer between U and D, turn direction as D (left-right)*/
+void m_E(Cube3* c);
+
+void m_e(Cube3* c);
+
+/* @brief the layer between F and B, turn direction as F*/
+void m_S(Cube3* c);
+
+void m_s(Cube3* c);
+
+
+
+/*the following functions consider different axis than we do in the cube.c for the auxiliary functions. No problem. This will be taken into account*/
+
+/* @brief rotate the entire Cube on R*/
+void m_X(Cube3* c);
+
+void m_x(Cube3* c);
+
+/* @brief rotate the entire Cube on U*/
+void m_Y(Cube3* c);
+
+void m_y(Cube3* c);
+
+/* @brief rotate the entire Cube on F*/
+void m_Z(Cube3* c);
+
+void m_z(Cube3* c);
+
+
+
 
 
 /***********functions in cube.h***************/
@@ -74,7 +149,7 @@ Cube3 *c_init(){
   /*yellow centerpiece*/
   assign(c->pc[3].p,0,0,-1);
   /*orange centerpiece*/
-  assign(c->pc[4].p,0,0,-1);
+  assign(c->pc[4].p,0,-1,0);
   /*blue centerpiece*/
   assign(c->pc[5].p,-1,0,0);
   
@@ -136,11 +211,6 @@ void c_free(Cube3* c){
   free(c);
 }
 
-/* @brief prints a cube in 2d */
-int c_print(FILE* f,Cube3* c){
-
-}
-
 int c_iofPos(Cube3 *c, short x, short y, short z){
   short i;
 
@@ -161,6 +231,14 @@ int c_iofCol(Cube3 *c, short searchcolours){
     }
   }
   return -1;
+}
+
+
+int p_print(FILE *f, Piece *p){
+    if(!p||!f){
+        return -1;
+    }
+    return fprintf(f,"\nPiece: pos=(%hd,%hd,%hd), col=(%hd,%hd,%hd)\n",p->p[0],p->p[1],p->p[2],p->c[0],p->c[1],p->c[2]);
 }
 
 /*Functions that call moves*/
@@ -536,21 +614,3 @@ void rot_z(Piece *p, short dir){
   p->c[1]=temp;
 }
 
-
-void InsertSort(short* table, short ip, short iu)
-{ int i = ip+1, j, num, count=0;
-
-  if(!table||ip<0||iu<ip)
-    return ;
-  
-  while (i<=iu){
-    num=table[i];
-
-    for(j = i-1;j>=ip && num<table[j];count++, j--){
-      table[j+1] = table[j];
-    }
-    table[j+1]=num;
-    i++;
-  }
-
-}
