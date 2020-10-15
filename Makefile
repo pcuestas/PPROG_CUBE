@@ -1,4 +1,4 @@
-all: main
+all: cube_interface
 CFLAGS=-ansi -pedantic -Wall -g
 CC=gcc
 

@@ -1,0 +1,18 @@
+
+  c=c_init();
+  if(!c) return 1;
+
+  colour_stickers(c,s)
+
+  c_print(stdout, s);
+
+  while{
+        recibir string-
+            si loa string="q"->>terminar while
+
+        c_moves(c,string); 
+        colour_stickers(c,s)
+        c_print(stdout, s);
+  }
+  fin
+  
