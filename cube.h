@@ -9,6 +9,8 @@
 /* 
 COLORS: (standard) defined so that the id of a piece is c[0]+c[1]+c[2]
 */
+
+/*false colours, only for v1.0 of cube*/
 #define W 1 /*white*/
 #define Y 2 /*yellow*/
 #define R 3 /**/
@@ -16,6 +18,17 @@ COLORS: (standard) defined so that the id of a piece is c[0]+c[1]+c[2]
 #define G 5
 #define B 6
 #define N 0 /*none, for edges and centers*/
+
+
+/*REAL COLOURS:
+#define W 1 
+#define Y 2 
+#define R 10 
+#define O 20
+#define G 100
+#define B 200
+#define N 0 
+*/
 
 #define NPC 26 /*number of pieces*/
 
@@ -56,6 +69,9 @@ void c_make(Cube3 *c, char l);
 /* @brief performs set of moves in string in order */
 Status c_moves(Cube3 *c, char *s);
 
+
+/*returns array of stickers's colours as shown in picture STICKERS.jpeg*/
+Status colour_stickers(Cube3* c, short *s);
 
 
 int p_print(FILE *, Piece *);

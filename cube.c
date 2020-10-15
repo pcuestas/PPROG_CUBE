@@ -293,6 +293,127 @@ Status c_moves(Cube3 *c, char *s){
   return OK;
 }
 
+/*DESCRIPTION*******************/
+
+
+Status colour_stickers(Cube3* c, short *s){
+  int i;
+  if(!s||!c){
+    return ERROR;
+  }
+  i=c_iofPos(c, 1, 1, 1);
+  s[8]=c->pc[i].c[2];
+  s[18]=c->pc[i].c[1];
+  s[11]=c->pc[i].c[0];
+
+  i=c_iofPos(c, -1, 1, 1);
+  s[2]=c->pc[i].c[2];
+  s[20]=c->pc[i].c[1];
+  s[27]=c->pc[i].c[0];
+
+  i=c_iofPos(c, -1, -1, 1);
+  s[0]=c->pc[i].c[2];
+  s[36]=c->pc[i].c[1];
+  s[29]=c->pc[i].c[0];
+
+  i=c_iofPos(c, 1, -1, 1);
+  s[6]=c->pc[i].c[2];
+  s[38]=c->pc[i].c[1];
+  s[9]=c->pc[i].c[0];
+
+  i=c_iofPos(c, 1, 1, -1);
+  s[47]=c->pc[i].c[2];
+  s[24]=c->pc[i].c[1];
+  s[17]=c->pc[i].c[0];
+
+  i=c_iofPos(c, -1, 1, -1);
+  s[53]=c->pc[i].c[2];
+  s[26]=c->pc[i].c[1];
+  s[33]=c->pc[i].c[0];
+
+  i=c_iofPos(c, -1, -1, -1);
+  s[51]=c->pc[i].c[2];
+  s[42]=c->pc[i].c[1];
+  s[35]=c->pc[i].c[0];
+
+  i=c_iofPos(c, 1, -1, -1);
+  s[45]=c->pc[i].c[2];
+  s[44]=c->pc[i].c[1];
+  s[15]=c->pc[i].c[0];
+
+
+  i=c_iofPos(c, 0, 0, 1);
+  s[4]=c->pc[i].c[2];
+
+  i=c_iofPos(c, 0, 0, -1);
+  s[49]=c->pc[i].c[2];
+
+  i=c_iofPos(c, 0, 1, 0);
+  s[22]=c->pc[i].c[1];
+
+  i=c_iofPos(c, 0, -1, 0);
+  s[40]=c->pc[i].c[1];
+
+  i=c_iofPos(c, 1, 0, 0);
+  s[13]=c->pc[i].c[0];
+
+  i=c_iofPos(c, -1, 0, 0);
+  s[31]=c->pc[i].c[0];
+
+
+  i=c_iofPos(c, 1, 0, 1);
+  s[7]=c->pc[i].c[2];
+  s[10]=c->pc[i].c[0];
+
+  i=c_iofPos(c, -1, 0, 1);
+  s[1]=c->pc[i].c[2];
+  s[28]=c->pc[i].c[0];
+  
+  i=c_iofPos(c, -1, 0, -1);
+  s[52]=c->pc[i].c[2];
+  s[34]=c->pc[i].c[0];
+
+  i=c_iofPos(c, 1, 0, -1);
+  s[46]=c->pc[i].c[2];
+  s[16]=c->pc[i].c[0];
+
+
+  i=c_iofPos(c, 1, 1, 0);
+  s[14]=c->pc[i].c[0];
+  s[21]=c->pc[i].c[1];
+
+  i=c_iofPos(c, -1, 1, 0);
+  s[30]=c->pc[i].c[0];
+  s[23]=c->pc[i].c[1];
+
+  i=c_iofPos(c, -1, -1, 0);
+  s[32]=c->pc[i].c[0];
+  s[39]=c->pc[i].c[1];
+  
+  i=c_iofPos(c, 1, -1, 0);
+  s[12]=c->pc[i].c[0];
+  s[41]=c->pc[i].c[1];
+
+    
+  i=c_iofPos(c, 0, 1, 1);
+  s[5]=c->pc[i].c[2];
+  s[19]=c->pc[i].c[1];
+    
+  i=c_iofPos(c, 0, 1, -1);
+  s[50]=c->pc[i].c[2];
+  s[25]=c->pc[i].c[1];
+    
+  i=c_iofPos(c, 0, -1, -1);
+  s[48]=c->pc[i].c[2];
+  s[43]=c->pc[i].c[1];
+    
+  i=c_iofPos(c, 0, -1, 1);
+  s[3]=c->pc[i].c[2];
+  s[37]=c->pc[i].c[1];
+
+  return OK;
+}
+
 /*CUBE MOVES*/
 
 void m_U(Cube3* c){
