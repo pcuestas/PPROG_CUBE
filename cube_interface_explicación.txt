@@ -1,18 +1,18 @@
 
-  c=c_init();
+  c=c_init(); //inicializar cubo resuelto
   if(!c) return 1;
 
-  colour_stickers(c,s)
+  colour_stickers(c,s)//copiar distribución del cubo al array de stickers
 
-  c_print(stdout, s);
+  c_print(stdout, s);//imprimir el cubo en la terminal
 
-  while{
-        recibir string-
-            si loa string="q"->>terminar while
+  while(TRUE){
+        recibir string- //recibimos el comando de los movimientos
+            si la string="q"->>terminar while (break)
 
-        c_moves(c,string); 
-        colour_stickers(c,s)
-        c_print(stdout, s);
+        c_moves(c,string); //ejecutar los movimientos recibidos
+        colour_stickers(c,s) //copiar distribución del cubo al array de stickers
+        c_print(stdout, s);//imprimir el cubo en la terminal
   }
   fin
   
