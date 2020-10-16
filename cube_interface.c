@@ -1,14 +1,18 @@
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "cube.h"
 #include "print_c.h"
+
+#define MAX_CAD 100
 
 int main(void)
 {
     Cube3 *c = NULL;
     short s[54];
-    int i;
-    char *cad = NULL;
-    short flag;
+    char cad[MAX_CAD];
+    short flag=0;
 
     c = c_init();
     if (!c)
@@ -23,15 +27,10 @@ int main(void)
 
     while (TRUE)
     {
-        if (fscanf(stdin, "%s", cad) != 1)
-        {
-            flag = 1;
-            break;
-        }
+        fscanf(stdin, "%s", cad);
         /*command to quit the game*/
-        if (cad == "q")
+        if (strcmp(cad,"q")==0)
         {
-            free(cad);
             break;
         }
 
@@ -46,7 +45,6 @@ int main(void)
             break;
         }
         c_print(stdout, s);
-        free(cad);
     }
 
     c_free(c);

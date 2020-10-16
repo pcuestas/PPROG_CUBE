@@ -4,7 +4,7 @@ CC=gcc
 
 
 cube_interface: cube_interface.o cube.o print_c.o
-	gcc cube_interface.o cube.o print_c.o -o main
+	gcc cube_interface.o cube.o print_c.o -o cube_interface
 
 cube_interface.o: cube_interface.c
 	gcc $(CFLAGS) -c cube_interface.c
