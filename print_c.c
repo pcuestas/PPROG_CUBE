@@ -1,6 +1,24 @@
 #include "print_c.h"
 
 
+Status refresh_cube(Cube3* c, FILE* pf, cprint_from_stickers print_cube){
+    short *s=NULL;
+    
+    if(!(s = (short*) calloc (54,sizeof(short)))){
+        return ERROR;
+    }
+
+    if (colour_stickers(c, s) == ERROR){
+        return ERROR;
+    }
+
+    print_cube(pf, s);
+
+    free(s);
+
+    return OK;
+}
+
 int c_print(FILE *f, short *s)
 {
 

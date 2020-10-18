@@ -46,23 +46,22 @@ void _term_init() {
 int main(void)
 {
     Cube3 *c = NULL;
-    short s[54];
     char cad[MAX_CAD], letter;
     short flag=0;
+    cprint_from_stickers printcube = c_print; /* This is the only place in the routine where 
+                                               * the function that prints the cube must be changed*/
 
     c = c_init();
     if (!c)
         return 1;
 
-    if (colour_stickers(c, s) == ERROR)
-    {
-        c_free(c);
-        return 1;
-    }
-
     _term_init();/*modifica los parámetros de la terminal para poder leer las letras sin que se presione enter*/
 
-    c_print(stdout, s);
+    if (refresh_cube(c, stdout, printcube) == ERROR){
+        c_free(c);
+        tcsetattr(fileno(stdin), TCSANOW, &initial);/*deshace los cambios hechos por _term_init()*/
+        return 1;
+    }
 
     while (TRUE){
         letter=fgetc(stdin);
@@ -78,11 +77,10 @@ int main(void)
             flag = 1;
             break;
         }
-        if (colour_stickers(c, s) == ERROR){
+        if (refresh_cube(c, stdout, printcube) == ERROR){
             flag = 1;
             break;
         }
-        c_print(stdout, s);
     }
 
     c_free(c);
