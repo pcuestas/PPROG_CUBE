@@ -114,3 +114,105 @@ int c_print(FILE *f, short *s)
     fprintf(f,"\n\n");
     return 1;
 }
+
+short *sticker_to_color(short *s)
+{
+    int i;
+    short *c;
+
+    if (!s)
+        return NULL;
+
+    if (!(c = (short *)calloc(54, sizeof(short))))
+        return NULL;
+
+    for (i = 0; i < 54; i++)
+    {
+        switch (s[i])
+        {
+        case W:
+            c[i] = 7;
+            break;
+        case Y:
+            c[i] = 103;
+            break;
+        case O:
+            c[i] = 43;
+            break;
+        case G:
+            c[i] = 42;
+            break;
+        case B:
+            c[i] = 44;
+            break;
+        case R:
+            c[i] = 101;
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    return c;
+}
+
+int c_print2(FILE *f, short *s)
+{
+    /*Liberar el array col!!!*/
+    Bool flag = 0;
+    int color, aux;
+    short *col;
+
+    FILE *fp;
+    int c;
+
+    printf("%c[2J", 27);
+    printf("%c[1;1H", 27);
+
+    fp = fopen("cubo.txt", "r"); /*de donde leo*/
+    col = sticker_to_color(s);
+
+    do
+    {
+        c = fgetc(fp);
+        if (feof(fp))
+        {
+            break;
+        }
+        if (/*c >= 65 && c <= 91*/ c == 'J')
+        {
+            aux = c;
+            fprintf(f, "%c", c);
+            color = col[aux - 65]; /*limits of rectangles are between 65 and 91 -> col[0] to col[26]*/
+            fprintf(f, "%c[;;%im", 27, color);
+            do
+            {
+                c = fgetc(fp);
+                if (feof(fp))
+                {
+                    flag = 1;
+                    break;
+                }
+
+                if (c == aux) /*we have reach the 'wall' of the rectangle*/
+                {
+                    fprintf(f, "%c[0m", 27);
+                    break;
+                }
+
+                fprintf(f, "%c", c);
+
+            } while (1);
+        }
+
+        if (flag == 1)
+            break;
+
+        fprintf(f, "%c", c);
+    } while (1);
+
+    free(col);
+    fclose(fp);
+    return (0);
+}

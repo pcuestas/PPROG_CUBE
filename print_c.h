@@ -20,4 +20,8 @@ int c_print(FILE *f, short *s);
 */
 Status refresh_cube(Cube3*, FILE*, cprint_from_stickers);
 
+short *sticker_to_color(short *s);
+
+int c_print2(FILE *f, short *s);
+
 #endif 
