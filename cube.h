@@ -74,6 +74,11 @@ Status c_moves(Cube3 *c, char *s);
 Status colour_stickers(Cube3* c, short *s);
 
 
+/*scrambles a cube using a random scramble from a file with name filename*/
+Status scramble_cube(Cube3*c, char *filename);
+
+
+/*prints info of a piece (for testing)*/
 int p_print(FILE *, Piece *);
 
 

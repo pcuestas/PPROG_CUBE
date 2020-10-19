@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <termios.h>
+#include <time.h>
 
 #include "cube.h"
 #include "print_c.h"
@@ -48,8 +49,11 @@ int main(void)
     Cube3 *c = NULL;
     char cad[MAX_CAD], letter;
     short flag=0;
+    char scramblefile[MAX_CAD]="scrambles.txt";
     cprint_from_stickers printcube = c_print2; /* This is the only place in the routine where 
                                                * the function that prints the cube must be changed*/
+
+    srand(time(NULL));
 
     c = c_init();
     if (!c)
@@ -68,15 +72,22 @@ int main(void)
 
         if (letter=='q'){
             break;
-        }else{
-          cad[0]=letter;
-          cad[1]='\0';
         }
-
-        if (c_moves(c, cad) == ERROR){
-            flag = 1;
-            break;
+        else if(letter=='w'){
+            if(scramble_cube(c, scramblefile) == ERROR){
+                flag = 1;
+                break;
+            }
         }
+        else{
+            cad[0]=letter;
+            cad[1]='\0';
+            if (c_moves(c, cad) == ERROR){
+                flag = 1;
+                break;
+            }
+        }
+        
         if (refresh_cube(c, stdout, printcube) == ERROR){
             flag = 1;
             break;
