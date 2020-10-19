@@ -44,6 +44,12 @@ void _term_init() {
 						    before making this change*/
 }
 
+
+/*
+ * si se escribe cualquier letra que corresponda a un movimiento, se realizara en el cubo en pantalla
+ * si se presiona 'w'. se mezclará el cubo con una mezcla aleatoria elegida de entre las mezclas del fichero "scrambles.txt"
+ * si se presiona 'q', se terminará el programa.
+*/
 int main(void)
 {
     Cube3 *c = NULL;
