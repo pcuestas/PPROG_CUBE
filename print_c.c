@@ -180,7 +180,7 @@ int c_print2(FILE *f, short *s)
         {
             break;
         }
-        if (/*c >= 65 && c <= 91*/ c == 'J')
+        if (c >= 65 && c <= 91)
         {
             aux = c;
             fprintf(f, "%c", c);
