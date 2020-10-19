@@ -137,7 +137,7 @@ short *sticker_to_color(short *s)
             c[i] = 103;
             break;
         case O:
-            c[i] = 43;
+            c[i] = 45;
             break;
         case G:
             c[i] = 42;
@@ -157,9 +157,8 @@ short *sticker_to_color(short *s)
     return c;
 }
 
-int c_print2(FILE *f, short *s)
-{
-    /*Liberar el array col!!!*/
+int c_print2(FILE *f, short *s){
+
     Bool flag = 0;
     int color, aux;
     short *col;
@@ -167,10 +166,10 @@ int c_print2(FILE *f, short *s)
     FILE *fp;
     int c;
 
-    printf("%c[2J", 27);
-    printf("%c[1;1H", 27);
+    printf("%c[2J", 27); /*Cleans the screen*/
+    printf("%c[1;1H", 27); /*Positionates the */
 
-    fp = fopen("cubo.txt", "r"); /*de donde leo*/
+    fp = fopen("cubo.txt", "r"); /*File where is the shape of the cube*/
     col = sticker_to_color(s);
 
     do
@@ -180,12 +179,12 @@ int c_print2(FILE *f, short *s)
         {
             break;
         }
-        if (c >= 65 && c <= 91)
+        if (c >= 65 && c <= 91) /*If you have reached the begining of a sticker */
         {
             aux = c;
             fprintf(f, "%c", c);
-            color = col[aux - 65]; /*limits of rectangles are between 65 and 91 -> col[0] to col[26]*/
-            fprintf(f, "%c[;;%im", 27, color);
+            color = col[aux - 65]; /*limits of stickers are letters between A (65) and [ (91) -> col[0] to col[26]*/
+            fprintf(f, "%c[;;%im", 27, color); /*stablish color of the sticker*/
             do
             {
                 c = fgetc(fp);
@@ -195,7 +194,7 @@ int c_print2(FILE *f, short *s)
                     break;
                 }
 
-                if (c == aux) /*we have reach the 'wall' of the rectangle*/
+                if (c == aux) /*we have reached the end of the sticker*/
                 {
                     fprintf(f, "%c[0m", 27);
                     break;
