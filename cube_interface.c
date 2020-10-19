@@ -48,7 +48,7 @@ int main(void)
     Cube3 *c = NULL;
     char cad[MAX_CAD], letter;
     short flag=0;
-    cprint_from_stickers printcube = c_print; /* This is the only place in the routine where 
+    cprint_from_stickers printcube = c_print2; /* This is the only place in the routine where 
                                                * the function that prints the cube must be changed*/
 
     c = c_init();
