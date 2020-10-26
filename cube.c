@@ -444,6 +444,63 @@ Status colour_stickers(Cube3* c, short *s){
   return OK;
 }
 
+Bool is_solved(short *s){
+  int i,j;
+ 
+  for(j=0;j<6;j++){
+    i=9*j;
+    if (s[i]==s[i+1] && s[i]==s[i+2] && s[i]==s[i+3] && s[i]==s[i+4] && s[i]==s[i+5] && s[i]==s[i+6]){
+      continue;
+    }else{
+      return FALSE;
+    }
+  }
+  
+  return TRUE;
+}
+
+
+short cfrom(Cube3* cube, char cp){
+    short pos;
+    if(!cube){
+        return ERROR ;
+    }
+    switch(cp){
+        case 'U':
+            pos=c_iofPos(cube, 0,0,1);
+            return cube->pc[pos].c[2];
+
+            break;
+        case 'D':
+            pos=c_iofPos(cube, 0,0,-1);
+            return cube->pc[pos].c[2];
+
+            break;
+        case 'R':
+            pos=c_iofPos(cube, 0,1,0);
+            return cube->pc[pos].c[1];
+
+            break;
+        case 'L':
+            pos=c_iofPos(cube, 0,-1,0);
+            return cube->pc[pos].c[1];
+
+            break;
+        case 'F':
+            pos=c_iofPos(cube, 1,0,0);
+            return cube->pc[pos].c[0];
+
+            break;
+        case 'B':
+            pos=c_iofPos(cube, -1,0,0);
+            return cube->pc[pos].c[0];
+
+            break;
+        default:
+            return ERROR;
+    }
+}
+
 /*CUBE MOVES*/
 
 void m_U(Cube3* c){
@@ -763,20 +820,4 @@ void rot_z(Piece *p, short dir){
   temp=p->c[0];
   p->c[0]=p->c[1];
   p->c[1]=temp;
-}
-
-Bool is_solved(short *s){
-  
-  int i,j;
- 
-  for(j=0;i<6;j++){
-    i=9*j;
-    if (s[i] == s[i + 1] == s[i + 2] == s[i + 3] == s[i + 4] == s[i + 5] == s[i + 6] == s[i + 7] == s[i + 8]){
-      continue;
-    }else{
-      return FALSE;
-    }
-    }
-  
-  return TRUE;
 }
