@@ -209,6 +209,29 @@ Cube3 *c_init(){
   return c;
 }
 
+/*copies cube c1 into c2, and returns the allocated copy*/
+Cube3 *c_copy(Cube3*c1){
+    Cube3* c2=NULL;
+    int i;
+
+    if(!c1){
+        return NULL;
+    }
+    if(!(c2=c_init())){
+        return NULL;
+    }
+    
+    for (i=0;i<NPC;i++){
+        c2->pc[i].c[0]=c1->pc[i].c[0];
+        c2->pc[i].c[1]=c1->pc[i].c[1];
+        c2->pc[i].c[2]=c1->pc[i].c[2];
+        c2->pc[i].p[0]=c1->pc[i].p[0];
+        c2->pc[i].p[1]=c1->pc[i].p[1];
+        c2->pc[i].p[2]=c1->pc[i].p[2];
+    }
+    return c2;
+}
+
 void c_free(Cube3* c){
   free(c);
 }
@@ -444,8 +467,11 @@ Status colour_stickers(Cube3* c, short *s){
   return OK;
 }
 
-Bool is_solved(short *s){
+Bool is_solved(Cube3 *c){
   int i,j;
+  short s[54];
+
+  colour_stickers(c, s);
  
   for(j=0;j<6;j++){
     i=9*j;

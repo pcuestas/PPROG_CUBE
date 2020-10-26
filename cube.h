@@ -10,17 +10,7 @@
 COLORS: (standard) defined so that the id of a piece is c[0]+c[1]+c[2]
 */
 
-/*false colours, only for v1.0 of cube*/
-#define W 1 /*white*/
-#define Y 2 /*yellow*/
-#define R 3 /**/
-#define O 4
-#define G 5
-#define B 6
-#define N 0 /*none, for edges and centers*/
 
-
-/*REAL COLOURS:
 #define W 1 
 #define Y 2 
 #define R 10 
@@ -28,7 +18,7 @@ COLORS: (standard) defined so that the id of a piece is c[0]+c[1]+c[2]
 #define G 100
 #define B 200
 #define N 0 
-*/
+
 
 #define NPC 26 /*number of pieces*/
 
@@ -53,6 +43,9 @@ Cube3 *c_init();
  * 
 */
 void c_free(Cube3*);
+
+/*copies cube c1 into c2, and returns the allocated copy*/
+Cube3 *c_copy(Cube3*c1);
 
 
 /*returns index of piece in pos (x,y,z)*/
@@ -82,7 +75,7 @@ Status scramble_cube(Cube3*c, char *filename);
 int p_print(FILE *, Piece *);
 
 /*Checks if a cube is solved*/
-Bool is_solved(short*s);
+Bool is_solved(Cube3*c);
 
 /*function that returns the color from the centerpiece in position cp: RLFBUD*/
 short cfrom(Cube3* cube, char cp);

@@ -5,6 +5,7 @@
 #include <time.h>
 
 #include "cube.h"
+#include "solver.h"
 #include "print_c.h"
 
 struct termios initial;
@@ -84,6 +85,10 @@ int main(void)
                 flag = 1;
                 break;
             }
+        }
+        else if(letter=='W'){
+            printf("%s\n", solve_cube(c));
+            continue;
         }
         else{
             cad[0]=letter;

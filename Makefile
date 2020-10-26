@@ -1,29 +1,21 @@
 CFLAGS=-ansi -pedantic -Wall -g
 CC=gcc
+OBJ=cube.o solver.o print_c.o cube_interface.o
+HEADERS=cube.h solver.h print_c.h
 EXE=cube_interface
 
 
 all: $(EXE)
 
-cube_interface: cube_interface.o cube.o print_c.o
-	gcc cube_interface.o cube.o print_c.o -o cube_interface
-
-cube_interface.o: cube_interface.c
-	gcc $(CFLAGS) -c cube_interface.c
-
+$(EXE): $(OBJ) $(HEADERS)
+	gcc $(OBJ) -o $(EXE)
 
 main: main.o cube.o print_c.o
 	gcc main.o cube.o print_c.o -o main
 
-main.o: main.c
-	gcc $(CFLAGS) -c main.c
+%.o: %.c %.h
+	gcc $(CFLAGS) -c $^
 
-
-cube.o: cube.h
-	gcc $(CFLAGS) -c cube.c
-
-print_c.o: print_c.h
-	gcc $(CFLAGS) -c print_c.c
 
 clean:
 	rm -f *.o $(EXE)
