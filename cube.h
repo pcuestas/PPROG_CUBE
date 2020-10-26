@@ -84,5 +84,8 @@ int p_print(FILE *, Piece *);
 /*Checks if a cube is solved*/
 Bool is_solved(short*s);
 
+/*function that returns the color from the centerpiece in position cp: RLFBUD*/
+short cfrom(Cube3* cube, char cp);
+
 
 #endif
