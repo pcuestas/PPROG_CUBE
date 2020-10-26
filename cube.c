@@ -765,3 +765,18 @@ void rot_z(Piece *p, short dir){
   p->c[1]=temp;
 }
 
+Bool is_solved(short *s){
+  
+  int i,j;
+ 
+  for(j=0;i<6;j++){
+    i=9*j;
+    if (s[i] == s[i + 1] == s[i + 2] == s[i + 3] == s[i + 4] == s[i + 5] == s[i + 6] == s[i + 7] == s[i + 8]){
+      continue;
+    }else{
+      return FALSE;
+    }
+    }
+  
+  return TRUE;
+}

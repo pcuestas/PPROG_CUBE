@@ -81,5 +81,8 @@ Status scramble_cube(Cube3*c, char *filename);
 /*prints info of a piece (for testing)*/
 int p_print(FILE *, Piece *);
 
+/*Checks if a cube is solved*/
+Bool is_solved(short*s);
+
 
 #endif
