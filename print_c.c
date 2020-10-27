@@ -157,6 +157,79 @@ short *sticker_to_color(short *s)
     return c;
 }
 
+double **sticker_colorSDL(short *s){
+    int i,j;
+    double **c;
+
+    if (!s)
+        return NULL;
+
+    if (!(c = (double **)calloc(54, sizeof(double*))))
+        return NULL;
+
+    for(i=0;i<54;i++){
+        if(!(c[i]=(double*)calloc(3,sizeof(double)))){
+            for(j=0;j<i;j++){
+                free(c[j]);
+            }
+            free(c);
+            return NULL;
+        }
+    }
+
+    for (i = 0; i < 54; i++){
+        switch (s[i]){
+        case W:
+            c[i][0]=1;
+            c[i][1] = 1;
+            c[i][2] = 1;
+            break;
+        case Y:
+            c[i][0] = 1;
+            c[i][1] = 1;
+            c[i][2] = 0;
+            break;
+        case O:
+            c[i][0] = 1;
+            c[i][1] = 0.5;
+            c[i][2] = 0;
+            break;
+        case G:
+            c[i][0] = 0;
+            c[i][1] = 1;
+            c[i][2] = 0;
+            break;
+        case B:
+            c[i][0] = 0;
+            c[i][1] = 0;
+            c[i][2] = 0;
+            break;
+        case R:
+            c[i][0] = 1;
+            c[i][1] = 0;
+            c[i][2] = 0;
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    return c;
+}
+
+void colorSDL_free(double **s){
+
+    int i;
+
+    if(s){
+        for(i=0;i<54;i++){
+            free(s[i]);
+        }
+        free(s);
+    }
+}
+
 int c_print2(FILE *f, short *s){
 
     Bool flag = 0;
