@@ -1,4 +1,5 @@
 #include "print_c.h"
+#include <string.h>
 
 
 Status refresh_cube(Cube3* c, FILE* pf, cprint_from_stickers print_cube){
@@ -232,57 +233,95 @@ void colorSDL_free(double **s){
 
 int c_print2(FILE *f, short *s){
 
-    Bool flag = 0;
-    int color, aux;
+    Bool flag = FALSE,rep=FALSE;
+    int c, color, aux,column,line,incr=1,code=65,min=65; 
     short *col;
-
     FILE *fp;
-    int c;
+    char firstview[30],secondview[30];
 
-    printf("%c[2J", 27); /*Cleans the screen*/
-    printf("%c[1;1H", 27); /*Positionates the */
+    /*
+                                VARIABLES EXPLAINED
+    (U): this variable has to be updated before printing second view
+    column, line: where to start printing. (U)
+     code: relation between the char that delimitates a sticker in the .txt and the postion in the array col (U).
+     min: smallest char that is used to delimitate a sticker in the .txt
+     rep: inidicates if you are printing first view (FALSE) or second (TRUE)
+    */
+   
 
-    fp = fopen("cubo.txt", "r"); /*File where is the shape of the cube*/
+    /*WHERE TO START PRINTING 1st VIEW*/
+    line = 3;
+    column = 1;
+
+    strcpy(firstview, "cubo.txt");
+    strcpy(secondview, "cubo2.txt");
+
     col = sticker_to_color(s);
+    if(col==NULL)
+        return -1;
 
-    do
-    {
+    fp = fopen(firstview, "r");
+    printf("%c[2J", 27); /*Cleans the screen*/
+
+    print:
+    printf("%c[%i;%iH", 27, line, column); /*Positionates the cursor to start printing */
+
+    do{
         c = fgetc(fp);
         if (feof(fp))
-        {
             break;
-        }
-        if (c >= 65 && c <= 91) /*If you have reached the begining of a sticker */
-        {
-            aux = c;
-            fprintf(f, "%c", c);
-            color = col[aux - 65]; /*limits of stickers are letters between A (65) and [ (91) -> col[0] to col[26]*/
-            fprintf(f, "%c[;;%im", 27, color); /*stablish color of the sticker*/
-            do
-            {
-                c = fgetc(fp);
-                if (feof(fp))
-                {
-                    flag = 1;
-                    break;
-                }
 
-                if (c == aux) /*we have reached the end of the sticker*/
-                {
-                    fprintf(f, "%c[0m", 27);
-                    break;
-                }
-
+        if (c >= min && c <= min + 26){ /*If you have reached the begining of a sticker */
+                
+                aux = c;
                 fprintf(f, "%c", c);
+                color = col[aux - code];           /*limits of stickers are letters between A (65) and [ (91) -> col[0] to col[26]*/
+                fprintf(f, "%c[;;%im", 27, color); /*stablish color of the sticker*/
+                
+                do{
+                    c = fgetc(fp);
+                    if (feof(fp))
+                    {
+                        flag = TRUE;
+                        break;
+                    }
 
-            } while (1);
+                    if (c == aux){     /*we have reached the end of the sticker*/
+                        fprintf(f, "%c[0m", 27); /*reset color*/
+                        break;
+                    }
+
+                    fprintf(f, "%c", c);
+
+                } while (1);
+            }
+
+            if (c == '\n')
+            { /*new line read --> update cursor position*/
+                printf("%c[%i;%iH", 27, line + incr, column);
+                incr++;
+                continue;
+            }
+
+            if (flag == TRUE)
+                break;
+
+            fprintf(f, "%c", c);
         }
+        while (1);
 
-        if (flag == 1)
-            break;
-
-        fprintf(f, "%c", c);
-    } while (1);
+        if (rep == FALSE)
+        { /*update values for printing secondary view*/
+            fclose(fp);
+            rep = TRUE;
+            code = 70;
+            min = 97;
+            incr = 1;
+            fp = fopen(secondview, "r"); 
+            column = column + 100;
+            line = line + 30;
+            goto print;
+    }
 
     free(col);
     fclose(fp);
