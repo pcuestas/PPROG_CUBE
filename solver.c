@@ -24,6 +24,8 @@ char *solve_cube(Cube3* c1){
     /*resolver las esquinas inferiores*/
     solve_d_corners(c2, sol);
 
+    /*solve the second layer*/
+    solve_finishF2L(c2, sol);
 
 
 
@@ -201,6 +203,91 @@ void solve_d_corners(Cube3* c, char *sol){
             /*facing front*/
             strncat(cor, "URur",100);
             c_moves(c,"URur");
+        }
+        /*rotate cube to find next piece*/
+        strncat(cor, "Y", 100);
+        c_moves(c, "Y");
+        strncat(sol, cor, 100);
+    }
+}
+
+void solve_finishF2L(Cube3*c, char *sol){
+    short cf, cr, i, pos;
+    char cor[101]="";
+    Piece *p;
+    
+    /*solve each second layer piece*/
+    for(i=0;i<4;i++){
+        cor[0]=0;
+        cf=cfrom(c, 'F');
+        cr=cfrom(c, 'R');
+
+        /*search for the piece that goes in FD*/
+        pos=c_iofCol(c, cf+cr);
+        p=&(c->pc[pos]);
+
+        /*first we put our piece in UF*/
+
+        if(p->p[2]==0){
+        /*  it is in the middle layer */
+            if(p->p[1]==1){
+                /*it is in R */
+                if(p->p[0]==1){
+                    /*RF*/
+                    if(p->c[0]==cf){
+                        /*solved*/
+                        strncat(sol, "Y", 100);
+                        c_moves(c, "Y");
+                        continue;
+                    }else{
+                        /*only orientation*/
+                        strncat(sol, "RUUrURUUrUYluL", 100);
+                        c_moves(c, "RUUrURUUrUYluL");
+                        continue;
+                    }
+                }else{
+                    /*RB*/
+                    strncat(cor, "rURbRBr", 100);
+                }
+            }else{
+                /*it is in L */
+                if(p->p[0]==1){
+                    /*LF */
+                    strncat(cor, "lULfLFluu",100);
+                }else{
+                    /*DLB*/
+                    strncat(cor, "LulBlbL",100);
+                }
+            }
+        }else{
+        /*  it is in the U layer */
+            if(p->p[0]==1){
+                /*it is in UF --nothing to do*/
+            }else if(p->p[1]==1){
+                /*UR*/
+                strncat(cor, "U", 100);
+            }else if (p->p[1]==-1){
+                /*it is in UL */
+                strncat(cor, "u",100);
+            }else{
+                /*UB*/
+                strncat(cor, "UU",100);
+            }
+        }
+        
+        c_moves(c,cor);/*make the moves*/
+        
+        /*now that the piece is in URF*/
+        pos=c_iofPos(c, 1, 0, 1);
+        p=&(c->pc[pos]);
+        if(p->c[2]==cf){
+            /*no mathc with center*/
+            strncat(cor, "urfRURurF",100);
+            c_moves(c,"urfRURurF");
+        }else {
+            /*matches with center*/
+            strncat(cor, "URurFrfR",100);
+            c_moves(c,"URurFrfR");
         }
         /*rotate cube to find next piece*/
         strncat(cor, "Y", 100);

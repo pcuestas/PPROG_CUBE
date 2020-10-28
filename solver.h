@@ -9,5 +9,7 @@ void solve_cross(Cube3 *c, char *sol);
 
 void solve_d_corners(Cube3* c, char *sol);
 
+void solve_finishF2L(Cube3*c, char *sol);
+
 
 #endif
