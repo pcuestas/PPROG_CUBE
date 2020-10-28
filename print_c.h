@@ -28,6 +28,18 @@ Status refresh_cube(Cube3*, FILE*, cprint_from_stickers);
  */
 short *sticker_to_color(short *s);
 
+/**
+ * @brief ALLOCATES a matrix. Translates the array of colors of the stickers into the color code for SLD ESC
+ * @param s pointer to array of stickers (s[i]=MACRO of a color defined in cubo.c )
+ * @return a 56x3 matrix with the rgb code 
+ */
+double **sticker_colorSDL(short *s);
+
+/**
+ * @brief Frees the array allocated by the function sticker_colorSDL
+ * @param s matrix to be freed
+ */
+void colorSDL_free(double** s);
 
 /**
  * @brief prints a cube
