@@ -275,7 +275,7 @@ int c_print2(FILE *f, short *s){
                 
                 aux = c;
                 fprintf(f, "%c", c);
-                color = col[aux - code];           /*limits of stickers are letters between A (65) and [ (91) -> col[0] to col[26]*/
+                color = col[aux - code];           /*limits of stickers are letters between ASCII(min) and ACII(min+26).*/
                 fprintf(f, "%c[;;%im", 27, color); /*stablish color of the sticker*/
                 
                 do{
