@@ -21,12 +21,16 @@ char *solve_cube(Cube3* c1){
     /*resolvemos la cruz*/
     solve_cross(c2,sol);
 
+    /*resolver las esquinas inferiores*/
+    solve_d_corners(c2, sol);
+
 
 
 
     c_free(c2);
     return sol;
 }
+
 void solve_cross(Cube3 *c, char *sol){
     short cd, cf, i, pos;
     char cross[101]="";
@@ -116,5 +120,91 @@ void solve_cross(Cube3 *c, char *sol){
         strncat(cross, "Y", 100);
         c_moves(c, "Y");
         strncat(sol, cross, 100);
+    }
+}
+
+void solve_d_corners(Cube3* c, char *sol){
+    short cd, cf, cr, i, pos;
+    char cor[101]="";
+    Piece *p;
+
+    cd=cfrom(c, 'D');
+    
+    /*solve each cross piece*/
+    for(i=0;i<4;i++){
+        cor[0]=0;
+        cf=cfrom(c, 'F');
+        cr=cfrom(c, 'R');
+
+        /*search for the piece that goes in FD*/
+        pos=c_iofCol(c, cd+cf+cr);
+        p=&(c->pc[pos]);
+
+        /*first we put our piece in URF*/
+
+        if(p->p[2]==-1){
+        /*  it is in the D layer */
+            if(p->p[1]==1){
+                /*it is in DRx */
+                if(p->p[0]==1){
+                    /*DRF*/
+                    strncat(cor, "Rur", 100);
+                }else{
+                    /*DRB*/
+                    strncat(cor, "rURU", 100);
+                }
+            }else{
+                /*it is in DLx */
+                if(p->p[0]==1){
+                    /*DLF */
+                    strncat(cor, "luL",100);
+                }else{
+                    /*DLB*/
+                    strncat(cor, "Luul",100);
+                }
+            }
+        }else{
+        /*  it is in the U layer */
+            if(p->p[1]==1){
+                /*it is in URx */
+                if(p->p[0]==1){
+                    /*URF --  nothing to be done*/
+                }else{
+                    /*URB*/
+                    strncat(cor, "U", 100);
+                }
+            }else{
+                /*it is in ULx */
+                if(p->p[0]==1){
+                    /*ULF */
+                    strncat(cor, "u",100);
+                }else{
+                    /*ULB*/
+                    strncat(cor, "UU",100);
+                }
+            }
+        }
+        c_moves(c,cor);/*make the moves*/
+        
+        /*now that the piece is in URF*/
+        pos=c_iofPos(c, 1, 1, 1);
+        p=&(c->pc[pos]);
+        if(p->c[2]==cd){
+            /*facing up*/
+            strncat(cor, "RuuruRUr",100);
+            c_moves(c,"RuuruRUr");
+        }else if(p->c[1]==cd){
+            /*facing left*/
+            strncat(cor, "RUr",100);
+            c_moves(c,"RUr");
+        }else {
+            /*facing front*/
+            strncat(cor, "URur",100);
+            c_moves(c,"URur");
+        }
+        /*rotate cube to find next piece*/
+        strncat(cor, "Y", 100);
+        c_moves(c, "Y");
+        strncat(sol, cor, 100);
     }
 }

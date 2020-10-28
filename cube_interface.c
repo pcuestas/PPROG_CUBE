@@ -54,7 +54,7 @@ void _term_init() {
 int main(void)
 {
     Cube3 *c = NULL;
-    char cad[MAX_CAD], letter;
+    char cad[MAX_CAD], letter, *solution = NULL;
     short flag=0;
     char scramblefile[MAX_CAD]="scrambles.txt";
     cprint_from_stickers printcube = c_print2; /* This is the only place in the routine where 
@@ -86,9 +86,16 @@ int main(void)
                 break;
             }
         }
-        else if(letter=='W'){
-            printf("%s\n", solve_cube(c));
+        else if(letter=='A'){
+            solution = solve_cube(c);
+            printf("%s", solution);
+            free(solution);
             continue;
+        }
+        else if(letter=='W'){
+            solution = solve_cube(c);
+            c_moves(c, solution);
+            free(solution);
         }
         else{
             cad[0]=letter;
