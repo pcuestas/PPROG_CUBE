@@ -101,7 +101,7 @@ void print_menu(int pos){
 
     posi=pos*10+2;
 
-    /*WHERE TO START PRINTING 1st VIEW*/
+    /*WHERE TO START PRINTING VIEW*/
     line = 2;
     column = 29;
 
