@@ -13,6 +13,14 @@
  line 2-9: new game -->pos 0
  line 12-9: ...     -->pos 1
  line 22-31: ...    -->pos2
+
+ si se hace una funcin que solo mueva la flecha va a quedar más fluido. Problema como borrar solo la flecha y no el resto del menu
+ submenus!
+
+ nueva partida
+ cargar partida
+ Instrucciones?
+
  **/ 
 
 int ShowMainMenu(){
@@ -38,9 +46,9 @@ int ShowMainMenu(){
             }
                 
         }
-        pos++;
+        
         if(letter==1) /*Poner flecha hacia arriba*/{
-            if (pos<3){
+            if (pos<2){
                 pos++;
                 /*Mocer flecha a pos*/
                 print_menu(pos);
@@ -59,7 +67,7 @@ int ShowMainMenu(){
     return 0;
 }
 
-int read_key()
+int read_keyMenu()
 {
     char choice;
     choice = fgetc(stdin);
@@ -75,7 +83,7 @@ int read_key()
         case ('B'):
             return DOWN;
         case ('C'):
-            return ENTER; /* la c hay que cambiarla por enter */
+            return ENTER; /* la c hay que cambiarla por el codifo correspondiente a enter !!!!!*/
         default:
             return 0;
         }
