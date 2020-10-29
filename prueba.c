@@ -21,6 +21,8 @@ static void quit(int rc){
 }
 
 static void Render(int mov){
+
+    printf("Holalalla");
     static float color[56][3] = {
         {1.0, 1.0, 0.0},
         {1.0, 0.0, 0.0},
