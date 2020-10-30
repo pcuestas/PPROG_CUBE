@@ -43,6 +43,8 @@ int ShowMainMenu(){
     r_arrow=rect_init(2,4,20,29);
     r_arrowblock=rect_init(2,4,20,30);
 
+    printf("%c[2J", 27);
+    
     print_element(MENU,r_menu);
     print_element(ARROW,r_arrow);
 
