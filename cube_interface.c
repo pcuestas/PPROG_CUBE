@@ -86,16 +86,22 @@ int main(void)
                 break;
             }
         }
+        else if(letter=='W'){
+            solution = solve_cube(c);
+            c_moves(c, solution);
+            free(solution);
+        }
         else if(letter=='A'){
             solution = solve_cube(c);
             printf("%s", solution);
             free(solution);
             continue;
         }
-        else if(letter=='W'){
+        else if(letter=='a'){
             solution = solve_cube(c);
-            c_moves(c, solution);
+            slow_moves(c, stdout, printcube, solution, 300000000);
             free(solution);
+            continue;
         }
         else{
             cad[0]=letter;

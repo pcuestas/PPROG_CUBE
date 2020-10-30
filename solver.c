@@ -255,7 +255,7 @@ void solve_finishF2L(Cube3*c, char *sol){
                     /*LF */
                     strncat(cor, "lULfLFluu",100);
                 }else{
-                    /*DLB*/
+                    /*LB*/
                     strncat(cor, "LulBlbL",100);
                 }
             }
@@ -295,3 +295,4 @@ void solve_finishF2L(Cube3*c, char *sol){
         strncat(sol, cor, 100);
     }
 }
+

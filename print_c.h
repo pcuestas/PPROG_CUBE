@@ -49,4 +49,16 @@ void colorSDL_free(double** s);
  */ 
 int c_print2(FILE *f, short *s);
 
+/**
+ * @brief makes the moves in the input waiting delay seconds befor making each move
+ * @param c, cube
+ * @param pf, file to print in
+ * @param print_cube function used to print the cube 
+ * @param moves -moves to be made to the cube
+ * @param delay -used to regulate the time that it waits
+ * @return 
+ */ 
+Status slow_moves(Cube3* c, FILE* pf, cprint_from_stickers print_cube, char *moves, int delay);
+
+
 #endif 

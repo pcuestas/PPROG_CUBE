@@ -1,5 +1,6 @@
 #include "print_c.h"
 #include <string.h>
+#include "types.h"
 
 
 Status refresh_cube(Cube3* c, FILE* pf, cprint_from_stickers print_cube){
@@ -326,4 +327,20 @@ int c_print2(FILE *f, short *s){
     free(col);
     fclose(fp);
     return (0);
+}
+
+Status slow_moves(Cube3* c, FILE* pf, cprint_from_stickers print_cube, char *moves, int delay){
+    int i, len, j;
+
+    if(!c||!pf||!moves){
+        return ERROR;
+    }
+    len=strlen(moves);
+
+    for(i=0;i<len;i++){
+        c_make(c, moves[i]);
+        refresh_cube(c, pf, print_cube);
+        for(j=0;j<delay;j++);
+    }
+    return OK;
 }
