@@ -60,7 +60,7 @@ Status print_element(char*filename, rect*r){
     line = r->line;
     column = r->column;
 
-    clear_rect(r);
+    rect_clear(r);
 
     printf("%c[%i;%iH", 27, line, column);
 

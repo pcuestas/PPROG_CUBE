@@ -40,10 +40,11 @@ int ShowMainMenu(){
     /*imprimir flecha pos(0)*/
     
     r_menu=rect_init(2,29,113,29);
-    r_arrow=rect_init(2,2,20,29);
-    r_arrowblock=rect_init(2,2,20,30);
+    r_arrow=rect_init(2,4,20,29);
+    r_arrowblock=rect_init(2,4,20,30);
 
     print_element(MENU,r_menu);
+    print_element(ARROW,r_arrow);
 
     do{
 
@@ -64,13 +65,17 @@ int ShowMainMenu(){
             }
             
         }
-        
+
         rect_clear(r_arrowblock);
         rect_setline(r_arrow, 10 * pos + 2);
         print_element(ARROW, r_arrow);
 
     }while(1);
 
+
+    rect_free(r_menu);
+    rect_free(r_arrowblock);
+    rect_free(r_arrow);
 
     return 0;
 }

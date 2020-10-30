@@ -14,9 +14,12 @@ int ShowMainMenu();
  */
 int read_keyMenu();
 
+
+/*NOT USED ANY MORE*/
 /**
   @brief Prints the main menu with the cursor in the right position
   @param pos place to print the cursor 
+
  */
 void print_menu(int pos);
 
