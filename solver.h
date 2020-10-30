@@ -13,5 +13,14 @@ void solve_finishF2L(Cube3*c, char *sol);
 
 void solve_topcross(Cube3* c, char *sol);
 
+/*gets rid of unnecessary moves (redundancy)*/
+void clean_moves(char* m);
+
+/*if it is lowercase, returns uppercase and viceversa*/
+char opposite_move(char c);
+
+/*strcat seems not to work*/
+void concatenate(char* a, char* b);
+
 
 #endif

@@ -99,7 +99,7 @@ int main(void)
         }
         else if(letter=='a'){
             solution = solve_cube(c);
-            slow_moves(c, stdout, printcube, solution, 300000000);
+            slow_moves(c, stdout, printcube, solution, 150000000);
             free(solution);
             continue;
         }
