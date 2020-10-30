@@ -13,7 +13,7 @@ rect *rect_init(int line, int column, int l, int h){
     if(line<1||column<1||l<1||h<1)
         return NULL;
     
-    if(!(r=(rect*)caloc(1,sizeof(rect))))
+    if(!(r=(rect*)calloc(1,sizeof(rect))))
         return NULL;
     
     r->column=column;

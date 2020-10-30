@@ -47,7 +47,7 @@ int ShowMainMenu(){
 
     do{
 
-        letter=read_key();
+        letter=read_keyMenu();
 
         if (letter == 0) /*Enter*/
         {
