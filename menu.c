@@ -2,12 +2,18 @@
 #include <stdlib.h>
 #include <string.h>
 #include "types.h"
+#include "interface.h"
 
 #include "menu.h"
 
 #define UP -1
 #define DOWN 1
 #define ENTER 0;
+
+/*FILES WHERE ARE THE GRAPHIC CONTENT*/
+#define MENU "menu.txt"
+#define ARROW "arrow.txt"
+
 
 /**
  line 2-9: new game -->pos 0
@@ -26,40 +32,42 @@
 int ShowMainMenu(){
     int pos=0;
     int letter;
+    rect *r_menu, *r_arrow,*r_arrowblock;
 
     char buf[16];
 
     /*imprimir menu principal*/
     /*imprimir flecha pos(0)*/
     
-    print_menu(pos);
+    r_menu=rect_init(2,29,113,29);
+    r_arrow=rect_init(2,2,20,29);
+    r_arrowblock=rect_init(2,2,20,30);
+
+    print_element(MENU,r_menu);
 
     do{
 
         letter=read_key();
 
-        if (letter == -1) /*Poner flecha hacia arriba*/{
+        if (letter == 0) /*Enter*/
+        {
+            break; /*printear submenus*/
+
+        }else if (letter == -1) /*Poner flecha hacia arriba*/{
             if(pos>0){
                 pos--;
-                /*Mover flecha a pos*/
-                print_menu(pos);
             }
                 
-        }
-        
-        if(letter==1) /*Poner flecha hacia arriba*/{
+        }else if(letter==1) /*Poner flecha hacia arriba*/{
             if (pos<2){
                 pos++;
-                /*Mocer flecha a pos*/
-                print_menu(pos);
             }
             
         }
-
-        if(letter==0) /*Enter*/{
-            break; /*printear submenus*/
-        }
-
+        
+        rect_clear(r_arrowblock);
+        rect_setline(r_arrow, 10 * pos + 2);
+        print_element(ARROW, r_arrow);
 
     }while(1);
 
@@ -91,6 +99,8 @@ int read_keyMenu()
     else
         return choice;
 }
+
+
 
 void print_menu(int pos){
 
