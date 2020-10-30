@@ -52,8 +52,8 @@ void _term_init()
 int main(void)
 {
     
-    char cad[MAX_CAD], letter;
-    short flag = 0;
+    char letter;
+    
   
     _term_init(); /*modifica los parámetros de la terminal para poder leer las letras sin que se presione enter*/
 

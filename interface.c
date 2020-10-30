@@ -60,7 +60,7 @@ Status print_element(char*filename, rect*r){
     line = r->line;
     column = r->column;
 
-    clear_rect(r);
+    rect_clear(r);
 
     printf("%c[%i;%iH", 27, line, column);
 
@@ -83,4 +83,27 @@ Status print_element(char*filename, rect*r){
 
     fclose(pf);
     return OK;
+}
+
+
+void rect_clear(rect*r){
+
+    int line, column, h,l;
+    int i,j;
+
+    if(!r)
+        return;
+    
+    line=r->line;
+    column=r->column;
+    h=r->h;
+    l=r->l;
+
+    for(i=0;i<h;i++){
+    printf("%c[%i;%iH", 27, line+i, column);
+        for(j=0;j<l;j++){
+            printf(" ");
+        }
+    }
+    
 }
