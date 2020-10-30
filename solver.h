@@ -11,5 +11,7 @@ void solve_d_corners(Cube3* c, char *sol);
 
 void solve_finishF2L(Cube3*c, char *sol);
 
+void solve_topcross(Cube3* c, char *sol);
+
 
 #endif

@@ -1,12 +1,12 @@
 CFLAGS=-ansi -pedantic -Wall -g
 CC=gcc
 OBJ=cube.o solver.o print_c.o cube_interface.o
-OBJ2=cube.o solver.o print_c.o interface.o menu.o menu_interface.o
+OBJ2=menu_interface.o menu.o interface.o
 HEADERS=cube.h solver.h print_c.h types.h menu.h interface.h
 MENU=menu_interface
 EXE=cube_interface
 
-all: $(EXE)
+all: $(EXE) cleantrash
 
 menu: $(MENU)
 
@@ -24,3 +24,5 @@ main: main.o cube.o print_c.o
 
 clean:
 	rm -f *.o $(EXE) $(MENU) *.gch
+cleantrash:
+	rm -f *.o *.gch

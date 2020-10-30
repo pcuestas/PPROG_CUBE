@@ -296,3 +296,33 @@ void solve_finishF2L(Cube3*c, char *sol){
     }
 }
 
+void solve_topcross(Cube3* c, char *sol){
+    short cu, pos;
+    Piece *p1=NULL, *p2=NULL, *p3=NULL, *p4=NULL;
+    char moves[101]="";
+    int i, count;
+
+    cu=cfrom(c, 'U');
+
+    /*count oriented edges on the top*/
+    for (i=count=0;i<4;i++){
+        pos=c_iofPos(c, 1, 0, 1);
+        if(cu==c->pc[pos].c[2]){
+            count++;
+        }
+        c_moves(c, "U");
+    }
+
+    switch(count){
+        case 0:{
+            strncat(sol, "FRUruSRUrufs", 100);
+        }
+            break;
+        case 2:{
+
+        }
+            break;
+        default:
+            break;
+    }
+}

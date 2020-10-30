@@ -103,6 +103,10 @@ int main(void)
             free(solution);
             continue;
         }
+        else if(letter==' '){
+            solve_topcross(c, cad);
+            continue;
+        }
         else{
             cad[0]=letter;
             cad[1]='\0';
