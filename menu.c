@@ -1,3 +1,9 @@
+/**
+ * This file is only a test for the future menu of the game 
+ * 
+*/
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

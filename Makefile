@@ -10,6 +10,9 @@ all: $(EXE) cleantrash
 
 menui: $(MENU)
 
+game: 
+	./$(EXE)
+
 $(EXE): $(OBJ) $(HEADERS)
 	gcc $(OBJ) -o $(EXE)
 
