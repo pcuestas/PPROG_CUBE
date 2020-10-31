@@ -4,15 +4,6 @@
 #define MAX_MOV 10000
 
 
-char opposite_move(char c){
-    if(c>='a' && c<='z'){
-        return (c-'a'+'A');
-    }else if(c>='A' && c<='Z'){
-        return (c-'A'+'a');
-    }else{
-        return -1;
-    }
-}
 
 
 char *solve_cube(Cube3* c1){
@@ -40,6 +31,15 @@ char *solve_cube(Cube3* c1){
     
     /*solve the top cross*/
     solve_topcross(c2, sol);
+
+    /*permutate top edges*/
+    solve_topedges(c2, sol);
+
+    /*permutate top corners*/
+    solve_permcorners(c2, sol);
+
+    /*orient the top corners*/
+    solve_oricorners(c2, sol);
     
     c_free(c2);
     clean_moves(sol);
@@ -391,6 +391,153 @@ void solve_topcross(Cube3* c, char *sol){
     strncat(sol, moves, 101);
 }
 
+
+void solve_topedges(Cube3 *c, char* sol){
+    short cf, cr, cl, pos;
+    Piece *p1 = NULL, *p2 = NULL;
+    char moves[101]="";
+
+    /*store the colors: */
+    cf = cfrom(c, 'F');
+    cr = cfrom(c, 'R');
+    cl = cfrom(c, 'L');
+
+    pos = c_iofPos(c, 1, 0, 1);
+
+    while( c->pc[pos].c[0] != cf ){
+        c_make(c, 'U');
+        strncat(sol, "U", MAX_MOV);
+        pos = c_iofPos(c, 1, 0, 1);
+    }
+    /*right piece*/
+    pos = c_iofPos(c, 0, 1, 1);
+    p1 = &(c->pc[pos]);
+    /*left piece*/
+    pos = c_iofPos(c, 0, -1, 1);
+    p2 = &(c->pc[pos]);
+
+    if(p1->c[1]==cl){
+        if(p2->c[1]==cr){
+            /*permutate right to left, left to right*/
+            strncat(moves, "RUrurFRRuruRUrf", 100);
+        }else{
+            /*U perm, right opposite*/
+            strncat(moves, "RUUruRur", 100);
+        }
+    }else if(p2->c[1]==cr){
+        /*U perm, right opposite*/
+        strncat(moves, "RUrURUUr", 100);
+    }else if(p1->c[1]==cr){
+        /*right good*/
+        if(p2->c[1]==cl){
+            /*left good, ie. all good*/
+        }else{
+            strncat(moves, "yRUrURUUrU", 100);
+        }
+    }else{
+        /*left good, right not*/
+        strncat(moves, "YRUUruRuru", 100);
+    }
+    c_moves(c, moves);
+    strncat(sol, moves, MAX_MOV);
+}
+
+void solve_permcorners(Cube3 *c, char *sol){
+    short pos1, pos2, cf, cl, cu, cb, cr, i, flag=0;
+    char moves[101]="";
+
+    /*store the colors: */
+    cf = cfrom(c, 'F');
+    cl = cfrom(c, 'L');
+    cu = cfrom(c, 'U');
+
+    pos1 = c_iofCol(c, cf+cl+cu);
+    pos2 = c_iofPos(c, 1, -1, 1);
+
+    i=0;
+    while(pos1!=pos2){
+        if(i==4){
+            flag=1;
+            break;
+        }
+        c_make(c, 'Y');
+        strncat(sol, "Y", MAX_MOV);
+        cf = cfrom(c, 'F');
+        cl = cfrom(c, 'L');
+        pos1 = c_iofCol(c, cf+cl+cu);
+        pos2 = c_iofPos(c, 1, -1, 1);
+        i++;
+    }
+
+    cb = cfrom(c, 'B');
+    cr = cfrom(c, 'R');
+    cl = cfrom(c, 'L');
+    
+    pos2 = c_iofPos(c, 1, 1, 1);
+
+    if(flag==1){
+        /*special case*/
+        if(pos2==c_iofCol(c, cu+cb+cl)){
+            /*h perm*/
+            strncat(moves, "mmUmmUUmmUmmUU", 100);
+        }else if(pos2==c_iofCol(c, cu+cb+cr)){
+            /*e perm*/
+            strncat(moves, "rurdRurDRUrdRUrDRR", 100);
+        }else{
+            /*U+e perm*/
+            strncat(moves, "UrurdRurDRUrdRUrDRRu", 100);
+        }
+    }else{
+        if(pos2==c_iofCol(c, cb+cr+cu)){
+            strncat(moves, "RulUruLU", 100);
+        }else if(pos2==c_iofCol(c, cb+cl+cu)){
+            strncat(moves, "ulURuLUr", 100);
+        }else{
+            /*all good*/
+        }
+    }
+    c_moves(c, moves);
+    strncat(sol, moves, MAX_MOV);
+}
+
+void solve_oricorners(Cube3* c, char *sol){
+    short cu, i, pos;
+    char moves[101]="";
+
+    cu=cfrom(c, 'U');
+
+    /*categorize the cases: */
+    for(i=0; i<4; i++){
+        pos = c_iofPos(c, 1, 1, 1);
+        if(c->pc[pos].c[2]==cu){
+            strncat(moves, "U", 100);
+        }else if(c->pc[pos].c[1]==cu){
+            strncat(moves, "rdRDrdRDU", 100);
+        }else{
+            strncat(moves, "drDRdrDRU", 100);
+        }
+        c_make(c, 'U');/*4 made, after loop the cube is untouched*/
+    }
+    c_moves(c, moves);
+    strncat(sol, moves, MAX_MOV);
+}
+
+/* auxiliary functions: */
+
+/**
+ * Returns the opposite move (same axis of rotation, 
+ * opposite direction) of entered move
+ **/
+char opposite_move(char c){
+    if(c>='a' && c<='z'){
+        return (c-'a'+'A');
+    }else if(c>='A' && c<='Z'){
+        return (c-'A'+'a');
+    }else{
+        return -1;
+    }
+}
+
 void clean_moves(char* m){
     int i;
     if(!m){
@@ -420,14 +567,16 @@ void clean_moves(char* m){
     }
 }
 
+/**
+ * This function should be the same as strcat(), but said 
+ * function seems not to do the job properly
+ **/
 
 void concatenate(char *a, char *b){
-    int i, j;
 
-    for(i=0; a[i]!=0; i++);
+    for(; *a != 0; a++);
 
-    for(j=0; b[j]!=0; i++, j++){
-        a[i]=b[j];
-    }
-    a[i]=0;
+    for( ; *b != 0 ; *(a++) = *(b++) );
+
+    (*a) = 0;
 }

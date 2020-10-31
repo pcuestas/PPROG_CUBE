@@ -308,8 +308,7 @@ int c_print2(FILE *f, short *s){
                 break;
 
             fprintf(f, "%c", c);
-        }
-        while (1);
+        }while (1);
 
         if (rep == FALSE)
         { /*update values for printing secondary view*/

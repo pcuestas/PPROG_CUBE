@@ -13,6 +13,17 @@ void solve_finishF2L(Cube3*c, char *sol);
 
 void solve_topcross(Cube3* c, char *sol);
 
+/*permutates top edges*/
+void solve_topedges(Cube3 *c, char* sol);
+
+/*permutates top corners */
+void solve_permcorners(Cube3 *c, char* sol);
+
+/*orients corners - final step*/
+void solve_oricorners(Cube3* c, char *sol);
+
+
+
 /*gets rid of unnecessary moves (redundancy)*/
 void clean_moves(char* m);
 

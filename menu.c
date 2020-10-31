@@ -34,7 +34,7 @@ int ShowMainMenu(){
     int letter;
     rect *r_menu, *r_arrow,*r_arrowblock;
 
-    char buf[16];
+    /*char buf[16]; --not used*/
 
     /*imprimir menu principal*/
     /*imprimir flecha pos(0)*/
@@ -111,7 +111,7 @@ int read_keyMenu()
 
 void print_menu(int pos){
 
-    Bool flag = FALSE, rep = FALSE;
+    Bool rep = FALSE;
     int c,column, line, incr = 1,posi;
     char menu[30], arrow[30];
     FILE *fp;

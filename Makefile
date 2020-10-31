@@ -8,7 +8,7 @@ EXE=cube_interface
 
 all: $(EXE) cleantrash
 
-menu: $(MENU)
+menui: $(MENU)
 
 $(EXE): $(OBJ) $(HEADERS)
 	gcc $(OBJ) -o $(EXE)

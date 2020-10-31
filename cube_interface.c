@@ -104,7 +104,9 @@ int main(void)
             continue;
         }
         else if(letter==' '){
-            solve_topcross(c, cad);
+            solve_permcorners(c, cad);
+            printf("%s\n", cad);
+            cad[0]=0;
             continue;
         }
         else{
