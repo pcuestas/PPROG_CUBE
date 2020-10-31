@@ -103,7 +103,7 @@ int main(void)
             free(solution);
             continue;
         }
-        else if(letter==' '){
+        else if(letter==' '){/*DEL: this is just for trials--solver.c*/
             solve_permcorners(c, cad);
             printf("%s\n", cad);
             cad[0]=0;
