@@ -46,6 +46,27 @@ Status rect_setheight(rect *r, int h){
     return OK;
 }
 
+int rect_getline(rect *r){
+    if(!r)
+        return -1;
+    return r->line;
+}
+int rect_getcolumn(rect *r){
+    if(!r)
+        return -1;
+    return r->column;
+}
+int rect_getl(rect *r){
+    if(!r)
+        return -1;
+    return r->l;
+}
+int rect_geth(rect *r){
+    if(!r)
+        return -1;
+    return r->h;
+}
+
 Status print_element(char*filename, rect*r){
 
     int line,column,incr=1,c;
