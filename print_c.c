@@ -275,7 +275,7 @@ int c_print2(FILE *f, short *s){
         if (c >= min && c <= min + 26){ /*If you have reached the begining of a sticker */
                 
                 aux = c;
-                fprintf(f, "%c", c);
+                fprintf(f, " ");
                 color = col[aux - code];           /*limits of stickers are letters between ASCII(min) and ACII(min+26).*/
                 fprintf(f, "%c[;;%im", 27, color); /*stablish color of the sticker*/
                 
@@ -292,7 +292,7 @@ int c_print2(FILE *f, short *s){
                         break;
                     }
 
-                    fprintf(f, "%c", c);
+                    fprintf(f, " ");
 
                 } while (1);
             }
@@ -307,7 +307,7 @@ int c_print2(FILE *f, short *s){
             if (flag == TRUE)
                 break;
 
-            fprintf(f, "%c", c);
+            fprintf(f, " ");
         }while (1);
 
         if (rep == FALSE)

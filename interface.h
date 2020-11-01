@@ -24,7 +24,7 @@ Status rect_setheight(rect*r,int h);
 Status print_element(char *filename,rect*r);
 
 /**
- * @brief Clears the part of the terminal, delimited by the rectangle
+ * @brief Clears the part of the terminal delimited by the rectangle
  */
 void rect_clear(rect *r);
 
