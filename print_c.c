@@ -204,7 +204,7 @@ double **sticker_colorSDL(short *s){
         case B:
             c[i][0] = 0;
             c[i][1] = 0;
-            c[i][2] = 0;
+            c[i][2] = 1;
             break;
         case R:
             c[i][0] = 1;
