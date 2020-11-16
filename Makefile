@@ -5,6 +5,7 @@ OBJ2=menu_interface.o menu.o interface.o
 HEADERS=cube.h solver.h print_c.h types.h menu.h interface.h
 MENU=menu_interface
 EXE=cube_interface
+LIB=-lSDL2main -lSDL2 -lSDL2_image -lglut -lGLU -lGL -lm
 
 all: $(EXE) cleantrash
 
