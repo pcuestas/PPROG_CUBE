@@ -650,6 +650,8 @@ int main(int argc, char *argv[])
                 break;
             }
 
+            
+
             // Render(mov);
         }
         int w, h;
