@@ -3,6 +3,12 @@
 
 #define MAX_MOV 10000
 
+/*
+    This file implemets a solution of a 3x3 ruciks cube 
+    using the 'beginners method'.
+    This file is called by cube_interface in order to 
+    display the solution of a given cube.
+*/
 
 
 
