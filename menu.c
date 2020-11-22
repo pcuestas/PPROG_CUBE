@@ -3,7 +3,6 @@
  * 
 */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,12 +13,13 @@
 
 #define UP -1
 #define DOWN 1
-#define ENTER 0;
+#define ENTER 0
+#define OTHER 2
 
 /*FILES WHERE ARE THE GRAPHIC CONTENT*/
-#define MENU "menu.txt"
+#define MAINMENU "menu.txt"
+#define NEWGAMEMNU "newgame.txt"
 #define ARROW "arrow.txt"
-
 
 /**
  line 2-9: new game -->pos 0
@@ -33,53 +33,138 @@
  cargar partida
  Instrucciones?
 
- **/ 
+ **/
 
-int ShowMainMenu(){
-    int pos=0;
+int ShowMainMenu()
+{
+    int pos = 0;
     int letter;
-    rect *r_menu, *r_arrow,*r_arrowblock;
+    rect *r_menu, *r_arrow, *r_arrowblock;
 
-    /*char buf[16]; --not used*/
-
-    /*imprimir menu principal*/
-    /*imprimir flecha pos(0)*/
-    
-    r_menu=rect_init(2,29,113,29);
-    r_arrow=rect_init(2,4,20,29);
-    r_arrowblock=rect_init(2,4,20,30);
+    r_menu = rect_init(2, 29, 113, 29);
+    r_arrow = rect_init(2, 4, 20, 29);
+    r_arrowblock = rect_init(2, 4, 20, 30);
 
     printf("%c[2J", 27);
-    
-    print_element(MENU,r_menu);
-    print_element(ARROW,r_arrow);
 
-    do{
+    print_element(MAINMENU, r_menu);
+    print_element(ARROW, r_arrow);
 
-        letter=read_keyMenu();
+    do
+    {
 
-        if (letter == 0) /*Enter*/
+        letter = read_keyMenu();
+
+        if (letter == ENTER) /*Enter*/
         {
-            break; /*printear submenus*/
 
-        }else if (letter == -1) /*Poner flecha hacia arriba*/{
-            if(pos>0){
+            rect_free(r_menu);
+            rect_free(r_arrowblock);
+            rect_free(r_arrow);
+            if (pos == 0)
+            {
+                ShowNewGameMenu();
+            }
+            else if (pos == 1)
+            {
+                /*SEGUNDA OPCION*/
+                break;
+            }
+            else
+            {
+                printf("LALALALLALAL");
+                return 0;
+            }
+        }
+        else if (letter == UP) /*Poner flecha hacia arriba*/
+        {
+            if (pos > 0)
+            {
                 pos--;
             }
-                
-        }else if(letter==1) /*Poner flecha hacia arriba*/{
-            if (pos<2){
+        }
+        else if (letter == DOWN) /*Poner flecha hacia arriba*/
+        {
+            if (pos < 2)
+            {
                 pos++;
             }
-            
         }
 
         rect_clear(r_arrowblock);
-        rect_setline(r_arrow, 10 * pos + 2);
+        rect_setline(r_arrow, 13 * pos + 2);
         print_element(ARROW, r_arrow);
 
-    }while(1);
+    } while (1);
 
+    rect_free(r_menu);
+    rect_free(r_arrowblock);
+    rect_free(r_arrow);
+
+    return 0;
+}
+
+int ShowNewGameMenu()
+{
+    int pos = 0;
+    int letter;
+    rect *r_menu, *r_arrow, *r_arrowblock;
+
+    r_menu = rect_init(2, 29, 113, 29);
+    r_arrow = rect_init(2, 4, 20, 29);
+    r_arrowblock = rect_init(2, 4, 20, 30);
+
+    printf("%c[2J", 27);
+
+    print_element(NEWGAMEMNU, r_menu);
+    print_element(ARROW, r_arrow);
+
+    do
+    {
+
+        letter = read_keyMenu();
+
+        if (letter == ENTER)
+        {
+            if (pos == 0)
+            {
+                /*3x3 Cube*/
+                continue;
+            }
+            else if (pos == 1)
+            {
+                /*2x2 Cube*/
+                continue;
+            }
+            else
+            {
+                rect_free(r_menu);
+                rect_free(r_arrowblock);
+                rect_free(r_arrow);
+                return ShowMainMenu();
+            }
+            break; /*printear submenus*/
+        }
+        else if (letter == UP)
+        {
+            if (pos > 0)
+            {
+                pos--;
+            }
+        }
+        else if (letter == DOWN)
+        {
+            if (pos < 2)
+            {
+                pos++;
+            }
+        }
+
+        rect_clear(r_arrowblock);
+        rect_setline(r_arrow, 13 * pos + 2);
+        print_element(ARROW, r_arrow);
+
+    } while (1);
 
     rect_free(r_menu);
     rect_free(r_arrowblock);
@@ -93,6 +178,9 @@ int read_keyMenu()
     char choice;
     choice = fgetc(stdin);
 
+    if (choice == 10)
+        return ENTER;
+
     if (choice == 27 && fgetc(stdin) == '[')
     { /* The key is an arrow key */
         choice = fgetc(stdin);
@@ -103,26 +191,23 @@ int read_keyMenu()
             return UP;
         case ('B'):
             return DOWN;
-        case ('C'):
-            return ENTER; /* la c hay que cambiarla por el codifo correspondiente a enter !!!!!*/
         default:
-            return 0;
+            return OTHER;
         }
     }
     else
         return choice;
 }
 
-
-
-void print_menu(int pos){
+void print_menu(int pos)
+{
 
     Bool rep = FALSE;
-    int c,column, line, incr = 1,posi;
+    int c, column, line, incr = 1, posi;
     char menu[30], arrow[30];
     FILE *fp;
 
-    posi=pos*10+2;
+    posi = pos * 10 + 2;
 
     /*WHERE TO START PRINTING VIEW*/
     line = 2;
@@ -130,7 +215,6 @@ void print_menu(int pos){
 
     strcpy(menu, "menu.txt");
     strcpy(arrow, "arrow.txt");
-
 
     fp = fopen(menu, "r");
     printf("%c[2J", 27); /*Cleans the screen*/
