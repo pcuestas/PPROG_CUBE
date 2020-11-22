@@ -42,7 +42,7 @@ static void Render(int mov, double **s)
         {0.0, 0.0, 1.0}};
 
     static float cube[56][3] = {
-        //Cara 1
+        /*Cara 1*/
         {0.6, 0.6, 0.6},
         {0.6, 0.6, 0.2},
         {0.6, 0.6, -0.2},
@@ -60,51 +60,51 @@ static void Render(int mov, double **s)
         {0.6, -0.2, -0.2},
         {0.6, -0.2, 0.2},
 
-        //Cara 2
+        /*Cara 2*/
         {0.2, 0.6, 0.6},
         {-0.2, 0.6, 0.6},
         {-0.6, 0.6, 0.6},
         {-0.6, 0.6, 0.2},
         {-0.6, 0.6, -0.2},
         {-0.6, 0.6, -0.6},
-        {-0.2, 0.6, -0.6}, //22
+        {-0.2, 0.6, -0.6}, /*22*/
         {0.2, 0.6, -0.6},
         {0.2, 0.6, -0.2},
         {0.2, 0.6, 0.2},
         {-0.2, 0.6, 0.2},
-        {-0.2, 0.6, -0.2}, //27
+        {-0.2, 0.6, -0.2}, /*27*/
 
-        //Cara 3
+        /*Cara 3*/
         {-0.6, 0.2, 0.6},
         {-0.6, 0.2, 0.2},
         {-0.6, 0.2, -0.2},
         {-0.6, 0.2, -0.6},
         {-0.6, -0.2, -0.6},
-        {-0.6, -0.6, -0.6}, //33
+        {-0.6, -0.6, -0.6}, /*33*/
         {-0.6, -0.6, -0.2},
         {-0.6, -0.6, 0.2},
         {-0.6, -0.6, 0.6},
         {-0.6, -0.2, 0.6},
         {-0.6, -0.2, 0.2},
-        {-0.6, -0.2, -0.2}, //39
+        {-0.6, -0.2, -0.2}, /*39*/
 
-        //Cara 4
+        /*Cara 4*/
         {-0.2, -0.6, 0.6},
         {-0.2, -0.6, 0.2},
         {-0.2, -0.6, -0.2},
         {-0.2, -0.6, -0.6},
-        {0.2, -0.6, -0.6}, //44
+        {0.2, -0.6, -0.6}, /*44*/
         {0.2, -0.6, -0.2},
         {0.2, -0.6, 0.2},
-        {0.2, -0.6, 0.6}, //47
+        {0.2, -0.6, 0.6}, /*47*/
 
-        //Cara 5
+        /*Cara 5*/
         {0.2, 0.2, 0.6},
         {0.2, -0.2, 0.6},
         {-0.2, -0.2, 0.6},
         {-0.2, 0.2, 0.6},
 
-        //Cara 6
+        /*Cara 6*/
         {0.2, 0.2, -0.6},
         {0.2, -0.2, -0.6},
         {-0.2, -0.2, -0.6},
@@ -118,7 +118,7 @@ static void Render(int mov, double **s)
 
     glBegin(GL_QUADS);
 
-    //Cara 1
+    /*Cara 1*/
 
     glColor3f(s[2][0], s[2][1], s[2][2]);
     glVertex3fv(cube[8]);
@@ -174,7 +174,7 @@ static void Render(int mov, double **s)
     glVertex3fv(cube[4]);
     glVertex3fv(cube[13]);
 
-    //Cara 2
+    /*Cara 2*/
     glColor3f(s[11][0], s[11][1], s[11][2]);
     glVertex3fv(cube[0]);
     glVertex3fv(cube[1]);
@@ -229,7 +229,7 @@ static void Render(int mov, double **s)
     glVertex3fv(cube[26]);
     glVertex3fv(cube[27]);
 
-    //Cara 3
+    /*Cara 3*/
 
     glColor3f(s[47][0], s[47][1], s[47][2]);
     glVertex3fv(cube[18]);
@@ -285,7 +285,7 @@ static void Render(int mov, double **s)
     glVertex3fv(cube[38]);
     glVertex3fv(cube[39]);
 
-    //Cara 4
+    /*Cara 4*/
     glColor3f(s[33][0], s[33][1], s[33][2]);
     glVertex3fv(cube[35]);
     glVertex3fv(cube[36]);
@@ -340,7 +340,7 @@ static void Render(int mov, double **s)
     glVertex3fv(cube[46]);
     glVertex3fv(cube[45]);
 
-    //Cara 5
+    /*Cara 5*/
     glColor3f(s[18][0], s[18][1], s[18][2]);
     glVertex3fv(cube[11]);
     glVertex3fv(cube[48]);
@@ -395,7 +395,7 @@ static void Render(int mov, double **s)
     glVertex3fv(cube[49]);
     glVertex3fv(cube[48]);
 
-    //Cara 6
+    /*Cara 6*/
     glColor3f(s[36][0], s[36][1], s[36][2]);
     glVertex3fv(cube[44]);
     glVertex3fv(cube[6]);
@@ -453,61 +453,44 @@ static void Render(int mov, double **s)
     glEnd();
 
     if (mov == 1)
-    {
         glRotatef(2.0, 0, 0, 0);
-    }
     else if (mov == 2)
-    {
         glRotatef(2.0, 1.0, 0, 0);
-    }
     else if (mov == 3)
-    {
         glRotatef(2.0, 0, 1.0, 0);
-    }
     else if (mov == 4)
-    {
         glRotatef(2.0, 0, 0, 1.0);
-    }
     else
         glRotatef(1.0, 0, 0, 0);
 }
 
 int main(int argc, char *argv[])
 {
-    int value;
-    int mov;
-    int i = 0, done, j = 0;
+    int value, flag = 0, mov, i=0, done, j=0, status, w, h;
     SDL_DisplayMode mode;
     SDL_Event event;
     Uint32 then, now, frames;
-    int status;
     Cube3 *c = NULL;
     cprint_from_stickers printcube = c_print2;
     char cad[MAX_CAD], *text = malloc(200);
-    short *s = NULL, *s2 = NULL;
+    short s[54], s2[54];
     double **stickers = NULL, **stickers2 = NULL;
     char akkk = 'u', *solution = NULL;
 
     c = c_init();
     if (!c)
         return 1;
-    if (!(s = (short *)calloc(54, sizeof(short))))
-    {
-        return ERROR;
-    }
 
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
-    {
+    if (SDL_Init(SDL_INIT_VIDEO) < 0){
         printf("SDL_Error: %s\n", SDL_GetError());
         return 1;
     }
 
-    //Create window
+    /*Create window*/
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     window = SDL_CreateWindow("Rubik Cube PPROG", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 940, 880, SDL_WINDOW_OPENGL);
 
-    if (!window)
-    {
+    if (!window){
         printf("SDL_Error: %s\n", SDL_GetError());
         return 1;
     }
@@ -526,135 +509,110 @@ int main(int argc, char *argv[])
 
     gluLookAt(1.5, 1.0, 1.0, 0, 0, 0, 0.5, 0, 0);
     /* Main loop */
-    int flag = 0;
     SDL_StartTextInput();
     while (flag == 0)
     {
 
         if (colour_stickers(c, s) == ERROR)
-        {
             return ERROR;
-        }
+
         stickers = sticker_colorSDL(s);
         if (!stickers)
-        {
             return ERROR;
-        }
+        
         SDL_Event ev;
-        while (SDL_PollEvent(&ev))
-        {
+        while (SDL_PollEvent(&ev)){
 
-            switch (ev.type)
-            {
-            case SDL_QUIT:
-                flag = 1;
-                break;
-
-            case SDL_KEYDOWN:
-                switch (ev.key.keysym.sym)
-                {
-                case SDLK_UP:
-                    mov = 1;
-                    break;
-                case SDLK_DOWN:
-                    mov = 2;
-                    break;
-                case SDLK_LEFT:
-                    mov = 3;
-                    break;
-                case SDLK_RIGHT:
-                    mov = 4;
-                    break;
-                case SDLK_ESCAPE:
+            switch (ev.type){
+                case SDL_QUIT:
                     flag = 1;
                     break;
-                }
-                break;
-            case SDL_TEXTINPUT:
-                strcat(text, ev.text.text);
-                c_make(c, text[j]);
-                if (text[j] == 'w')
-                    scramble_cube(c, "scrambles.txt");
-                else if (text[j] == 'W')
-                {
-                    solution = solve_cube(c);
-                    c_moves(c, solution);
-                    free(solution);
-                }
-                else if (text[j] == 'A')
-                {
-                    solution = solve_cube(c);
-                    printf("%s", solution);
-                    free(solution);
-                }
-                else if (text[j] == 'a')
-                {
-                    solution = solve_cube(c);
-                    while (i < strlen(solution))
-                    {
 
-                        SDL_Event ev2;
-                        while (SDL_PollEvent(&ev2))
-                        {
-
-                            switch (ev2.key.keysym.sym)
-                            {
-                            case SDLK_UP:
-                                mov = 1;
-                                break;
-                            case SDLK_DOWN:
-                                mov = 2;
-                                break;
-                            case SDLK_LEFT:
-                                mov = 3;
-                                break;
-                            case SDLK_RIGHT:
-                                mov = 4;
-                                break;
-                            case SDLK_ESCAPE:
-                                flag = 1;
-                                break;
-                            }
-                        }
-
-                        c_make(c, solution[i]);
-                        if (!(s2 = (short *)calloc(54, sizeof(short))))
-                        {
-                            return ERROR;
-                        }
-                        if (colour_stickers(c, s2) == ERROR)
-                        {
-                            return ERROR;
-                        }
-                        stickers2 = sticker_colorSDL(s2);
-                        if (!stickers2)
-                        {
-                            return ERROR;
-                        }
-
-                        //Render(mov, stickers2);
-
-                        int w, h;
-                        SDL_GL_MakeCurrent(window, ctx);
-                        SDL_GetWindowSize(window, &w, &h);
-                        glViewport(0, 0, w, h);
-                        Render(mov, stickers2);
-                        SDL_GL_SwapWindow(window);
-                        free(s2);
-                        i++;
-                        SDL_Delay(200);
+                case SDL_KEYDOWN:
+                    switch (ev.key.keysym.sym){
+                        case SDLK_UP:
+                            mov = 1;
+                            break;
+                        case SDLK_DOWN:
+                            mov = 2;
+                            break;
+                        case SDLK_LEFT:
+                            mov = 3;
+                            break;
+                        case SDLK_RIGHT:
+                            mov = 4;
+                            break;
+                        case SDLK_ESCAPE:
+                            flag = 1;
+                            break;
                     }
-                    free(solution);
-                }
-                j++;
-                break;
+                    break;
+                case SDL_TEXTINPUT:
+                    strcat(text, ev.text.text);
+                    c_make(c, text[j]);
+                    if (text[j] == 'w')
+                        scramble_cube(c, "scrambles.txt");
+                    else if (text[j] == 'W'){
+                        solution = solve_cube(c);
+                        c_moves(c, solution);
+                        free(solution);
+                    }
+                    else if (text[j] == 'A'){
+                        solution = solve_cube(c);
+                        printf("%s", solution);
+                        free(solution);
+                    }
+                    else if (text[j] == 'a'){
+                        solution = solve_cube(c);
+                        while (i < strlen(solution)){
+
+                            SDL_Event ev2;
+                            while (SDL_PollEvent(&ev2)){
+
+                                switch (ev2.key.keysym.sym){
+                                    case SDLK_UP:
+                                        mov = 1;
+                                        break;
+                                    case SDLK_DOWN:
+                                        mov = 2;
+                                        break;
+                                    case SDLK_LEFT:
+                                        mov = 3;
+                                        break;
+                                    case SDLK_RIGHT:
+                                        mov = 4;
+                                        break;
+                                    case SDLK_ESCAPE:
+                                        flag = 1;
+                                        break;
+                                }
+                            }
+
+                            c_make(c, solution[i]);
+                            if (colour_stickers(c, s2) == ERROR){
+                                return ERROR;
+                            }
+                            stickers2 = sticker_colorSDL(s2);
+                            if (!stickers2){
+                                return ERROR;
+                            }
+
+                            SDL_GL_MakeCurrent(window, ctx);
+                            SDL_GetWindowSize(window, &w, &h);
+                            glViewport(0, 0, w, h);
+                            Render(mov, stickers2);
+                            SDL_GL_SwapWindow(window);
+                            i++;
+                            SDL_Delay(200);
+                            colorSDL_free(stickers2);
+                        }
+                        free(solution);
+                    }
+                    j++;
+                    break;
             }
 
-            
-
-            // Render(mov);
         }
-        int w, h;
         SDL_GL_MakeCurrent(window, ctx);
         SDL_GetWindowSize(window, &w, &h);
         glViewport(0, 0, w, h);
@@ -666,7 +624,6 @@ int main(int argc, char *argv[])
 
     SDL_Delay(1000);
     quit(0);
-    free(s);
     c_free(c);
     return 0;
 }
