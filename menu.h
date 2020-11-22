@@ -15,6 +15,10 @@ int ShowMainMenu();
 int read_keyMenu();
 
 
+int ShowNewGameMenu();
+
+int MenusDisplay();
+
 /*NOT USED ANY MORE*/
 /**
   @brief Prints the main menu with the cursor in the right position
