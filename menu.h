@@ -2,6 +2,12 @@
 #define MENU_H
 
 /**
+ * @brief Manages the main menu and the NewGameMenu at the same time.
+ * @return 3 if 3x3 cube is selected, 2 in the case of the 2x2 cube and 0 to exit the game 
+ */
+int MenusDisplay();
+
+/**
  *@brief Deals with the main menu, reading the keyboard for moving the cursor and selecting an option
  *
  * 
