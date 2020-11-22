@@ -8,6 +8,7 @@
 #include <SDL2/SDL_opengl.h>
 #include <SDL2/SDL_stdinc.h>
 #include <SDL2/SDL_timer.h>
+#include <GL/glut.h>
 
 #include "cube.h"
 #include "print_c.h"
@@ -113,6 +114,7 @@ static void Render(int mov, double **s)
 
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glMatrixMode(GL_MODELVIEW);
 
     glBegin(GL_QUADS);
 
@@ -450,7 +452,6 @@ static void Render(int mov, double **s)
 
     glEnd();
 
-    glMatrixMode(GL_MODELVIEW);
     if (mov == 1)
     {
         glRotatef(2.0, 0, 0, 0);
@@ -490,6 +491,10 @@ int main(int argc, char *argv[])
     c = c_init();
     if (!c)
         return 1;
+    if (!(s = (short *)calloc(54, sizeof(short))))
+    {
+        return ERROR;
+    }
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
@@ -519,27 +524,25 @@ int main(int argc, char *argv[])
     glDepthFunc(GL_LESS);
     glShadeModel(GL_SMOOTH);
 
+    gluLookAt(1.5, 1.0, 1.0, 0, 0, 0, 0.5, 0, 0);
     /* Main loop */
     int flag = 0;
     SDL_StartTextInput();
     while (flag == 0)
     {
+
+        if (colour_stickers(c, s) == ERROR)
+        {
+            return ERROR;
+        }
+        stickers = sticker_colorSDL(s);
+        if (!stickers)
+        {
+            return ERROR;
+        }
         SDL_Event ev;
         while (SDL_PollEvent(&ev))
         {
-            if (!(s = (short *)calloc(54, sizeof(short))))
-            {
-                return ERROR;
-            }
-            if (colour_stickers(c, s) == ERROR)
-            {
-                return ERROR;
-            }
-            stickers = sticker_colorSDL(s);
-            if (!stickers)
-            {
-                return ERROR;
-            }
 
             switch (ev.type)
             {
@@ -647,8 +650,8 @@ int main(int argc, char *argv[])
                 break;
             }
 
-            //colorSDL_free(stickers); //ESTO NO ENTIENDO POR QUE DA VIOLACION DE SEGMENTO
-            free(s);
+            
+
             // Render(mov);
         }
         int w, h;
@@ -657,10 +660,13 @@ int main(int argc, char *argv[])
         glViewport(0, 0, w, h);
         Render(mov, stickers);
         SDL_GL_SwapWindow(window);
+        colorSDL_free(stickers);
     }
     SDL_StopTextInput();
 
     SDL_Delay(1000);
     quit(0);
+    free(s);
+    c_free(c);
     return 0;
 }
