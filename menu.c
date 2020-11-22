@@ -35,6 +35,50 @@
 
  **/
 
+int MenusDisplay()
+{
+    int choice1 = 0, choice2;
+
+MainMenu_choice:
+    choice1 = ShowMainMenu();
+
+    switch (choice1)
+    {
+    case 0:
+        choice2 = ShowNewGameMenu();
+        goto Newgame_choice;
+        break;
+    case 1:
+        /*mostrat comandos ...*/
+        break;
+
+    case 2:
+        return 0;
+        break;
+    }
+
+Newgame_choice:
+    switch (choice2)
+    {
+    case 0:
+        /*EMPEZAR JUEGO CON 3x3*/
+        printf("3x3\n");
+        return 3;
+        break;
+    case 1:
+        /*EMPEZAR JUEGO CON 2x2*/
+        printf("2x2\n");
+        return 2;
+        break;
+
+    case 2:
+        goto MainMenu_choice;
+        break;
+    }
+
+    return 0;
+}
+
 int ShowMainMenu()
 {
     int pos = 0;
@@ -61,20 +105,7 @@ int ShowMainMenu()
             rect_free(r_menu);
             rect_free(r_arrowblock);
             rect_free(r_arrow);
-            if (pos == 0)
-            {
-                ShowNewGameMenu();
-            }
-            else if (pos == 1)
-            {
-                /*SEGUNDA OPCION*/
-                break;
-            }
-            else
-            {
-                printf("LALALALLALAL");
-                return 0;
-            }
+            return pos;
         }
         else if (letter == UP) /*Poner flecha hacia arriba*/
         {
@@ -96,10 +127,6 @@ int ShowMainMenu()
         print_element(ARROW, r_arrow);
 
     } while (1);
-
-    rect_free(r_menu);
-    rect_free(r_arrowblock);
-    rect_free(r_arrow);
 
     return 0;
 }
@@ -126,24 +153,11 @@ int ShowNewGameMenu()
 
         if (letter == ENTER)
         {
-            if (pos == 0)
-            {
-                /*3x3 Cube*/
-                continue;
-            }
-            else if (pos == 1)
-            {
-                /*2x2 Cube*/
-                continue;
-            }
-            else
-            {
-                rect_free(r_menu);
-                rect_free(r_arrowblock);
-                rect_free(r_arrow);
-                return ShowMainMenu();
-            }
-            break; /*printear submenus*/
+
+            rect_free(r_menu);
+            rect_free(r_arrowblock);
+            rect_free(r_arrow);
+            return pos;
         }
         else if (letter == UP)
         {
@@ -165,10 +179,6 @@ int ShowNewGameMenu()
         print_element(ARROW, r_arrow);
 
     } while (1);
-
-    rect_free(r_menu);
-    rect_free(r_arrowblock);
-    rect_free(r_arrow);
 
     return 0;
 }

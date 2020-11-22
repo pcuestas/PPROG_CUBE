@@ -53,7 +53,7 @@ int main(void)
 
   _term_init(); /*modifica los parámetros de la terminal para poder leer las letras sin que se presione enter*/
 
-  ret=ShowMainMenu();
+  ret=MenusDisplay();
 
   tcsetattr(fileno(stdin), TCSANOW, &initial); /*deshace los cambios hechos por _term_init()*/
 
