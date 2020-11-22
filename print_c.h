@@ -1,5 +1,3 @@
-
-
 #ifndef PRINT_C_H
 #define PRINT_C_H
 
