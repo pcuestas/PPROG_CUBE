@@ -175,39 +175,39 @@ double **sticker_colorSDL(short *s){
 
     for (i = 0; i < 54; i++){
         switch (s[i]){
-        case W:
-            c[i][0]=1;
-            c[i][1] = 1;
-            c[i][2] = 1;
-            break;
-        case Y:
-            c[i][0] = 1;
-            c[i][1] = 1;
-            c[i][2] = 0;
-            break;
-        case O:
-            c[i][0] = 1;
-            c[i][1] = 0.5;
-            c[i][2] = 0;
-            break;
-        case G:
-            c[i][0] = 0;
-            c[i][1] = 1;
-            c[i][2] = 0;
-            break;
-        case B:
-            c[i][0] = 0;
-            c[i][1] = 0;
-            c[i][2] = 1;
-            break;
-        case R:
-            c[i][0] = 1;
-            c[i][1] = 0;
-            c[i][2] = 0;
-            break;
+            case W:
+                c[i][0] = 1;
+                c[i][1] = 1;
+                c[i][2] = 1;
+                break;
+            case Y:
+                c[i][0] = 1;
+                c[i][1] = 1;
+                c[i][2] = 0;
+                break;
+            case O:
+                c[i][0] = 1;
+                c[i][1] = 0.5;
+                c[i][2] = 0;
+                break;
+            case G:
+                c[i][0] = 0;
+                c[i][1] = 1;
+                c[i][2] = 0;
+                break;
+            case B:
+                c[i][0] = 0;
+                c[i][1] = 0;
+                c[i][2] = 1;
+                break;
+            case R:
+                c[i][0] = 1;
+                c[i][1] = 0;
+                c[i][2] = 0;
+                break;
 
-        default:
-            break;
+            default:
+                break;
         }
     }
 
