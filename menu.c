@@ -35,8 +35,8 @@
 
  **/
 
-
-int ShowMainMenu(){
+int ShowMainMenu()
+{
     int pos = 0;
     int letter;
     rect *r_menu, *r_arrow, *r_arrowblock;
@@ -55,19 +55,38 @@ int ShowMainMenu(){
 
         letter = read_keyMenu();
 
-        if (letter == ENTER) /*Enter*/{
+        if (letter == ENTER) /*Enter*/
+        {
+
             rect_free(r_menu);
             rect_free(r_arrowblock);
             rect_free(r_arrow);
-            return pos;
+            if (pos == 0)
+            {
+                ShowNewGameMenu();
+            }
+            else if (pos == 1)
+            {
+                /*SEGUNDA OPCION*/
+                break;
+            }
+            else
+            {
+                printf("LALALALLALAL");
+                return 0;
+            }
         }
-        else if (letter == UP) /*Poner flecha hacia arriba*/{
-            if (pos > 0){
+        else if (letter == UP) /*Poner flecha hacia arriba*/
+        {
+            if (pos > 0)
+            {
                 pos--;
             }
         }
-        else if (letter == DOWN) /*Poner flecha hacia arriba*/{
-            if (pos < 2){
+        else if (letter == DOWN) /*Poner flecha hacia arriba*/
+        {
+            if (pos < 2)
+            {
                 pos++;
             }
         }
