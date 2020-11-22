@@ -3,7 +3,7 @@ OBJ=cube.o solver.o print_c.o $(EXE).o
 
 TEMPEXE=prueba
 LIB=-lSDL2main -lSDL2 -lSDL2_image -lglut -lGLU -lGL -lm
-OBJTEMPEXE=$(TEMPEXE).o cube.o print_c.o solver.o
+OBJTEMPEXE=$(TEMPEXE).o cube.o print_c.o solver.o lib_funct.o
 
 MENU=menu_interface
 OBJ2=$(MENU).o menu.o interface.o
