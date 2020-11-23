@@ -221,5 +221,10 @@ sCube *sCube_init(){
     return sc;
 }
 
+void free_sCube(sCube *p){
+    if(p!=NULL)
+        free(p);
+}
+
 
 #endif

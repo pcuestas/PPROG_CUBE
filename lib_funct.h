@@ -32,6 +32,8 @@ typedef struct _sCube{
 /*initializes the whole static sCube structure, to be used in order for the processes of colouring the cube in the library's window easier*/
 sCube *sCube_init();
 
+void free_sCube(sCube *p);
+
 /*wrapper of the functions used to give color to the sticker s, using the matrix cube and the colours in rgb
 It does not paint non existing stickers (those with s->num==-1)*/
 void paint_sSticker(sSticker *s, float cube[56][3], double **rgb);

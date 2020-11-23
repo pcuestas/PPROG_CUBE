@@ -116,6 +116,7 @@ void Render(int mov, double **s)
     /* "paint" all pieces */
     for (i=0;i<NPC;i++)
         paint_sPiece(&(sc->pc[i]), cube, s);
+    free_sCube(sc);
 
     glEnd();
 
