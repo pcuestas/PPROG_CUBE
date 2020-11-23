@@ -1,3 +1,8 @@
+/**
+ * @author Pablo Cuesta Sierra 
+ * 
+ */
+
 #ifndef CUBE_H_
 #define CUBE_H_
 

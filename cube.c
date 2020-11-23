@@ -1,3 +1,8 @@
+/**
+ * @author Pablo Cuesta Sierra 
+ * 
+ */
+
 #include "cube.h"
 #include <string.h>
 

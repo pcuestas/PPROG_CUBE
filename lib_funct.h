@@ -32,6 +32,17 @@ typedef struct _sCube{
 /*initializes the whole static sCube structure, to be used in order for the processes of colouring the cube in the library's window easier*/
 sCube *sCube_init();
 
+/*wrapper of the functions used to give color to the sticker s, using the matrix cube and the colours in rgb
+It does not paint non existing stickers (those with s->num==-1)*/
+void paint_sSticker(sSticker *s, float cube[56][3], double **rgb);
+
+/*wrapper of the functions used to give color to the piece p (its three (or less) stickers), using the matrix cube and the colours in rgb*/
+void paint_sPiece(sPiece *p, float cube[56][3], double **rgb);
+
+/*this function returns 1 if sPiece i (in cube sCube) is in face c=R,U,D,L,F,B,M,E,S
+and 0 otherwise*/
+int is_in_face(int i, char c);
+
 
 void quit(int rc);
 

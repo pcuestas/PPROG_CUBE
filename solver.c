@@ -1,3 +1,9 @@
+/**
+ * @author Pablo Cuesta Sierra 
+ * @date 2020/11/01
+ * 
+ */
+
 #include "solver.h"
 #include <string.h>
 

@@ -1,3 +1,8 @@
+/**
+ * @author Pablo Cuesta Sierra 
+ * 
+ */
+
 #ifndef SOLVER_H_
 #define SOLVER_H_
 
