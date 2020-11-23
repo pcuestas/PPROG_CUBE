@@ -39,8 +39,12 @@ void paint_sSticker(sSticker *s, float cube[56][3], double **rgb);
 /*wrapper of the functions used to give color to the piece p (its three (or less) stickers), using the matrix cube and the colours in rgb*/
 void paint_sPiece(sPiece *p, float cube[56][3], double **rgb);
 
-/*this function returns 1 if sPiece i (in cube sCube) is in face c=R,U,D,L,F,B,M,E,S
-and 0 otherwise*/
+/**
+ * this function returns 1 if 
+ * sPiece i (in cube sCube) is 
+ * in face c='R','U','D','L','F','B','M','E','S'
+ * and 0 otherwise
+ **/
 int is_in_face(int i, char c);
 
 

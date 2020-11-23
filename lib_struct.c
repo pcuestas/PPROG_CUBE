@@ -39,8 +39,12 @@ void paint_sPiece(sPiece *p, float cube[56][3], double **rgb){
 }
 
 
-/*this function returns 1 if sPiece i (in cube sCube) is in face c=R,U,D,L,F,B,M,E,S
-and 0 otherwise*/
+/**
+ * this function returns 1 if 
+ * sPiece i (in cube sCube) is 
+ * in face c='R','U','D','L','F','B','M','E','S'
+ * and 0 otherwise
+ **/
 int is_in_face(int i, char c){
     char inU[]=U_INDEXES, inD[]=D_INDEXES, inE[]=E_INDEXES;
     char inR[]=R_INDEXES, inL[]=L_INDEXES, inM[]=M_INDEXES;
