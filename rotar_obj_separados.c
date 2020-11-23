@@ -25,8 +25,8 @@ void handleKeypress(unsigned char key, int x, int y)
         break;
     
     case 'R':
-    mov=2;
-    _angle=0;
+        mov=2;
+        _angle=0;
     break;
     }
 }
@@ -342,7 +342,7 @@ void drawScene()
 
     glEnd();
 
-    //glPopMatrix();
+    /*glPopMatrix();*/
 
     if (mov == 1)
     {
@@ -1077,7 +1077,7 @@ void update(int value)
         _angle -= 360;
     }
 
-    glutPostRedisplay(); ////Tell GLUT that the scene has changed
+    glutPostRedisplay(); /*Tell GLUT that the scene has changed*/
     glutTimerFunc(10, update, 0);
 }
 
@@ -1091,15 +1091,15 @@ int main(int argc, char **argv)
     //Create the window
     glutCreateWindow("Color");
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_COLOR_MATERIAL);          //Enable color
-    glClearColor(0.7f, 0.9f, 1.0f, 1.0f); //Change the background to sky blue
+    glEnable(GL_COLOR_MATERIAL);          /*Enable color*/
+    glClearColor(0.7f, 0.9f, 1.0f, 1.0f); /*Change the background to sky blue*/
 
     glutDisplayFunc(drawScene);
 
     glutKeyboardFunc(handleKeypress);
     glutReshapeFunc(handleResize);
 
-    glutTimerFunc(25, update, 0); //Add a timer
+    glutTimerFunc(25, update, 0); /*Add a timer*/
 
     glutMainLoop();
     return 0;
