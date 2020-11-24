@@ -21,6 +21,7 @@ int c_print(FILE *f, short *s);
 */
 Status refresh_cube(Cube3*, FILE*, cprint_from_stickers);
 
+Status refresh_cube2(Cube3 *, rect *,rect*, cprint_from_stickers2);
 
 /**
  * @brief ALLOCATES an array. Translates the array of colors of the stickers into the color code for ANSI ESC

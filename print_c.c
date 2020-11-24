@@ -20,9 +20,8 @@ Status refresh_cube2(Cube3 *c, rect *r1, rect *r2, cprint_from_stickers2 print_c
     /*Meter s[54] y col[54] en la estructura cubo*/
 
     if (colour_stickers(c, s) == ERROR)
-    {
         return ERROR;
-    }
+    
 
     /*c->s,c->colors*/
 
@@ -34,8 +33,7 @@ Status refresh_cube2(Cube3 *c, rect *r1, rect *r2, cprint_from_stickers2 print_c
     return OK;
 }
 
-int c_print(FILE *f, short *s)
-{
+int c_print(FILE *f, short *s){
 
   fprintf(f,"%c[2J",27);
 
