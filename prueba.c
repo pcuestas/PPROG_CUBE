@@ -20,12 +20,11 @@
 static SDL_GLContext ctx;
 static SDL_Window *window;
 
-
 int main(int argc, char *argv[])
 {
-    int value, flag = 0, mov, i=0, done, j=0, status, w, h;
+    int value, flag = 0, mov, i = 0, done, j = 0, status, w, h;
     SDL_DisplayMode mode;
-    SDL_Event event;
+    SDL_Event event, ev2;
     Uint32 then, now, frames;
     Cube3 *c = NULL;
     cprint_from_stickers printcube = c_print2;
@@ -38,7 +37,8 @@ int main(int argc, char *argv[])
     if (!c)
         return 1;
 
-    if (SDL_Init(SDL_INIT_VIDEO) < 0){
+    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    {
         printf("SDL_Error: %s\n", SDL_GetError());
         return 1;
     }
@@ -47,7 +47,8 @@ int main(int argc, char *argv[])
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     window = SDL_CreateWindow("Rubik Cube PPROG", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 940, 880, SDL_WINDOW_OPENGL);
 
-    if (!window){
+    if (!window)
+    {
         printf("SDL_Error: %s\n", SDL_GetError());
         return 1;
     }
@@ -76,99 +77,109 @@ int main(int argc, char *argv[])
         stickers = sticker_colorSDL(s);
         if (!stickers)
             return ERROR;
-        
-        SDL_Event ev;
-        while (SDL_PollEvent(&ev)){
 
-            switch (ev.type){
-                case SDL_QUIT:
+        SDL_Event ev;
+        while (SDL_PollEvent(&ev))
+        {
+
+            switch (ev.type)
+            {
+            case SDL_QUIT:
+                flag = 1;
+                break;
+
+            case SDL_KEYDOWN:
+                switch (ev.key.keysym.sym)
+                {
+                case SDLK_UP:
+                    mov = 1;
+                    break;
+                case SDLK_DOWN:
+                    mov = 2;
+                    break;
+                case SDLK_LEFT:
+                    mov = 3;
+                    break;
+                case SDLK_RIGHT:
+                    mov = 4;
+                    break;
+                case SDLK_ESCAPE:
                     flag = 1;
                     break;
+                }
+                break;
+            case SDL_TEXTINPUT:
+                strcat(text, ev.text.text);
+                c_make(c, text[j]);
+                if (text[j] == 'w')
+                    scramble_cube(c, "scrambles.txt");
+                else if (text[j] == 'W')
+                {
+                    solution = solve_cube(c);
+                    c_moves(c, solution);
+                    free(solution);
+                }
+                else if (text[j] == 'A')
+                {
+                    solution = solve_cube(c);
+                    printf("%s", solution);
+                    free(solution);
+                }
+                else if (text[j] == 'a')
+                {
+                    solution = solve_cube(c);
+                    i = 0;
+                    while (i < strlen(solution))
+                    {
 
-                case SDL_KEYDOWN:
-                    switch (ev.key.keysym.sym){
-                        case SDLK_UP:
-                            mov = 1;
-                            break;
-                        case SDLK_DOWN:
-                            mov = 2;
-                            break;
-                        case SDLK_LEFT:
-                            mov = 3;
-                            break;
-                        case SDLK_RIGHT:
-                            mov = 4;
-                            break;
-                        case SDLK_ESCAPE:
-                            flag = 1;
-                            break;
-                    }
-                    break;
-                case SDL_TEXTINPUT:
-                    strcat(text, ev.text.text);
-                    c_make(c, text[j]);
-                    if (text[j] == 'w')
-                        scramble_cube(c, "scrambles.txt");
-                    else if (text[j] == 'W'){
-                        solution = solve_cube(c);
-                        c_moves(c, solution);
-                        free(solution);
-                    }
-                    else if (text[j] == 'A'){
-                        solution = solve_cube(c);
-                        printf("%s", solution);
-                        free(solution);
-                    }
-                    else if (text[j] == 'a'){
-                        solution = solve_cube(c);
-                        while (i < strlen(solution)){
+                        while (SDL_PollEvent(&ev2))
+                        {
 
-                            SDL_Event ev2;
-                            while (SDL_PollEvent(&ev2)){
-
-                                switch (ev2.key.keysym.sym){
-                                    case SDLK_UP:
-                                        mov = 1;
-                                        break;
-                                    case SDLK_DOWN:
-                                        mov = 2;
-                                        break;
-                                    case SDLK_LEFT:
-                                        mov = 3;
-                                        break;
-                                    case SDLK_RIGHT:
-                                        mov = 4;
-                                        break;
-                                    case SDLK_ESCAPE:
-                                        flag = 1;
-                                        break;
-                                }
+                            switch (ev2.key.keysym.sym)
+                            {
+                            case SDLK_UP:
+                                mov = 1;
+                                break;
+                            case SDLK_DOWN:
+                                mov = 2;
+                                break;
+                            case SDLK_LEFT:
+                                mov = 3;
+                                break;
+                            case SDLK_RIGHT:
+                                mov = 4;
+                                break;
+                            case SDLK_ESCAPE:
+                                flag = 1;
+                                break;
                             }
-
-                            c_make(c, solution[i]);
-                            if (colour_stickers(c, s2) == ERROR){
-                                return ERROR;
-                            }
-                            stickers2 = sticker_colorSDL(s2);
-                            if (!stickers2){
-                                return ERROR;
-                            }
-
-                            SDL_GL_MakeCurrent(window, ctx);
-                            SDL_GetWindowSize(window, &w, &h);
-                            glViewport(0, 0, w, h);
-                            Render(mov, stickers2);
-                            SDL_GL_SwapWindow(window);
-                            i++;
-                            SDL_Delay(200);
-                            colorSDL_free(stickers2);
                         }
-                        free(solution);
-                    }
-                    j++;
-                    break;
-            }
 
+                        c_make(c, solution[i]);
+                        if (colour_stickers(c, s2) == ERROR)
+                        {
+                            return ERROR;
+                        }
+                        stickers2 = sticker_colorSDL(s2);
+                        if (!stickers2)
+                        {
+                            return ERROR;
+                        }
+
+                        SDL_GL_MakeCurrent(window, ctx);
+                        SDL_GetWindowSize(window, &w, &h);
+                        glViewport(0, 0, w, h);
+                        Render(mov, stickers2);
+                        SDL_GL_SwapWindow(window);
+                        i++;
+                        SDL_Delay(200);
+                        colorSDL_free(stickers2);
+                    }
+                    free(solution);
+                }
+                j++;
+                break;
+            }
         }
         SDL_GL_MakeCurrent(window, ctx);
         SDL_GetWindowSize(window, &w, &h);
