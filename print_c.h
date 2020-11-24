@@ -3,9 +3,12 @@
 
 #include "cube.h"
 #include "types.h"
+#include "interface.h"
 
 
 typedef int (*cprint_from_stickers)(FILE*, short*);
+typedef int (*cprint_from_stickers2)(short *, void *, void *); /*pointers to rect*/
+
 
 int c_print(FILE *f, short *s);
 
@@ -24,7 +27,7 @@ Status refresh_cube(Cube3*, FILE*, cprint_from_stickers);
  * @param s pointer to array of stickers (s[i]=MACRO of a color defined in cubo.c )
  * @return an array with the color for ansi code 
  */
-short *sticker_to_color(short *s);
+Status sticker_to_color(short *s,short *c);
 
 /**
  * @brief ALLOCATES a matrix. Translates the array of colors of the stickers into the color code for SLD ESC
@@ -45,7 +48,7 @@ void colorSDL_free(double** s);
  * @param s, array of stickers (it is translated with sticker_to_color funct)
  * @return 
  */ 
-int c_print2(FILE *f, short *s);
+int c_print2(FILE *f, short *s,short*col);
 
 /**
  * @brief makes the moves in the input waiting delay seconds befor making each move
@@ -58,5 +61,6 @@ int c_print2(FILE *f, short *s);
  */ 
 Status slow_moves(Cube3* c, FILE* pf, cprint_from_stickers print_cube, char *moves, int delay);
 
+int c_print3(short *s,short *col,rect *r1, rect *r2);
 
 #endif 

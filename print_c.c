@@ -15,6 +15,25 @@ Status refresh_cube(Cube3* c, FILE* pf, cprint_from_stickers print_cube){
     return OK;
 }
 
+Status refresh_cube2(Cube3 *c, rect *r1, rect *r2, cprint_from_stickers2 print_cube){
+    
+    /*Meter s[54] y col[54] en la estructura cubo*/
+
+    if (colour_stickers(c, s) == ERROR)
+    {
+        return ERROR;
+    }
+
+    /*c->s,c->colors*/
+
+    /*c_print3(s,r1,r2);*/
+    print_cube(s,col,r1, r2);
+
+    free(s);
+
+    return OK;
+}
+
 int c_print(FILE *f, short *s)
 {
 
@@ -111,16 +130,12 @@ int c_print(FILE *f, short *s)
     return 1;
 }
 
-short *sticker_to_color(short *s)
+Status sticker_to_color(short *s,short *c)
 {
     int i;
-    short *c;
-
-    if (!s)
-        return NULL;
-
-    if (!(c = (short *)calloc(54, sizeof(short))))
-        return NULL;
+    
+    if(!s||!c)
+        return ERROR;
 
     for (i = 0; i < 54; i++)
     {
@@ -226,7 +241,7 @@ void colorSDL_free(double **s){
     }
 }
 
-int c_print2(FILE *f, short *s){
+int c_print2(FILE *f, short *s,short *col){
 
     Bool flag = FALSE,rep=FALSE;
     int c, color, aux,column,line,incr=1,code=65,min=65; 
@@ -243,6 +258,8 @@ int c_print2(FILE *f, short *s){
      rep: inidicates if you are printing first view (FALSE) or second (TRUE)
     */
    
+   if(!s||!col)
+    return -1;
 
     /*WHERE TO START PRINTING 1st VIEW*/
     line = 3;
@@ -251,7 +268,7 @@ int c_print2(FILE *f, short *s){
     strcpy(firstview, "cubo.txt");
     strcpy(secondview, "cubo2.txt");
 
-    col = sticker_to_color(s);
+    sticker_to_color(s,col);
     if(col==NULL)
         return -1;
 
@@ -322,6 +339,109 @@ int c_print2(FILE *f, short *s){
     return (0);
 }
 
+int c_print3(short *s,short*col, rect *r1, rect *r2){
+
+    Bool flag = FALSE, rep = FALSE;
+    int c, color, aux, column, line, incr = 1, code = 65, min = 65;
+    short *col;
+    FILE *fp;
+    char firstview[30], secondview[30];
+
+    /*
+                                VARIABLES EXPLAINED
+    (U): this variable has to be updated before printing second view
+    column, line: where to start printing. (U)
+     code: relation between the char that delimitates a sticker in the .txt and the postion in the array col (U).
+     min: smallest char that is used to delimitate a sticker in the .txt
+     rep: inidicates if you are printing first view (FALSE) or second (TRUE)
+    */
+
+    /*WHERE TO START PRINTING 1st VIEW*/
+
+    if (!r1 || !r2||!s||!col)
+        return -1;
+
+    line = rect_getline(r1);
+    column = rect_getcolumn(r1);
+
+    strcpy(firstview, "cubo.txt");
+    strcpy(secondview, "cubo2.txt");
+
+    sticker_to_color(s,col);
+  
+
+    fp = fopen(firstview, "r");
+    rect_clear(r1);
+
+print:
+    printf("%c[%i;%iH", 27, line, column); /*Positionates the cursor to start printing */
+
+    do
+    {
+        c = fgetc(fp);
+        if (feof(fp))
+            break;
+
+        if (c >= min && c <= min + 26)
+        { /*If you have reached the begining of a sticker */
+
+            aux = c;
+            printf(" ");
+            color = col[aux - code];       /*limits of stickers are letters between ASCII(min) and ACII(min+26).*/
+            printf("%c[;;%im", 27, color); /*stablish color of the sticker*/
+
+            do
+            {
+                c = fgetc(fp);
+                if (feof(fp))
+                {
+                    flag = TRUE;
+                    break;
+                }
+
+                if (c == aux)
+                {                        /*we have reached the end of the sticker*/
+                    printf("%c[0m", 27); /*reset color*/
+                    break;
+                }
+
+                printf(" ");
+
+            } while (1);
+        }
+
+        if (c == '\n')
+        { /*new line read --> update cursor position*/
+            printf("%c[%i;%iH", 27, line + incr, column);
+            incr++;
+            continue;
+        }
+
+        if (flag == TRUE)
+            break;
+
+        printf(" ");
+    } while (1);
+
+    if (rep == FALSE)
+    { /*update values for printing secondary view*/
+        fclose(fp);
+        rep = TRUE;
+        code = 70;
+        min = 97;
+        incr = 1;
+        fp = fopen(secondview, "r");
+        column = rect_getcolumn(r2);
+        line = rect_getline(r2);
+        rect_clear(r2);
+        goto print;
+    }
+
+    free(col);
+    fclose(fp);
+    return (0);
+}
+
 Status slow_moves(Cube3* c, FILE* pf, cprint_from_stickers print_cube, char *moves, int delay){
     int i, len, j;
 
@@ -337,3 +457,5 @@ Status slow_moves(Cube3* c, FILE* pf, cprint_from_stickers print_cube, char *mov
     }
     return OK;
 }
+
+
