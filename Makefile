@@ -1,53 +1,37 @@
-EXE=cube_interface
-OBJ=cube.o solver.o print_c.o $(EXE).o
 
-TEMPEXE=prueba
-LIB=-lSDL2main -lSDL2 -lSDL2_image -lglut -lGLU -lGL -lm
-OBJTEMPEXE=$(TEMPEXE).o cube.o print_c.o solver.o lib_funct.o lib_struct.o
-
-MENU=menu_interface
-OBJ2=$(MENU).o menu.o interface.o
+all: cube_interface menu_interface clean
 
 CFLAGS=-ansi -pedantic -Wall -g
-CC=gcc
 
-HEADERS=cube.h solver.h print_c.h types.h menu.h interface.h
+menu_interface: interface.o menu_interface.o menu.o
+	gcc menu_interface.o interface.o menu.o -o menu_interface
 
+cube_interface: cube_interface.o cube.o interface.o print_c.o solver.o bcd.o
+	gcc cube_interface.o cube.o interface.o print_c.o solver.o bcd.o -lpthread -o cube_interface
 
-all: $(EXE)
+cube_interface.o: cube_interface.c
+	gcc $(CFLAGS) -c cube_interface.c
 
-prueba: $(TEMPEXE)
+cube.o: cube.c cube.h 
+	gcc $(CFLAGS) -c cube.c
 
-menui: $(MENU)
-
-game: 
-	./$(EXE)
-
-gamelib: 
-	./$(TEMPEXE)
-
-$(EXE): $(OBJ) $(HEADERS)
-	$(CC) $(OBJ) -o $@
-
-$(MENU): $(OBJ2) $(HEADERS)
-	$(CC) $(OBJ2) -o $@
-
-$(TEMPEXE): $(OBJTEMPEXE) $(HEADERS)
-	$(CC) $(OBJTEMPEXE) $(LIB) -o $@
-
-main: main.o cube.o print_c.o
-	$(CC) main.o cube.o print_c.o -o main
-
-lib_struct.o: lib_struct.c lib_funct.h
-	$(CC) $(CFLAGS) -c $<
+interface.o: interface.c interface.h 
+	gcc $(CFLAGS) -c interface.c 
 
 print_c.o: print_c.c print_c.h interface.h 
-	$(CC) $(CFLAGS) -c $<
+	gcc $(CFLAGS) -c print_c.c
 
-%.o: %.c %.h
-	$(CC) $(CFLAGS) -c $<
+solver.o: solver.c solver.h
+	gcc $(CFLAGS) -c solver.c
+
+bcd.o: bcd.h bcd.c interface.h
+	gcc $(CFLAGS) -c bcd.c
+
+menu.o: menu.h menu.c
+	gcc $(CFLAGS) -c menu.c
+
+menu_interface.o: menu_interface.c menu.h
+	gcc $(CFLAGS) -c menu_interface.c
 
 clean:
-	rm -f *.o $(EXE) $(MENU) $(TEMPEXE) *.gch
-cleantrash:
-	rm -f *.o *.gch
+	rm -f *.o 

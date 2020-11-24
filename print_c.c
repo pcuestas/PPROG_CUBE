@@ -17,13 +17,15 @@ Status refresh_cube(Cube3* c, FILE* pf, cprint_from_stickers print_cube){
 
 Status refresh_cube2(Cube3 *c, rect *r1, rect *r2, cprint_from_stickers2 print_cube){
 
+    
     if (colour_stickers(c, c->sitckers) == ERROR)
         return ERROR;
     
 
 
-    print_cube(c->sitckers,c->colorsESC,r1, r2);
+    /*print_cube(c->sitckers,c->colorsESC,r1, r2);*/
 
+    c_print3(c->sitckers, c->colorsESC, r1, r2);
 
     return OK;
 }
@@ -155,7 +157,7 @@ Status sticker_to_color(short *s,short *c){
         }
     }
 
-    return c;
+    return OK;
 }
 
 double **sticker_colorSDL(short *s){ /*CAMBIAR PARA QUE NO SE ALOQUE*/
@@ -235,7 +237,6 @@ int c_print2(FILE *f, short *s,short *col){
 
     Bool flag = FALSE,rep=FALSE;
     int c, color, aux,column,line,incr=1,code=65,min=65; 
-    short *col;
     FILE *fp;
     char firstview[30],secondview[30];
 
@@ -248,8 +249,9 @@ int c_print2(FILE *f, short *s,short *col){
      rep: inidicates if you are printing first view (FALSE) or second (TRUE)
     */
    
-   if(!s||!col)
-    return -1;
+   if(!s||!col){
+        return -1;
+   }
 
     /*WHERE TO START PRINTING 1st VIEW*/
     line = 3;
@@ -324,7 +326,7 @@ int c_print2(FILE *f, short *s,short *col){
             goto print;
     }
 
-    free(col);
+    
     fclose(fp);
     return (0);
 }
@@ -333,7 +335,6 @@ int c_print3(short *s,short*col, rect *r1, rect *r2){ /*Like cprint2 but using r
 
     Bool flag = FALSE, rep = FALSE;
     int c, color, aux, column, line, incr = 1, code = 65, min = 65;
-    short *col;
     FILE *fp;
     char firstview[30], secondview[30];
 
@@ -414,22 +415,22 @@ print:
         goto print;
     }
 
-    free(col);
     fclose(fp);
     return (0);
 }
 
-Status slow_moves(Cube3* c, FILE* pf, cprint_from_stickers print_cube, char *moves, int delay){
+Status slow_moves(Cube3* c, cprint_from_stickers2 print_cube, char *moves, int delay,rect* r1, rect*r2){
     int i, len, j;
 
-    if(!c||!pf||!moves){
+    if(!c||!moves||!r1||!r2||!print_cube){
         return ERROR;
     }
+
     len=strlen(moves);
 
     for(i=0;i<len;i++){
         c_make(c, moves[i]);
-        refresh_cube(c, pf, print_cube);
+        refresh_cube2(c,r1,r2,print_cube);
         for(j=0;j<delay;j++);
     }
     return OK;

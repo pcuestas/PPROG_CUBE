@@ -60,7 +60,7 @@ int c_print2(FILE *f, short *s,short*col);
  * @param delay -used to regulate the time that it waits
  * @return 
  */ 
-Status slow_moves(Cube3* c, FILE* pf, cprint_from_stickers print_cube, char *moves, int delay);
+Status slow_moves(Cube3* c, cprint_from_stickers2 print_cube, char *moves, int delay,rect*r1,rect*r2);
 
 int c_print3(short *s,short *col,rect *r1, rect *r2);
 

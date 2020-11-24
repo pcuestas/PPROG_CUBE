@@ -7,6 +7,7 @@
 #include "cube.h"
 #include "solver.h"
 #include "print_c.h"
+#include "interface.h"
 
 struct termios initial;
 
@@ -60,6 +61,12 @@ int main(void)
     cprint_from_stickers printcube = c_print2; /* This is the only place in the routine where 
                                                * the function that prints the cube must be changed*/
 
+    cprint_from_stickers2 pcube=c_print3;
+    rect *rvista1, *rvista2;
+
+    rvista1 = rect_init(2, 2, 100, 70);
+    rvista2 = rect_init(32, 120, 40, 40);
+
     srand(time(NULL));
 
     c = c_init();
@@ -68,7 +75,8 @@ int main(void)
 
     _term_init();/*modifica los parámetros de la terminal para poder leer las letras sin que se presione enter*/
 
-    if (refresh_cube(c, stdout, printcube) == ERROR){
+
+    if (refresh_cube2(c,rvista1,rvista2,pcube) == ERROR){
         c_free(c);
         tcsetattr(fileno(stdin), TCSANOW, &initial);/*deshace los cambios hechos por _term_init()*/
         return 1;
@@ -99,7 +107,7 @@ int main(void)
         }
         else if(letter=='a'){
             solution = solve_cube(c);
-            slow_moves(c, stdout, printcube, solution, 150000000);
+            slow_moves(c, pcube, solution, 150000000,rvista1,rvista2);
             free(solution);
             continue;
         }
@@ -117,14 +125,17 @@ int main(void)
                 break;
             }
         }
-        
-        if (refresh_cube(c, stdout, printcube) == ERROR){
+
+        if (refresh_cube2(c, rvista1, rvista2, pcube) == ERROR)
+        {
             flag = 1;
             break;
         }
     }
 
     c_free(c);
+    rect_free(rvista1);
+    rect_free(rvista2);
 
     tcsetattr(fileno(stdin), TCSANOW, &initial);/*deshace los cambios hechos por _term_init()*/
 
