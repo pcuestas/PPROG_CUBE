@@ -249,3 +249,51 @@ int bcd_display(int n, rect *r)
 
     return 0;
 }
+
+void *counter(void *a)
+{
+    int hour, minute, second;
+    rect *rs1, *rs2, *rmin1, *rmin2;
+    hour = minute = second = 0;
+
+    rs1 = rect_init(2, 150, 15, 25);
+    rs2 = rect_init(2, 170, 15, 25);
+    rmin1 = rect_init(2, 105, 15, 25);
+    rmin2 = rect_init(2, 125, 15, 25);
+
+    bcd_display(second % 10, rs2);
+    bcd_display(second / 10, rs1);
+    bcd_display(minute % 10, rmin2);
+    bcd_display(minute / 10, rmin1);
+
+    while (1)
+    {
+
+        bcd_display(second % 10, rs2);
+        bcd_display(second / 10, rs1);
+
+        second++;
+
+        if (second == 60)
+        {
+            bcd_display(minute % 10, rmin2);
+            bcd_display(minute / 10, rmin1);
+            minute += 1;
+            second = 0;
+        }
+        if (minute == 60)
+        {
+            hour += 1;
+            minute = 0;
+        }
+        if (hour == 24)
+        {
+            hour = 0;
+            minute = 0;
+            second = 0;
+        }
+        sleep(1);
+    }
+
+    return 0;
+}

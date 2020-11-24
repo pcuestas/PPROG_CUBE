@@ -17,4 +17,11 @@ void bcd_g(int line, int column);
 
 int bcd_display(int n, rect *r);
 
+
+/**
+* @brief implements a counter to be used in a thread.
+* 
+**/
+void *counter(void*a);
+
 #endif

@@ -3,11 +3,14 @@
 #include <stdlib.h>
 #include <termios.h>
 #include <time.h>
+#include <pthread.h>
+
 
 #include "cube.h"
 #include "solver.h"
 #include "print_c.h"
 #include "interface.h"
+#include "bcd.h"
 
 struct termios initial;
 
@@ -63,6 +66,7 @@ int main(void)
 
     cprint_from_stickers2 pcube=c_print3;
     rect *rvista1, *rvista2;
+    pthread_t pth;
 
     rvista1 = rect_init(2, 2, 100, 70);
     rvista2 = rect_init(32, 120, 40, 40);
@@ -81,6 +85,8 @@ int main(void)
         tcsetattr(fileno(stdin), TCSANOW, &initial);/*deshace los cambios hechos por _term_init()*/
         return 1;
     }
+
+    pthread_create(&pth, NULL, counter, NULL);
 
     while (TRUE){
         letter=fgetc(stdin);
