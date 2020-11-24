@@ -7,7 +7,7 @@
 
 
 typedef int (*cprint_from_stickers)(FILE*, short*);
-typedef int (*cprint_from_stickers2)(short *, void *, void *); /*pointers to rect*/
+typedef int (*cprint_from_stickers2)(short *,short*, void *, void *); /*pointers to rect*/
 
 
 int c_print(FILE *f, short *s);

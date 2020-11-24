@@ -35,6 +35,8 @@ typedef struct{
 
 typedef struct{
   Piece pc[NPC];
+  short sitckers[54];  /*Code of color of each sticker*/
+  short colorsESC[54]; /*C ANSI ESC COde color*/
 }Cube3;
 
 /*

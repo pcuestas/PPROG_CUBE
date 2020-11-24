@@ -6,7 +6,7 @@
 Status refresh_cube(Cube3* c, FILE* pf, cprint_from_stickers print_cube){
     short s[54];
 
-    if (colour_stickers(c, s) == ERROR){
+    if (colour_stickers(c, c->sitckers) == ERROR){
         return ERROR;
     }
 
@@ -16,19 +16,14 @@ Status refresh_cube(Cube3* c, FILE* pf, cprint_from_stickers print_cube){
 }
 
 Status refresh_cube2(Cube3 *c, rect *r1, rect *r2, cprint_from_stickers2 print_cube){
-    
-    /*Meter s[54] y col[54] en la estructura cubo*/
 
-    if (colour_stickers(c, s) == ERROR)
+    if (colour_stickers(c, c->sitckers) == ERROR)
         return ERROR;
     
 
-    /*c->s,c->colors*/
 
-    /*c_print3(s,r1,r2);*/
-    print_cube(s,col,r1, r2);
+    print_cube(c->sitckers,c->colorsESC,r1, r2);
 
-    free(s);
 
     return OK;
 }
@@ -128,17 +123,14 @@ int c_print(FILE *f, short *s){
     return 1;
 }
 
-Status sticker_to_color(short *s,short *c)
-{
+Status sticker_to_color(short *s,short *c){
     int i;
     
     if(!s||!c)
         return ERROR;
 
-    for (i = 0; i < 54; i++)
-    {
-        switch (s[i])
-        {
+    for (i = 0; i < 54; i++){
+        switch (s[i]){
         case W:
             c[i] = 7;
             break;
@@ -166,7 +158,7 @@ Status sticker_to_color(short *s,short *c)
     return c;
 }
 
-double **sticker_colorSDL(short *s){
+double **sticker_colorSDL(short *s){ /*CAMBIAR PARA QUE NO SE ALOQUE*/
     int i,j;
     double **c;
 
@@ -337,24 +329,13 @@ int c_print2(FILE *f, short *s,short *col){
     return (0);
 }
 
-int c_print3(short *s,short*col, rect *r1, rect *r2){
+int c_print3(short *s,short*col, rect *r1, rect *r2){ /*Like cprint2 but using rectangles*/
 
     Bool flag = FALSE, rep = FALSE;
     int c, color, aux, column, line, incr = 1, code = 65, min = 65;
     short *col;
     FILE *fp;
     char firstview[30], secondview[30];
-
-    /*
-                                VARIABLES EXPLAINED
-    (U): this variable has to be updated before printing second view
-    column, line: where to start printing. (U)
-     code: relation between the char that delimitates a sticker in the .txt and the postion in the array col (U).
-     min: smallest char that is used to delimitate a sticker in the .txt
-     rep: inidicates if you are printing first view (FALSE) or second (TRUE)
-    */
-
-    /*WHERE TO START PRINTING 1st VIEW*/
 
     if (!r1 || !r2||!s||!col)
         return -1;
@@ -372,7 +353,7 @@ int c_print3(short *s,short*col, rect *r1, rect *r2){
     rect_clear(r1);
 
 print:
-    printf("%c[%i;%iH", 27, line, column); /*Positionates the cursor to start printing */
+    printf("%c[%i;%iH", 27, line, column); 
 
     do
     {
@@ -397,9 +378,8 @@ print:
                     break;
                 }
 
-                if (c == aux)
-                {                        /*we have reached the end of the sticker*/
-                    printf("%c[0m", 27); /*reset color*/
+                if (c == aux){           
+                    printf("%c[0m", 27); 
                     break;
                 }
 
@@ -408,8 +388,7 @@ print:
             } while (1);
         }
 
-        if (c == '\n')
-        { /*new line read --> update cursor position*/
+        if (c == '\n'){ 
             printf("%c[%i;%iH", 27, line + incr, column);
             incr++;
             continue;

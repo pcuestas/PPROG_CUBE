@@ -43,7 +43,7 @@ lib_struct.o: lib_struct.c lib_funct.h
 
 print_c.o: print_c.c print_c.h interface.h 
 	$(CC) $(CFLAGS) -c $<
-	
+
 %.o: %.c %.h
 	$(CC) $(CFLAGS) -c $<
 
