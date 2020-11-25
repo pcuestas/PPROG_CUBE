@@ -256,10 +256,10 @@ void *counter(void *a)
     rect *rs1, *rs2, *rmin1, *rmin2;
     hour = minute = second = 0;
 
-    rs1 = rect_init(2, 150, 15, 25);
-    rs2 = rect_init(2, 170, 15, 25);
-    rmin1 = rect_init(2, 105, 15, 25);
-    rmin2 = rect_init(2, 125, 15, 25);
+    rs1 = rect_init(2, 160, 15, 17);
+    rs2 = rect_init(2, 180, 15, 17);
+    rmin1 = rect_init(2, 115, 15, 17);
+    rmin2 = rect_init(2, 135, 15, 17);
 
     bcd_display(second % 10, rs2);
     bcd_display(second / 10, rs1);
@@ -294,6 +294,11 @@ void *counter(void *a)
         }
         sleep(1);
     }
+
+    rect_free(rs1);
+    rect_free(rs2);
+    rect_free(rmin2);
+    rect_free(rmin1);
 
     return 0;
 }

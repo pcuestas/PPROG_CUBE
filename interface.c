@@ -199,7 +199,7 @@ rect* rect_expand(rect *r, int x, int y){
     if(!r||r->column-x<1||r->line-y<1)
         return NULL;
 
-    if (r2 = rect_init(r->line - y, r->column - x, r->l + x, r->h + y)==NULL)
+    if (!(r2 = rect_init(r->line - y, r->column - x, r->l + x, r->h + y)))
         return NULL;
 
     return r2;
