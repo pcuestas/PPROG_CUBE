@@ -192,15 +192,15 @@ Status positionate_cursor(int line, int column){
     return OK;
 }
 
-Status rect_expand(rect *r, int x, int y){
+rect* rect_expand(rect *r, int x, int y){
+
+    rect *r2;
 
     if(!r||r->column-x<1||r->line-y<1)
-        return ERROR;
-    
-    r->column-=x;
-    r->line-=y;
-    r->h+=y;
-    r->l+=x;
+        return NULL;
 
-    return OK;
+    if (r2 = rect_init(r->line - y, r->column - x, r->l + x, r->h + y)==NULL)
+        return NULL;
+
+    return r2;
 }

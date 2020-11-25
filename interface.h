@@ -41,12 +41,12 @@ Status rect_border(rect *r);
 
 
 /**
- * @brief changes the values of a rectangle to expand it in x direction and y.
+ * @brief inits a rectangle with the values of an existin rectangle expanded in x direction and y.
  * @param x changes column--> column-x && l+x
  * @param y changes line-->line-y && h+y
- * @return OK or ERROR in case of error (invalid x or y for instace)
+ * @return pointer to rect or NULL in case of error;
  */ 
-Status rect_expand(rect*r, int x,int y);
+rect* rect_expand(rect*r, int x,int y);
 
 /**
  * @brief Clears the screen using the C ANSI ESC code
