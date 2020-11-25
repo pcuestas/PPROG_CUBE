@@ -1,3 +1,6 @@
 1. Cargar y guardar cubo
 2. Marcos de los rectangulos en la terminal
 3. Modificzar c_print3, recibir como argumento nombre de los files
+4. Ver como se puede modificar el tamaño del api
+5. Mejorar crono: que empiece a contar con el primer movimiento
+6. Que pasa cunado muere un hilo...
