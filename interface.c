@@ -191,3 +191,16 @@ Status positionate_cursor(int line, int column){
     printf("%c[%i;%iH", 27, line, column);
     return OK;
 }
+
+Status rect_expand(rect *r, int x, int y){
+
+    if(!r||r->column-x<1||r->line-y<1)
+        return ERROR;
+    
+    r->column-=x;
+    r->line-=y;
+    r->h+=y;
+    r->l+=x;
+
+    return OK;
+}

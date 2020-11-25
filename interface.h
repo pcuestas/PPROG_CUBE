@@ -39,14 +39,23 @@ void rect_clear(rect *r);
  */
 Status rect_border(rect *r);
 
-    /**
+
+/**
+ * @brief changes the values of a rectangle to expand it in x direction and y.
+ * @param x changes column--> column-x && l+x
+ * @param y changes line-->line-y && h+y
+ * @return OK or ERROR in case of error (invalid x or y for instace)
+ */ 
+Status rect_expand(rect*r, int x,int y);
+
+/**
  * @brief Clears the screen using the C ANSI ESC code
  * */
-    void terminal_clear();
+void terminal_clear();
 
-    /**
+/**
  * @brief positiones the cursor in a line and column (starting by 1) using C ANSI ESC codes
  * */
-    Status positionate_cursor(int line, int column);
+ Status positionate_cursor(int line, int column);
 
 #endif
