@@ -79,7 +79,7 @@ int main(void)
 
     _term_init();/*modifica los parámetros de la terminal para poder leer las letras sin que se presione enter*/
 
-    printf("%c[2J", 27);
+    terminal_clear();
 
     if (refresh_cube2(c,rvista1,rvista2,pcube) == ERROR){
         c_free(c);

@@ -128,3 +128,16 @@ void rect_clear(rect*r){
     }
     
 }
+
+void terminal_clear(){
+    printf("%c[2J", 27);
+}
+
+Status positionate_cursor(int line, int column){
+
+    if(line<1||column<1)
+        return ERROR;
+
+    printf("%c[%i;%iH", 27, line, column);
+    return OK;
+}

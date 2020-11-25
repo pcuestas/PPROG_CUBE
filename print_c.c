@@ -351,7 +351,7 @@ int c_print3(short *s,short*col, rect *r1, rect *r2){ /*Like cprint2 but using r
   
 
     fp = fopen(firstview, "r");
-    rect_clear(r1);
+    /*rect_clear(r1); // always printing in the same rect.*/
 
 print:
     printf("%c[%i;%iH", 27, line, column); 
@@ -411,7 +411,7 @@ print:
         fp = fopen(secondview, "r");
         column = rect_getcolumn(r2);
         line = rect_getline(r2);
-        rect_clear(r2);
+        /*rect_clear(r2);*/
         goto print;
     }
 

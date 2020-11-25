@@ -33,6 +33,14 @@ Status print_element(char *filename,rect*r);
  */
 void rect_clear(rect *r);
 
+/**
+ * @brief Clears the screen using the C ANSI ESC code
+ * */
+void terminal_clear();
 
+/**
+ * @brief positiones the cursor in a line and column (starting by 1) using C ANSI ESC codes
+ * */
+Status positionate_cursor(int line, int column);
 
 #endif
