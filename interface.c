@@ -129,6 +129,56 @@ void rect_clear(rect*r){
     
 }
 
+Status rect_border(rect *r)
+{
+
+    int line, column, l, h, i;
+
+    if (!r)
+        return ERROR;
+
+    line = r->line;
+    column = r->column;
+    l = r->l;
+    h = r->h;
+
+    positionate_cursor(line, column);
+    for (i = 0; i < l; i++){
+        printf("%s", "━");
+    }
+
+    positionate_cursor(line + h, column);
+    for (i = 0; i < l; i++){
+        printf("%s", "━");
+    }
+
+    positionate_cursor(line, column);
+    for (i = 0; i < h; i++){
+        positionate_cursor(line + 1 + i, column);
+        printf("%s", "┃");
+    }
+
+    positionate_cursor(line, column + l);
+    for (i = 0; i < h; i++){
+        positionate_cursor(line + 1 + i, column + l);
+        printf("%s", "┃");
+    }
+
+    positionate_cursor(line, column);
+    printf("%s", "┏");
+
+    positionate_cursor(line + h, column);
+    printf("%s", "┗");
+
+    positionate_cursor(line, column + l);
+    printf("%s", "┓");
+
+    positionate_cursor(line + h, column + l);
+    printf("%s", "┛");
+
+    return OK;
+}
+
 void terminal_clear(){
     printf("%c[2J", 27);
 }
