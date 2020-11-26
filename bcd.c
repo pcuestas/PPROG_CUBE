@@ -21,6 +21,84 @@
           dddd
 */
 
+struct _counter_data{
+    int sec, min;
+    rect *rcounter[4]; /*Array of counters where to print min(r[0],r[1]) and secs(r[2],r[3])*/
+};
+
+counter_data *counter_data_init(){
+    counter_data *dat;
+    int i,j;
+
+    if(!(dat=(counter_data*)calloc(1,sizeof(counter_data))))
+        return NULL;
+
+    for(i=0;i<4;i++){
+        if(!(dat->rcounter[i]=rect_init(1,1,1,1))){
+            for(j=0;j<i;j++){
+                rect_free(dat->rcounter[j]);
+            }
+            free(dat);
+            return NULL;
+        }
+    }
+
+    return dat;
+}
+
+void counter_data_free(counter_data *dat){
+    int i;
+
+    if(dat){
+        for(i=0;i<4;i++)
+            rect_free(dat->rcounter[i]);
+        free(dat);
+    }
+        
+}
+
+Status counter_data_set_time(counter_data* dat, int min, int sec){
+    if(!dat||min>59||sec>59||min<0||sec<0)
+        return ERROR;
+    
+    dat->min=min;
+    dat->sec=sec;
+    return OK;
+}
+
+Status counter_data_set_rects(counter_data *dat, int line, int column, int l, int h){
+    int i;
+
+    if(!dat||line<1||column<1||l<0||h<0)
+        return ERROR;
+
+
+    for(i=0;i<2;i++){
+        rect_setline(dat->rcounter[i],line);
+        rect_setcolumn(dat->rcounter[i],column+i*20);
+        rect_setheight(dat->rcounter[i],h);
+        rect_setlength(dat->rcounter[i],l);
+    }
+
+    column+20*2+5; /*20 for each rect, 5 for the separation*/
+
+    for (i = 2; i < 4; i++){
+        rect_setline(dat->rcounter[i], line);
+        rect_setcolumn(dat->rcounter[i], column + i * 20);
+        rect_setheight(dat->rcounter[i], h);
+        rect_setlength(dat->rcounter[i], l);
+    }
+
+    return OK;
+}
+
+rect **counter_data_get_rect(counter_data *dat){
+    if(!dat)
+        return NULL;
+    
+    return dat->rcounter;
+}
+
 void bcd_a(int l, int c)
 {
     int line, column, i, j;
