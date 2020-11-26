@@ -21,6 +21,9 @@ prueba: $(TEMPEXE)
 
 menui: $(MENU)
 
+run:
+	./$(EXE)
+
 
 gamelib: 
 	./$(TEMPEXE)
