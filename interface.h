@@ -14,6 +14,8 @@ void rect_free(rect*r);
 
 /********GETTERS AND SETTERS************/
 Status rect_setline(rect*r,int line);
+Status rect_setcolumn(rect *r, int column);
+Status rect_setlength(rect *r, int l);
 Status rect_setheight(rect*r,int h);
 int rect_getline(rect*r);
 int rect_getcolumn(rect*r);
