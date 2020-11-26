@@ -15,6 +15,10 @@
 #include "solver.h"
 #include "lib_funct.h"
 
+#ifndef SCRAMBLES_TXT
+#define SCRAMBLES_TXT "./txt_files/scrambles.txt"
+#endif
+
 #define MAX_CAD 500
 
 static SDL_GLContext ctx;
@@ -112,7 +116,7 @@ int main(int argc, char *argv[])
                 strcat(text, ev.text.text);
                 c_make(c, text[j]);
                 if (text[j] == 'w')
-                    scramble_cube(c, "scrambles.txt");
+                    scramble_cube(c, SCRAMBLES_TXT);
                 else if (text[j] == 'W')
                 {
                     solution = solve_cube(c);

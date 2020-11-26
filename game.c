@@ -5,7 +5,7 @@ int main(void){
     int option=0;
 
     while ((option=MenusDisplay())!=0){
-        c_interface(option);
+        c_interface(option, 0);
     }
 
     return 0;

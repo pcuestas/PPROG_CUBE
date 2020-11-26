@@ -12,7 +12,7 @@ OBJ2=$(MENU).o menu.o interface.o
 CFLAGS=-ansi -pedantic -Wall -g
 CC=gcc
 
-HEADERS=cube.h solver.h print_c.h types.h menu.h interface.h bcd.h terminal_funct.h interface.h
+HEADERS=*.h
 
 
 all: $(EXE)
@@ -43,7 +43,10 @@ main: main.o cube.o print_c.o
 lib_struct.o: lib_struct.c lib_funct.h
 	$(CC) $(CFLAGS) -c $<
 
-print_c.o: print_c.c print_c.h interface.h 
+print_c.o: print_c.c print_c.h interface.o cube.o
+	$(CC) $(CFLAGS) -c $<
+
+solver.o: solver.c solver.h cube.o
 	$(CC) $(CFLAGS) -c $<
 
 %.o: %.c %.h

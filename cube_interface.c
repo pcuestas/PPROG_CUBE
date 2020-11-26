@@ -2,18 +2,21 @@
 
 #define MAX_CAD 100
 
+#ifndef SCRAMBLES_TXT
+#define SCRAMBLES_TXT "./txt_files/scrambles.txt"
+#endif
 
 
 /*
  * si se escribe cualquier letra que corresponda a un movimiento, se realizara en el cubo en pantalla
- * si se presiona 'w'. se mezclará el cubo con una mezcla aleatoria elegida de entre las mezclas del fichero "scrambles.txt"
+ * si se presiona 'w'. se mezclará el cubo con una mezcla aleatoria elegida de entre las mezclas del fichero SRAMBLES_TXT
  * si se presiona 'q', se terminará el programa.
 */
 int c_interface(int option, int new){
     Cube3 *c = NULL;
     char cad[MAX_CAD], letter, *solution = NULL;
     short flag=0;
-    char scramblefile[MAX_CAD]="scrambles.txt";
+    char scramblefile[MAX_CAD]=SCRAMBLES_TXT;
     cprint_from_stickers printcube = c_print2; /* This is the only place in the routine where 
                                                * the function that prints the cube must be changed*/
 

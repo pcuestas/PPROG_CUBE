@@ -19,9 +19,9 @@
 #define OTHER 2
 
 /*FILES WHERE ARE THE GRAPHIC CONTENT*/
-#define MAINMENU "menu.txt"
-#define NEWGAMEMNU "newgame.txt"
-#define ARROW "arrow.txt"
+#define MAIN_MENU "./txt_files/menu.txt"
+#define NEW_GAME_MENU "./txt_files/newgame.txt"
+#define ARROW "./txt_files/arrow.txt"
 
 /**
  line 2-9: new game -->pos 0
@@ -102,7 +102,7 @@ int ShowMainMenu()
 
     printf("%c[2J", 27);
 
-    print_element(MAINMENU, r_menu);
+    print_element(MAIN_MENU, r_menu);
     print_element(ARROW, r_arrow);
 
     do
@@ -154,7 +154,7 @@ int ShowNewGameMenu()
 
     printf("%c[2J", 27);
 
-    print_element(NEWGAMEMNU, r_menu);
+    print_element(NEW_GAME_MENU, r_menu);
     print_element(ARROW, r_arrow);
 
     do
@@ -225,7 +225,7 @@ void print_menu(int pos)
 
     Bool rep = FALSE;
     int c, column, line, incr = 1, posi;
-    char menu[30], arrow[30];
+    char menu[30]=MAIN_MENU, arrow[30]=ARROW;
     FILE *fp;
 
     posi = pos * 10 + 2;
@@ -233,9 +233,6 @@ void print_menu(int pos)
     /*WHERE TO START PRINTING VIEW*/
     line = 2;
     column = 29;
-
-    strcpy(menu, "menu.txt");
-    strcpy(arrow, "arrow.txt");
 
     fp = fopen(menu, "r");
     printf("%c[2J", 27); /*Cleans the screen*/

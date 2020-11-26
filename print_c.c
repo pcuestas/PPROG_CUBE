@@ -2,7 +2,9 @@
 #include <string.h>
 #include "types.h"
 
-#define CUBE_FILE "cubo3.txt"
+#define CUBE_1 "./txt_files/cubo.txt"
+#define CUBE_2 "./txt_files/cubo2.txt"
+#define CUBE_3 "./txt_files/cubo3.txt"
 
 Status refresh_cube(Cube3* c, FILE* pf, cprint_from_stickers print_cube){
     short s[54];
@@ -239,7 +241,7 @@ int c_print2(FILE *f, short *s,short *col){
     Bool flag = FALSE,rep=FALSE;
     int c, color, aux,column,line,incr=1,code=65,min=65; 
     FILE *fp;
-    char firstview[30],secondview[30];
+    char firstview[30]=CUBE_1, secondview[30]=CUBE_2;
 
     /*
                                 VARIABLES EXPLAINED
@@ -257,9 +259,6 @@ int c_print2(FILE *f, short *s,short *col){
     /*WHERE TO START PRINTING 1st VIEW*/
     line = 3;
     column = 1;
-
-    strcpy(firstview, "cubo.txt");
-    strcpy(secondview, "cubo2.txt");
 
     sticker_to_color(s,col);
     if(col==NULL)
@@ -337,7 +336,7 @@ int c_print3(short *s,short*col, rect *r1, rect *r2){ /*Like cprint2 but using r
     Bool flag = FALSE, rep = FALSE;
     int c, color, aux, column, line, incr = 1, code = 65, min = 65;
     FILE *fp;
-    char firstview[30]=CUBE_FILE, secondview[30]="cubo2.txt";
+    char firstview[30]=CUBE_3, secondview[30]=CUBE_2;
 
     if (!r1 || !r2||!s||!col)
         return -1;
