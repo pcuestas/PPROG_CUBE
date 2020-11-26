@@ -4,7 +4,7 @@ OBJ=cube.o solver.o print_c.o interface.o bcd.o terminal_funct.o cube_interface.
 TEMPEXE=prueba
 LIB2=-lpthread
 LIB=-lSDL2main -lSDL2 -lSDL2_image -lglut -lGLU -lGL -lm
-OBJTEMPEXE=$(TEMPEXE).o cube.o print_c.o solver.o lib_funct.o lib_struct.o
+OBJTEMPEXE=$(TEMPEXE).o cube.o print_c.o solver.o lib_funct.o lib_struct.o interface.o
 
 MENU=menu_interface
 OBJ2=$(MENU).o menu.o interface.o
@@ -12,7 +12,7 @@ OBJ2=$(MENU).o menu.o interface.o
 CFLAGS=-ansi -pedantic -Wall -g
 CC=gcc
 
-HEADERS=cube.h solver.h print_c.h types.h menu.h interface.h bcd.h terminal_funct.h
+HEADERS=cube.h solver.h print_c.h types.h menu.h interface.h bcd.h terminal_funct.h interface.h
 
 
 all: $(EXE)

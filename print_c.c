@@ -2,6 +2,7 @@
 #include <string.h>
 #include "types.h"
 
+#define CUBE_FILE "cubo3.txt"
 
 Status refresh_cube(Cube3* c, FILE* pf, cprint_from_stickers print_cube){
     short s[54];
@@ -336,16 +337,13 @@ int c_print3(short *s,short*col, rect *r1, rect *r2){ /*Like cprint2 but using r
     Bool flag = FALSE, rep = FALSE;
     int c, color, aux, column, line, incr = 1, code = 65, min = 65;
     FILE *fp;
-    char firstview[30], secondview[30];
+    char firstview[30]=CUBE_FILE, secondview[30]="cubo2.txt";
 
     if (!r1 || !r2||!s||!col)
         return -1;
 
     line = rect_getline(r1);
     column = rect_getcolumn(r1);
-
-    strcpy(firstview, "cubo.txt");
-    strcpy(secondview, "cubo2.txt");
 
     sticker_to_color(s,col);
   
@@ -362,7 +360,7 @@ print:
         if (feof(fp))
             break;
 
-        if (c >= min && c <= min + 26)
+        if (c >= min && c <= min + 53)/*54 is the number of stickers**/
         { /*If you have reached the begining of a sticker */
 
             aux = c;
@@ -400,9 +398,9 @@ print:
 
         printf(" ");
     } while (1);
-
+/****************************second view
     if (rep == FALSE)
-    { /*update values for printing secondary view*/
+    { /update values for printing secondary view/
         fclose(fp);
         rep = TRUE;
         code = 70;
@@ -411,10 +409,9 @@ print:
         fp = fopen(secondview, "r");
         column = rect_getcolumn(r2);
         line = rect_getline(r2);
-        /*rect_clear(r2);*/
+        /rect_clear(r2);/
         goto print;
-    }
-
+    }**********************/
     fclose(fp);
     return (0);
 }
