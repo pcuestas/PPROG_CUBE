@@ -3,13 +3,13 @@
 #define MAX_CAD 100
 
 
+
 /*
  * si se escribe cualquier letra que corresponda a un movimiento, se realizara en el cubo en pantalla
  * si se presiona 'w'. se mezclará el cubo con una mezcla aleatoria elegida de entre las mezclas del fichero "scrambles.txt"
  * si se presiona 'q', se terminará el programa.
 */
-int c_interface(int option)
-{
+int c_interface(int option, int new){
     Cube3 *c = NULL;
     char cad[MAX_CAD], letter, *solution = NULL;
     short flag=0;

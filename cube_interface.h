@@ -16,7 +16,7 @@
 #include "interface.h"
 #include "bcd.h"
 
-/*calls the cube interface with the option (2 or 3)*/
-int c_interface(int option);
+/*calls the cube interface with the option (2 or 3), new==1 iff we want a new game, else we charge a game from a file*/
+int c_interface(int option, int new);
 
 #endif
