@@ -37,19 +37,16 @@ $(MENU): $(OBJ2) $(HEADERS)
 $(TEMPEXE): $(OBJTEMPEXE) $(HEADERS)
 	$(CC) $(OBJTEMPEXE) $(LIB) -o $@
 
-main: main.o cube.o print_c.o
-	$(CC) main.o cube.o print_c.o -o main
+#lib_struct.o: lib_struct.c lib_funct.h
+#	$(CC) $(CFLAGS) -c $<
+#
+#print_c.o: print_c.c print_c.h interface.h cube.h
+#	$(CC) $(CFLAGS) -c $<
+#
+#solver.o: solver.c solver.h cube.h
+#	$(CC) $(CFLAGS) -c $<
 
-lib_struct.o: lib_struct.c lib_funct.h
-	$(CC) $(CFLAGS) -c $<
-
-print_c.o: print_c.c print_c.h interface.o cube.o
-	$(CC) $(CFLAGS) -c $<
-
-solver.o: solver.c solver.h cube.o
-	$(CC) $(CFLAGS) -c $<
-
-%.o: %.c %.h
+%.o: %.c $(HEADERS)
 	$(CC) $(CFLAGS) -c $<
 
 clean:

@@ -12,7 +12,6 @@ int main(void) {
   if(!c) return 1;
 
 
-  c_moves(c,"RUru");
 
   if(colour_stickers(c,s)==ERROR) {
     c_free(c);
@@ -21,6 +20,8 @@ int main(void) {
 
 
   c_print(stdout, s);
+
+  printf("\n\n\n\n\n\n");
 
   c_free(c);
 	return 0;

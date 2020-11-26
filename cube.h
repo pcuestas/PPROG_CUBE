@@ -15,7 +15,15 @@
 COLORS: (standard) defined so that the id of a piece is c[0]+c[1]+c[2]
 */
 
+#define W 1 
+#define Y 2 
+#define R 3 
+#define O 4
+#define G 5
+#define B 6
+#define N 0 
 
+/*
 #define W 1 
 #define Y 2 
 #define R 10 
@@ -23,7 +31,7 @@ COLORS: (standard) defined so that the id of a piece is c[0]+c[1]+c[2]
 #define G 100
 #define B 200
 #define N 0 
-
+*/
 
 #define NPC 26 /*number of pieces*/
 

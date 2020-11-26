@@ -80,7 +80,7 @@ Status counter_data_set_rects(counter_data *dat, int line, int column, int l, in
         rect_setlength(dat->rcounter[i],l);
     }
 
-    column+20*2+5; /*20 for each rect, 5 for the separation*/
+    column+=20*2+5; /*20 for each rect, 5 for the separation*/
 
     for (i = 2; i < 4; i++){
         rect_setline(dat->rcounter[i], line);

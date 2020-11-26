@@ -333,10 +333,10 @@ int c_print2(FILE *f, short *s,short *col){
 
 int c_print3(short *s,short*col, rect *r1, rect *r2){ /*Like cprint2 but using rectangles*/
 
-    Bool flag = FALSE, rep = FALSE;
+    Bool flag = FALSE /*, rep = FALSE*/;
     int c, color, aux, column, line, incr = 1, code = 65, min = 65;
     FILE *fp;
-    char firstview[30]=CUBE_3, secondview[30]=CUBE_2;
+    char firstview[30]=CUBE_3 /*, secondview[30]=CUBE_2*/;
 
     if (!r1 || !r2||!s||!col)
         return -1;
@@ -350,7 +350,7 @@ int c_print3(short *s,short*col, rect *r1, rect *r2){ /*Like cprint2 but using r
     fp = fopen(firstview, "r");
     /*rect_clear(r1); // always printing in the same rect.*/
 
-print:
+/*print:*/
     printf("%c[%i;%iH", 27, line, column); 
 
     do

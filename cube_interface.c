@@ -17,8 +17,6 @@ int c_interface(int option, int new){
     char cad[MAX_CAD], letter, *solution = NULL;
     short flag=0;
     char scramblefile[MAX_CAD]=SCRAMBLES_TXT;
-    cprint_from_stickers printcube = c_print2; /* This is the only place in the routine where 
-                                               * the function that prints the cube must be changed*/
 
     cprint_from_stickers2 pcube=c_print3;
     rect *rvista1, *rvista2;

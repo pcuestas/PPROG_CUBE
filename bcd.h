@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "interface.h"
 
 typedef struct _counter_data counter_data;
