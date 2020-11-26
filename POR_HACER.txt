@@ -4,3 +4,4 @@
 4. Ver como se puede modificar el tamaño del api
 5. Mejorar crono: que empiece a contar con el primer movimiento
 6. Que pasa cunado muere un hilo...
+7. Print element in rectangle., que tenga en cuenta los bordes y no se pueda salir
