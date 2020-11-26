@@ -6,26 +6,19 @@ LIB2=-lpthread
 LIB=-lSDL2main -lSDL2 -lSDL2_image -lglut -lGLU -lGL -lm
 OBJTEMPEXE=$(TEMPEXE).o cube.o print_c.o solver.o lib_funct.o lib_struct.o interface.o
 
-MENU=menu_interface
-OBJ2=$(MENU).o menu.o interface.o
-
 CFLAGS=-ansi -pedantic -Wall -g
 CC=gcc
 
 HEADERS=*.h
 
-
 all: $(EXE)
 
 prueba: $(TEMPEXE)
 
-menui: $(MENU)
-
 run:
 	./$(EXE)
 
-
-gamelib: 
+run_lib: 
 	./$(TEMPEXE)
 
 $(EXE): $(OBJ) $(HEADERS)
