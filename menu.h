@@ -23,11 +23,6 @@ int read_keyMenu();
 
 int ShowNewGameMenu();
 
-/**
- * @brief Manages the main menu and the NewGameMenu at the same time.
- * @return 3 if 3x3 cube is selected, 2 in the case of the 2x2 cube and 0 to exit the game 
- */
-int MenusDisplay();
 
 /*NOT USED ANY MORE*/
 /**

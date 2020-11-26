@@ -1,5 +1,5 @@
-EXE=cube_interface
-OBJ=cube.o solver.o print_c.o interface.o bcd.o $(EXE).o
+EXE=game
+OBJ=cube.o solver.o print_c.o interface.o bcd.o terminal_funct.o cube_interface.o menu.o $(EXE).o
 
 TEMPEXE=prueba
 LIB2=-lpthread
@@ -12,7 +12,7 @@ OBJ2=$(MENU).o menu.o interface.o
 CFLAGS=-ansi -pedantic -Wall -g
 CC=gcc
 
-HEADERS=cube.h solver.h print_c.h types.h menu.h interface.h bcd.h
+HEADERS=cube.h solver.h print_c.h types.h menu.h interface.h bcd.h terminal_funct.h
 
 
 all: $(EXE)
@@ -21,8 +21,6 @@ prueba: $(TEMPEXE)
 
 menui: $(MENU)
 
-game: 
-	./$(EXE)
 
 gamelib: 
 	./$(TEMPEXE)

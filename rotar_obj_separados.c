@@ -7,50 +7,17 @@
 #else
 #include <GL/glut.h>
 #endif
+
+
+
 float angleaux;
-
-float _angle = 30.0f;
-int mov;
-int flag = 0;
-//Called when a key is pressed
-void handleKeypress(unsigned char key, int x, int y)
-{
-    switch (key)
-    {
-    case 27: //Escape key
-        exit(0);
-    case 'r':
-        mov = 1;
-        _angle = 0;
-        break;
-    
-    case 'R':
-        mov=2;
-        _angle=0;
-    break;
-    }
-}
-
-//Initializes 3D rendering
-
-//Called when the window is resized
-void handleResize(int w, int h)
-{
-    glViewport(0, 0, w, h);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(-2, 2, -2, 2, -20, 20);
-
-    gluLookAt(1.5, 1.0, 1.0, 0, 0, 0, 0.5, 0, 0);
-}
-
 float _cameraAngle = 0.0f;
+float _angle = 30.0f;
+char mov;
+int flag = 0;
 
-//Draws the 3D scene
-void drawScene()
-{
-    static float cube[56][3] = {
-        //Cara 1
+static float cube[56][3] = {
+        /*Cara 1*/
         {0.6, 0.6, 0.6},
         {0.6, 0.6, 0.2},
         {0.6, 0.6, -0.2},
@@ -68,57 +35,79 @@ void drawScene()
         {0.6, -0.2, -0.2},
         {0.6, -0.2, 0.2},
 
-        //Cara 2
+        /*Cara 2*/
         {0.2, 0.6, 0.6},
         {-0.2, 0.6, 0.6},
         {-0.6, 0.6, 0.6},
         {-0.6, 0.6, 0.2},
         {-0.6, 0.6, -0.2},
         {-0.6, 0.6, -0.6},
-        {-0.2, 0.6, -0.6}, //22
+        {-0.2, 0.6, -0.6}, /*22*/
         {0.2, 0.6, -0.6},
         {0.2, 0.6, -0.2},
         {0.2, 0.6, 0.2},
         {-0.2, 0.6, 0.2},
-        {-0.2, 0.6, -0.2}, //27
+        {-0.2, 0.6, -0.2}, /*27*/
 
-        //Cara 3
+        /*Cara 3*/
         {-0.6, 0.2, 0.6},
         {-0.6, 0.2, 0.2},
         {-0.6, 0.2, -0.2},
         {-0.6, 0.2, -0.6},
         {-0.6, -0.2, -0.6},
-        {-0.6, -0.6, -0.6}, //33
+        {-0.6, -0.6, -0.6}, /*33*/
         {-0.6, -0.6, -0.2},
         {-0.6, -0.6, 0.2},
         {-0.6, -0.6, 0.6},
         {-0.6, -0.2, 0.6},
         {-0.6, -0.2, 0.2},
-        {-0.6, -0.2, -0.2}, //39
+        {-0.6, -0.2, -0.2}, /*39*/
 
-        //Cara 4
+        /*Cara 4*/
         {-0.2, -0.6, 0.6},
         {-0.2, -0.6, 0.2},
         {-0.2, -0.6, -0.2},
         {-0.2, -0.6, -0.6},
-        {0.2, -0.6, -0.6}, //44
+        {0.2, -0.6, -0.6}, /*44*/
         {0.2, -0.6, -0.2},
         {0.2, -0.6, 0.2},
-        {0.2, -0.6, 0.6}, //47
+        {0.2, -0.6, 0.6}, /*47*/
 
-        //Cara 5
+        /*Cara 5*/
         {0.2, 0.2, 0.6},
         {0.2, -0.2, 0.6},
         {-0.2, -0.2, 0.6},
         {-0.2, 0.2, 0.6},
 
-        //Cara 6
+        /*Cara 6*/
         {0.2, 0.2, -0.6},
         {0.2, -0.2, -0.6},
         {-0.2, -0.2, -0.6},
         {-0.2, 0.2, -0.6}
+};
 
-    };
+/*Called when a key is pressed*/
+void handleKeypress(unsigned char key, int x, int y){
+    mov=key;
+}
+
+/*Initializes 3D rendering*/
+
+/*Called when the window is resized*/
+void handleResize(int w, int h)
+{
+    glViewport(0, 0, w, h);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(-2, 2, -2, 2, -20, 20);
+
+    gluLookAt(1.5, 1.0, 1.0, 0, 0, 0, 0.5, 0, 0);
+}
+
+
+/*Draws the 3D scene*/
+void drawScene(){
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glMatrixMode(GL_MODELVIEW);

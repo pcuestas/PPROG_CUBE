@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <termios.h>
+#include "terminal_funct.h"
 #include "types.h"
 #include "interface.h"
 
@@ -37,7 +39,11 @@
 
 int MenusDisplay()
 {
-    int choice1 = 0, choice2;
+    int choice1 = 0, choice2, ret=0;
+
+    /*modifica los parámetros de la terminal para poder leer las letras sin que se presione enter*/
+    _term_init();
+
 
 MainMenu_choice:
     choice1 = ShowMainMenu();
@@ -53,7 +59,8 @@ MainMenu_choice:
         break;
 
     case 2:
-        return 0;
+        ret=0;
+        goto End_MenusDisplay;
         break;
     }
 
@@ -63,12 +70,12 @@ Newgame_choice:
     case 0:
         /*EMPEZAR JUEGO CON 3x3*/
         printf("3x3\n");
-        return 3;
+        ret=3;
         break;
     case 1:
         /*EMPEZAR JUEGO CON 2x2*/
         printf("2x2\n");
-        return 2;
+        ret=2;
         break;
 
     case 2:
@@ -76,7 +83,11 @@ Newgame_choice:
         break;
     }
 
-    return 0;
+End_MenusDisplay:
+    /*deshace los cambios hechos por _term_init()*/
+    tcsetattr(fileno(stdin), TCSANOW, &initial); 
+
+    return ret;
 }
 
 int ShowMainMenu()
