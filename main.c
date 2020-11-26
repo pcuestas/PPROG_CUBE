@@ -1,3 +1,5 @@
+/*first attempt to check cube.h*/
+
 #include <stdio.h>
 #include "cube.h"
 #include "print_c.h"
@@ -12,12 +14,10 @@ int main(void) {
   if(!c) return 1;
 
 
-
   if(colour_stickers(c,s)==ERROR) {
     c_free(c);
     return 1;
   }
-
 
   c_print(stdout, s);
 
