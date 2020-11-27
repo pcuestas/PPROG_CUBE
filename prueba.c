@@ -31,11 +31,13 @@ int main(int argc, char *argv[])
     SDL_Event event, ev2;
     Uint32 then, now, frames;
     Cube3 *c = NULL;
+    SDL_Event ev;
     cprint_from_stickers printcube = c_print2;
     char cad[MAX_CAD], *text = malloc(200);
     short s[54], s2[54];
     double **stickers = NULL, **stickers2 = NULL;
     char akkk = 'u', *solution = NULL;
+    float angle = 0.0f;
 
     c = c_init();
     if (!c)
@@ -82,7 +84,7 @@ int main(int argc, char *argv[])
         if (!stickers)
             return ERROR;
 
-        SDL_Event ev;
+        
         while (SDL_PollEvent(&ev))
         {
 
@@ -114,8 +116,43 @@ int main(int argc, char *argv[])
                 break;
             case SDL_TEXTINPUT:
                 strcat(text, ev.text.text);
-                c_make(c, text[j]);
-                if (text[j] == 'w')
+                angle = 0;
+                if (text[j] == 'R'||text[j]=='L'||text[j]=='M'||text[j]=='E'||text[j]=='U'||text[j]=='D'||text[j]=='F'||text[j]=='B'||text[j]=='S')
+                {
+                    glPushMatrix();
+                    while (angle < 90.0f)
+                    {
+
+                        SDL_GL_MakeCurrent(window, ctx);
+                        SDL_GetWindowSize(window, &w, &h);
+                        glViewport(0, 0, w, h);
+                        Rot_layer(angle, stickers, text[j]);
+                        SDL_GL_SwapWindow(window);
+
+                        SDL_Delay(10);
+                        angle += 1.0f;
+                    }
+                    glPopMatrix();
+                }
+                else if (text[j] == 'x'||text[j] == 'X'||text[j] == 'y'||text[j] == 'Y'||text[j] == 'z'||text[j] == 'Z')
+                {
+                    while (angle < 90.0f)
+                    {
+
+                        SDL_GL_MakeCurrent(window, ctx);
+                        SDL_GetWindowSize(window, &w, &h);
+                        glViewport(0, 0, w, h);
+                        Rot(angle, stickers, text[j]);
+                        SDL_GL_SwapWindow(window);
+
+                        SDL_Delay(10);
+                        angle += 1.0f;
+                    }
+                   
+                }
+                
+                
+                else if (text[j] == 'w')
                     scramble_cube(c, SCRAMBLES_TXT);
                 else if (text[j] == 'W')
                 {
@@ -181,10 +218,17 @@ int main(int argc, char *argv[])
                     }
                     free(solution);
                 }
+                c_make(c, text[j]);
                 j++;
                 break;
             }
         }
+        if (colour_stickers(c, s) == ERROR)
+            return ERROR;
+
+        stickers = sticker_colorSDL(s);
+        if (!stickers)
+            return ERROR;
         SDL_GL_MakeCurrent(window, ctx);
         SDL_GetWindowSize(window, &w, &h);
         glViewport(0, 0, w, h);
@@ -193,7 +237,7 @@ int main(int argc, char *argv[])
         colorSDL_free(stickers);
     }
     SDL_StopTextInput();
-
+    free(text);
     SDL_Delay(1000);
     quit(0);
     c_free(c);

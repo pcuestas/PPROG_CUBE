@@ -9,30 +9,62 @@
 
 #include "lib_funct.h"
 
-#define U_INDEXES {0,1,2,3,4,5,6,7,8}
-#define E_INDEXES {9,10,11,12,13,14,15,16,-1}
-#define D_INDEXES {17,18,19,20,21,22,23,24,25}
-#define R_INDEXES {2,5,8,11,12,13,19,20,21}
-#define L_INDEXES {0,3,6,9,16,15,17,24,23}
-#define M_INDEXES {1,4,7,10,14,18,25,22,-1}
-#define F_INDEXES {6,7,8,15,14,13,23,22,21}
-#define B_INDEXES {0,1,2,9,10,11,17,18,19}
-#define S_INDEXES {3,4,5,16,12,24,25,20,-1}
+#define U_INDEXES                 \
+    {                             \
+        0, 1, 2, 3, 4, 5, 6, 7, 8 \
+    }
+#define E_INDEXES                         \
+    {                                     \
+        9, 10, 11, 12, 13, 14, 15, 16, -1 \
+    }
+#define D_INDEXES                          \
+    {                                      \
+        17, 18, 19, 20, 21, 22, 23, 24, 25 \
+    }
+#define R_INDEXES                       \
+    {                                   \
+        2, 5, 8, 11, 12, 13, 19, 20, 21 \
+    }
+#define L_INDEXES                      \
+    {                                  \
+        0, 3, 6, 9, 16, 15, 17, 24, 23 \
+    }
+#define M_INDEXES                       \
+    {                                   \
+        1, 4, 7, 10, 14, 18, 25, 22, -1 \
+    }
+#define F_INDEXES                       \
+    {                                   \
+        6, 7, 8, 15, 14, 13, 23, 22, 21 \
+    }
+#define B_INDEXES                      \
+    {                                  \
+        0, 1, 2, 9, 10, 11, 17, 18, 19 \
+    }
+#define S_INDEXES                       \
+    {                                   \
+        3, 4, 5, 16, 12, 24, 25, 20, -1 \
+    }
+#define BLACK_INDEXES                   \
+    {                                   \
+        3, 4, 5, 16, 12, 24, 25, 20, -1 \
+    }
 #define SIZE_FACE 9
 
-
-
-void paint_sSticker(sSticker *s, float cube[56][3], double **rgb){
-    if((s->num) != -1){
+void paint_sSticker(sSticker *s, float cube[56][3], double **rgb)
+{
+    if ((s->num) != -1)
+    {
         glColor3f(rgb[s->num][0], rgb[s->num][1], rgb[s->num][2]);
         glVertex3fv(cube[s->mat[0]]);
         glVertex3fv(cube[s->mat[1]]);
         glVertex3fv(cube[s->mat[2]]);
         glVertex3fv(cube[s->mat[3]]);
-    }  
+    }
 }
 
-void paint_sPiece(sPiece *p, float cube[56][3], double **rgb){
+void paint_sPiece(sPiece *p, float cube[56][3], double **rgb)
+{
     paint_sSticker(&(p->st[0]), cube, rgb);
     paint_sSticker(&(p->st[1]), cube, rgb);
     paint_sSticker(&(p->st[2]), cube, rgb);
@@ -45,68 +77,73 @@ void paint_sPiece(sPiece *p, float cube[56][3], double **rgb){
  * in face c='R','U','D','L','F','B','M','E','S'
  * and 0 otherwise
  **/
-int is_in_face(int i, char c){
-    char inU[]=U_INDEXES, inD[]=D_INDEXES, inE[]=E_INDEXES;
-    char inR[]=R_INDEXES, inL[]=L_INDEXES, inM[]=M_INDEXES;
-    char inF[]=F_INDEXES, inB[]=B_INDEXES, inS[]=S_INDEXES;
+int is_in_face(int i, char c)
+{
+    char inU[] = U_INDEXES, inD[] = D_INDEXES, inE[] = E_INDEXES;
+    char inR[] = R_INDEXES, inL[] = L_INDEXES, inM[] = M_INDEXES;
+    char inF[] = F_INDEXES, inB[] = B_INDEXES, inS[] = S_INDEXES;
     char pc[SIZE_FACE];
-    int j=0; /*because memcpy works with char*/
+    int j = 0; /*because memcpy works with char*/
 
-    if(i<0 || i>=26)
+    if (i < 0 || i >= 26)
         return 0;
-    
-    switch (c){
-        case 'U':
-            memcpy(pc, inU, SIZE_FACE);
-            break;
-        case 'D':
-            memcpy(pc, inD, SIZE_FACE);
-            break;
-        case 'E':
-            memcpy(pc, inE, SIZE_FACE);
-            break;
-        case 'R':
-            memcpy(pc, inR, SIZE_FACE);
-            break;
-        case 'L':
-            memcpy(pc, inL, SIZE_FACE);
-            break;
-        case 'M':
-            memcpy(pc, inM, SIZE_FACE);
-            break;
-        case 'B':
-            memcpy(pc, inB, SIZE_FACE);
-            break;
-        case 'F':
-            memcpy(pc, inF, SIZE_FACE);
-            break;
-        case 'S':
-            memcpy(pc, inS, SIZE_FACE);
-            break;
-        default:
-            return 0;
+
+    switch (c)
+    {
+    case 'U':
+        memcpy(pc, inU, SIZE_FACE);
+        break;
+    case 'D':
+        memcpy(pc, inD, SIZE_FACE);
+        break;
+    case 'E':
+        memcpy(pc, inE, SIZE_FACE);
+        break;
+    case 'R':
+        memcpy(pc, inR, SIZE_FACE);
+        break;
+    case 'L':
+        memcpy(pc, inL, SIZE_FACE);
+        break;
+    case 'M':
+        memcpy(pc, inM, SIZE_FACE);
+        break;
+    case 'B':
+        memcpy(pc, inB, SIZE_FACE);
+        break;
+    case 'F':
+        memcpy(pc, inF, SIZE_FACE);
+        break;
+    case 'S':
+        memcpy(pc, inS, SIZE_FACE);
+        break;
+    default:
+        return 0;
     }
-    for(j=0;j<SIZE_FACE;j++){
-        if((char)i==pc[j])
+    for (j = 0; j < SIZE_FACE; j++)
+    {
+        if ((char)i == pc[j])
             return 1;
     }
     return 0;
 }
 
 /*aux. function to declare the cube more easily (used in sCube_init() )*/
-void declare_sticker(sCube *sc, int pindex, int sindex, int num, int v1, int v2, int v3, int v4){
+void declare_sticker(sCube *sc, int pindex, int sindex, int num, int v1, int v2, int v3, int v4)
+{
     sc->pc[pindex].st[sindex].num = num;
     sc->pc[pindex].st[sindex].mat[0] = v1;
     sc->pc[pindex].st[sindex].mat[1] = v2;
     sc->pc[pindex].st[sindex].mat[2] = v3;
     sc->pc[pindex].st[sindex].mat[3] = v4;
 }
-    
-/*declares pieces as in piezas_lib_struct.jpeg*/
-sCube *sCube_init(){
-    sCube *sc=NULL;
 
-    if((sc=(sCube*)calloc(1, sizeof(sCube)))==NULL)
+/*declares pieces as in piezas_lib_struct.jpeg*/
+sCube *sCube_init()
+{
+    sCube *sc = NULL;
+
+    if ((sc = (sCube *)calloc(1, sizeof(sCube))) == NULL)
         return NULL;
 
     /*declaration of the whole cube: */
@@ -132,21 +169,21 @@ sCube *sCube_init(){
     declare_sticker(sc, 4, 2, 4, 12, 13, 14, 15);
     /*piece: UR */
     declare_sticker(sc, 5, 0, -1, 44, 45, 7, 6);
-    declare_sticker(sc, 5, 1, 19, 10 ,49, 48, 11);
-    declare_sticker(sc, 5, 2, 5 , 10, 11, 12, 15);
+    declare_sticker(sc, 5, 1, 19, 10, 49, 48, 11);
+    declare_sticker(sc, 5, 2, 5, 10, 11, 12, 15);
     /*piece: UFL */
-    declare_sticker(sc, 6, 0, 9 , 2, 3, 23, 24);
+    declare_sticker(sc, 6, 0, 9, 2, 3, 23, 24);
     declare_sticker(sc, 6, 1, 38, 52, 4, 3, 23);
-    declare_sticker(sc, 6, 2, 6 , 2, 3, 4, 13);
+    declare_sticker(sc, 6, 2, 6, 2, 3, 4, 13);
     /*piece: UF */
     declare_sticker(sc, 7, 0, 10, 1, 2, 24, 25);
     declare_sticker(sc, 7, 1, -1, 44, 6, 5, 53);
-    declare_sticker(sc, 7, 2, 7 , 1, 2, 13, 12);
+    declare_sticker(sc, 7, 2, 7, 1, 2, 13, 12);
     /*piece: UFR */
     declare_sticker(sc, 8, 0, 11, 0, 1, 25, 16);
     declare_sticker(sc, 8, 1, 18, 11, 48, 16, 0);
-    declare_sticker(sc, 8, 2, 8 , 0, 1, 12, 11);
-    
+    declare_sticker(sc, 8, 2, 8, 0, 1, 12, 11);
+
     /*piece: BL */
     declare_sticker(sc, 9, 0, 32, 43, 42, 45, 44);
     declare_sticker(sc, 9, 1, 39, 43, 44, 53, 54);
@@ -216,15 +253,14 @@ sCube *sCube_init(){
     declare_sticker(sc, 25, 0, -1, 44, 45, 7, 6);
     declare_sticker(sc, 25, 1, -1, 44, 6, 5, 53);
     declare_sticker(sc, 25, 2, 49, 30, 29, 38, 39);
-    
-    
+
     return sc;
 }
 
-void free_sCube(sCube *p){
-    if(p!=NULL)
+void free_sCube(sCube *p)
+{
+    if (p != NULL)
         free(p);
 }
-
 
 #endif

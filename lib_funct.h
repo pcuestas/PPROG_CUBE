@@ -54,4 +54,8 @@ void quit(int rc);
 
 void Render(int mov, double **s);
 
+void Rot_layer(float _angle, double **s, char c);
+
+void Rot(float _angle, double **s, char c);
+
 #endif
