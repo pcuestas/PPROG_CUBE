@@ -35,13 +35,17 @@ Status sticker_to_color(short *s,short *c);
  * @param s pointer to array of stickers (s[i]=MACRO of a color defined in cubo.c )
  * @return a 56x3 matrix with the rgb code 
  */
-double **sticker_colorSDL(short *s);
+double** sticker_colorSDL_init();/*allocates the pointer used in the next function*/
+double **sticker_colorSDL(short *s, double **c);
 
 /**
  * @brief Frees the array allocated by the function sticker_colorSDL
  * @param s matrix to be freed
  */
 void colorSDL_free(double** s);
+
+/*passes the cube stickers to the rgb matrix stickers*/
+void cube_to_SDL(Cube3 *c, double **stickers);
 
 /**
  * @brief prints a cube

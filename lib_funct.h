@@ -12,6 +12,8 @@
 #include <SDL2/SDL_timer.h>
 #include <GL/glut.h>
 
+#include "cube.h"
+
 #ifndef NPC
 #define NPC 26
 #endif
@@ -52,10 +54,26 @@ int is_in_face(int i, char c);
 
 void quit(int rc);
 
-void Render(int mov, double **s);
 
+void Render(double **s);
+
+/*wrapper of render with all the previous preparations*/
+void Render_wr(int *w, int *h, double **stickers, SDL_Window *_window, SDL_GLContext _ctx);
+
+/*rotation of a layer*/
 void Rot_layer(float _angle, double **s, char c);
 
+/*rotation of the whole cube*/
+void Rot_cube(float _angle, double **s, char c);
+
+/*rotation- calls either Rot_cube or Rot_layer*/
 void Rot(float _angle, double **s, char c);
+
+/*performs the whole rotation calling Rot several times (with different angles)*/
+void Rot_full_move(int *w, int *h, double **stickers, char move, SDL_Window *_window, SDL_GLContext _ctx);
+
+/*makes in cube3 c and displays moves in *moves string*/
+void SlowMoveRot(Cube3* c, int *w, int *h, double **stickers, char *moves, SDL_Window *_window, SDL_GLContext _ctx);
+
 
 #endif

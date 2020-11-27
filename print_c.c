@@ -9,7 +9,7 @@
 Status refresh_cube(Cube3* c, FILE* pf, cprint_from_stickers print_cube){
     short s[54];
 
-    if (colour_stickers(c, c->sitckers) == ERROR){
+    if (colour_stickers(c, c->stickers) == ERROR){
         return ERROR;
     }
 
@@ -21,14 +21,14 @@ Status refresh_cube(Cube3* c, FILE* pf, cprint_from_stickers print_cube){
 Status refresh_cube2(Cube3 *c, rect *r1, rect *r2, cprint_from_stickers2 print_cube){
 
     
-    if (colour_stickers(c, c->sitckers) == ERROR)
+    if (colour_stickers(c, c->stickers) == ERROR)
         return ERROR;
     
 
 
-    /*print_cube(c->sitckers,c->colorsESC,r1, r2);*/
+    /*print_cube(c->stickers,c->colorsESC,r1, r2);*/
 
-    c_print3(c->sitckers, c->colorsESC, r1, r2);
+    c_print3(c->stickers, c->colorsESC, r1, r2);
 
     return OK;
 }
@@ -163,12 +163,9 @@ Status sticker_to_color(short *s,short *c){
     return OK;
 }
 
-double **sticker_colorSDL(short *s){ /*CAMBIAR PARA QUE NO SE ALOQUE*/
-    int i,j;
-    double **c;
-
-    if (!s)
-        return NULL;
+double** sticker_colorSDL_init(){
+    double **c=NULL;
+    int i=0, j=0;
 
     if (!(c = (double **)calloc(54, sizeof(double*))))
         return NULL;
@@ -182,6 +179,14 @@ double **sticker_colorSDL(short *s){ /*CAMBIAR PARA QUE NO SE ALOQUE*/
             return NULL;
         }
     }
+    return c;
+}
+
+double **sticker_colorSDL(short *s, double **c){ 
+    int i=0;
+    
+    if (!s)
+        return NULL;
 
     for (i = 0; i < 54; i++){
         switch (s[i]){
@@ -222,6 +227,17 @@ double **sticker_colorSDL(short *s){ /*CAMBIAR PARA QUE NO SE ALOQUE*/
     }
 
     return c;
+}
+
+/*passes the cube stickers to the rgb matrix stickers*/
+void cube_to_SDL(Cube3 *c, double **stickers){
+    if(!c||!stickers)
+        return ;
+
+    if (colour_stickers(c, c->stickers) == ERROR)
+            return ;
+
+    sticker_colorSDL(c->stickers, stickers);
 }
 
 void colorSDL_free(double **s){
