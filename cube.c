@@ -214,6 +214,62 @@ Cube3 *c_init(){
   return c;
 }
 
+/**
+ * saves cube c in (binary) file save_game
+ * option is where wither 3 or 2 is passed (for 3x3 or 2x2)
+ * 
+ * returns ERROR/OK
+ **/
+int save_cube(Cube3 *c, char *save_game, int *option){
+    FILE *pf = NULL;
+    int ret = 0, i = 0;
+
+    if (!save_game)
+        return ERROR;
+
+    if (!(pf = fopen(save_game, "wb")))
+        return ERROR;
+
+    /*store the option at the beginning of the file*/
+    ret = fwrite(option, sizeof(option), 1, pf);
+
+    /*store every piece of the cube*/
+    for (i = 0; i < NPC && ret != 0; i++)
+        ret = fwrite(&(c->pc[i]), sizeof(Piece), 1, pf);
+
+    fclose(pf);
+
+    return ret == 0 ? ERROR : OK;
+}
+
+/**
+ * reads saved cube into c from (binary) file save_game
+ * option is where wither 3 or 2 is stored (for 3x3 or 2x2)
+ * 
+ * returns ERROR/OK
+ **/
+int read_saved_cube(Cube3 *c, char *save_game, int *option){
+    FILE *pf = NULL;
+    int ret = 0, i = 0;
+
+    if (!save_game)
+        return -1;
+
+    if (!(pf = fopen(save_game, "rb")))
+        return -1;
+
+    /*read the option at the beginning of the file*/
+    ret = fread(option, sizeof(option), 1, pf);
+
+    /*store every piece of the cube*/
+    for (i = 0; i < NPC && ret != 0; i++)
+        ret = fread(&(c->pc[i]), sizeof(Piece), 1, pf);
+
+    fclose(pf);
+
+    return ret == 0 ? ERROR : OK;
+}
+
 /*copies cube c1 into c2, and returns the allocated copy*/
 Cube3 *c_copy(Cube3*c1){
     Cube3* c2=NULL;

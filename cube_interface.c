@@ -12,7 +12,7 @@
  * si se presiona 'w'. se mezclará el cubo con una mezcla aleatoria elegida de entre las mezclas del fichero SRAMBLES_TXT
  * si se presiona 'q', se terminará el programa.
 */
-int c_interface(int option, int new){
+int c_interface(int option, int use_saved_game, char *save_game_file){
     Cube3 *c = NULL;
     char cad[MAX_CAD], letter, *solution = NULL;
     short flag=0;
@@ -29,7 +29,24 @@ int c_interface(int option, int new){
 
     c = c_init();
     if (!c)
-        return 1;
+        return ERROR;
+    
+    if (use_saved_game==TRUE)
+        if (read_saved_cube(c, save_game_file, &option)==ERROR){
+            c_free(c);
+            rect_free(rvista1);
+            rect_free(rvista2);
+            return ERROR;
+        }
+
+    switch(option){/*when 2x2 file is ready*/
+        case 2:
+            break;
+        case 3:
+            break;
+        default:
+            break;
+    }
 
     _term_init();/*modifica los parámetros de la terminal para poder leer las letras sin que se presione enter*/
 
@@ -37,8 +54,10 @@ int c_interface(int option, int new){
 
     if (refresh_cube2(c,rvista1,rvista2,pcube) == ERROR){
         c_free(c);
+        rect_free(rvista1);
+        rect_free(rvista2);
         tcsetattr(fileno(stdin), TCSANOW, &initial);/*deshace los cambios hechos por _term_init()*/
-        return 1;
+        return ERROR;
     }
 
     pthread_create(&pth, NULL, counter, NULL);
@@ -95,7 +114,6 @@ int c_interface(int option, int new){
         }
     }
 
-    c_free(c);
     rect_free(rvista1);
     rect_free(rvista2);
 
@@ -103,7 +121,12 @@ int c_interface(int option, int new){
 
     /*in case the loop gets any error*/
     if (flag == 1)
-        return -1;
+        return ERROR;
 
-    return 0;
+    if(save_cube(c, save_game_file, &option)==ERROR)
+        printf("There was an error when saving the game.\n");
+
+    c_free(c);
+
+    return OK;
 }
