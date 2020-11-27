@@ -91,30 +91,39 @@ int is_in_face(int i, char c)
     switch (c)
     {
     case 'U':
+    case 'u':
         memcpy(pc, inU, SIZE_FACE);
         break;
     case 'D':
+    case 'd':
         memcpy(pc, inD, SIZE_FACE);
         break;
     case 'E':
+    case 'e':
         memcpy(pc, inE, SIZE_FACE);
         break;
     case 'R':
+    case 'r':
         memcpy(pc, inR, SIZE_FACE);
         break;
     case 'L':
+    case 'l':
         memcpy(pc, inL, SIZE_FACE);
         break;
     case 'M':
+    case 'm':
         memcpy(pc, inM, SIZE_FACE);
         break;
     case 'B':
+    case 'b':
         memcpy(pc, inB, SIZE_FACE);
         break;
     case 'F':
+    case 'f':
         memcpy(pc, inF, SIZE_FACE);
         break;
     case 'S':
+    case 's':
         memcpy(pc, inS, SIZE_FACE);
         break;
     default:

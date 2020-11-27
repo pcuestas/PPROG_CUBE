@@ -239,12 +239,21 @@ void Rot_layer(float _angle, double **s, char c)
     }
     glEnd();
     glPushMatrix();
-    if(c=='L'||c=='M')glRotatef(_angle, 0.0f, 0.0f, 1.0f);
-    else if(c=='R')glRotatef(-_angle, 0.0f, 0.0f, 1.0f);
-    else if(c=='E'||c=='D')glRotatef(_angle, 1.0f, 0.0f, 0.0f);
-    else if(c=='U')glRotatef(-_angle, 1.0f, 0.0f, 0.0f);
-    else if(c=='F'||c=='S')glRotatef(-_angle, 0.0f, 1.0f, 0.0f);
-    else if(c=='B')glRotatef(_angle, 0.0f, 1.0f, 0.0f);
+
+    /*set up the angles and axis of rotation*/
+    if(c=='L'||c=='M'||c=='r')
+        glRotatef(_angle, 0.0f, 0.0f, 1.0f);
+    else if(c=='R'||c=='l'||c=='m')
+        glRotatef(-_angle, 0.0f, 0.0f, 1.0f);
+    else if(c=='E'||c=='D'||c=='u')
+        glRotatef(_angle, 1.0f, 0.0f, 0.0f);
+    else if(c=='U'||c=='e'||c=='d')
+        glRotatef(-_angle, 1.0f, 0.0f, 0.0f);
+    else if(c=='F'||c=='S'||c=='b')
+        glRotatef(-_angle, 0.0f, 1.0f, 0.0f);
+    else if(c=='B'||c=='f'||c=='s')
+        glRotatef(_angle, 0.0f, 1.0f, 0.0f);
+
     glBegin(GL_QUADS);
     for (i = 0; i < NPC; i++)
     {
@@ -388,10 +397,16 @@ void Rot(float _angle, double **s, char c)
 
         paint_sPiece(&(sc->pc[i]), cube, s);
     }
-    paint_blackFaces(cube);
+    /*paint_blackFaces(cube);*/
 
     glEnd();
     glPopMatrix();
 
     free_sCube(sc);
 }
+/*
+slow_moves(......., solucion){
+    for (i=0;i<strlen(solucion);i++){
+        funcion(....., solucion[i]);
+    }
+}*/

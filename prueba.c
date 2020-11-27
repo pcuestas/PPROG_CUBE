@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
             case SDL_TEXTINPUT:
                 strcat(text, ev.text.text);
                 angle = 0;
-                if (text[j] == 'R'||text[j]=='L'||text[j]=='M'||text[j]=='E'||text[j]=='U'||text[j]=='D'||text[j]=='F'||text[j]=='B'||text[j]=='S')
+                if (text[j] == 'R'||text[j]=='L'||text[j]=='M'||text[j]=='E'||text[j]=='U'||text[j]=='D'||text[j]=='F'||text[j]=='B'||text[j]=='S'||text[j] == 'r'||text[j]=='l'||text[j]=='m'||text[j]=='e'||text[j]=='u'||text[j]=='d'||text[j]=='f'||text[j]=='b'||text[j]=='s')
                 {
                     glPushMatrix();
                     while (angle < 90.0f)
