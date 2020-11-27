@@ -21,9 +21,16 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
     cprint_from_stickers2 pcube=c_print3;
     rect *rvista1, *rvista2;
     pthread_t pth;
+    counter_data *dat;
+    int stop = 0,firstmove=0;
 
-    rvista1 = rect_init(2, 2, 100, 70);
-    rvista2 = rect_init(32, 120, 40, 40);
+    rvista1 = rect_init(25, 2, 177, 76);
+    /*rvista2 = rect_init(32, 120, 40, 40);*/
+
+    if (!(dat = counter_data_init(dat)))
+        return -1;
+
+    counter_data_set_rects(dat, 2, 2, 15, 17);
 
     srand(time(NULL));
 
@@ -60,8 +67,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
         return ERROR;
     }
 
-    pthread_create(&pth, NULL, counter, NULL);
-
+    pthread_create(&pth,NULL,counter,dat);
     
     while (TRUE){
         letter=fgetc(stdin);
@@ -74,6 +80,9 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
                 flag = 1;
                 break;
             }
+            counter_data_set_time(dat, 0, 0);
+            counter_data_set_mode(dat,0);
+            firstmove=0;
         }
         else if(letter=='W'){
             solution = solve_cube(c);
@@ -92,19 +101,34 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
             free(solution);
             continue;
         }
-        else if(letter==' '){/*DEL: this is just for trials--solver.c*/
-            solve_permcorners(c, cad);
-            printf("%s\n", cad);
-            cad[0]=0;
-            continue;
+        
+        else if (letter == 'o')
+        {
+            terminal_clear();
+            /*PINTAR BORDES OTRA VEZ*/
         }
-        else{
+        else if (letter == 32){ /*stop crono*/
+            if (stop == 0){ /*counter was running*/
+               counter_data_set_mode(dat,-1);
+               stop = 1;
+            }else{
+                counter_data_set_mode(dat, 1);
+                stop = 0;
+            }
+        }else{
             cad[0]=letter;
             cad[1]='\0';
             if (c_moves(c, cad) == ERROR){
                 flag = 1;
                 break;
             }
+
+            if(firstmove==0){
+                counter_data_set_mode(dat,1);
+                terminal_clear();
+                firstmove=1;
+            }
+
         }
 
         if (refresh_cube2(c, rvista1, rvista2, pcube) == ERROR)
@@ -112,10 +136,9 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
             flag = 1;
             break;
         }
-    }
+        }
 
     rect_free(rvista1);
-    rect_free(rvista2);
 
     tcsetattr(fileno(stdin), TCSANOW, &initial);/*deshace los cambios hechos por _term_init()*/
 
@@ -126,7 +149,9 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
     if(save_cube(c, save_game_file, &option)==ERROR)
         printf("There was an error when saving the game.\n");
 
+    pthread_cancel(pth);
     c_free(c);
+    counter_data_free(dat);
 
     return OK;
 }

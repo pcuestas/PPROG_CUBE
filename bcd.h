@@ -21,6 +21,7 @@ counter_data* counter_data_init();
 void counter_data_free(counter_data *dat);
 
 Status counter_data_set_time(counter_data* dat,int min, int sec);
+Status counter_data_set_mode(counter_data* dat, int mode);
 
 /**
  * @brief Stablish the data of each rectangle of the struct. Should be called with l=15,h=17
@@ -29,6 +30,7 @@ Status counter_data_set_rects(counter_data* dat,int line, int column,int l,int h
 rect **counter_data_get_rect(counter_data* dat);
 int counter_data_get_min(counter_data*dat);
 int counter_data_get_sec(counter_data *dat);
+int counter_data_get_mode(counter_data *dat);
 
 /**Prints the segmenst of a bcd. Arguments line and column define the upper left corner**/
 void bcd_a(int line, int column);

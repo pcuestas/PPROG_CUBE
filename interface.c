@@ -41,7 +41,7 @@ Status rect_setcolumn(rect *r, int column){
     if (!r || column < 1)
         return ERROR;
 
-    r->line = column;
+    r->column = column;
     return OK;
 }
 
@@ -49,7 +49,7 @@ Status rect_setlength(rect *r, int l){
     if (!r || l < 0)
         return ERROR;
 
-    r->line = l;
+    r->l = l;
     return OK;
 }
 

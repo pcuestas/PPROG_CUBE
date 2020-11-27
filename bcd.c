@@ -22,7 +22,7 @@
 */
 
 struct _counter_data{
-    int sec, min;
+    int sec, min,mode; /*Mode=0: show time 00:00. Mode=-1 Counter stopped. Mode=1 Counter running*/
     rect *rcounter[4]; /*Array of counters where to print min(r[0],r[1]) and secs(r[2],r[3])*/
 };
 
@@ -43,6 +43,10 @@ counter_data *counter_data_init(){
         }
     }
 
+    dat->min=0;
+    dat->sec=0;
+    dat->mode=0;
+
     return dat;
 }
 
@@ -55,6 +59,13 @@ void counter_data_free(counter_data *dat){
         free(dat);
     }
         
+}
+Status counter_data_set_mode(counter_data *dat, int mode){
+    if(!dat||mode>1||mode<-1)
+        return ERROR;
+    
+    dat->mode=mode;
+    return OK;
 }
 
 Status counter_data_set_time(counter_data* dat, int min, int sec){
@@ -97,6 +108,27 @@ rect **counter_data_get_rect(counter_data *dat){
         return NULL;
     
     return dat->rcounter;
+}
+
+int counter_data_get_mode(counter_data *dat){
+    if(!dat)
+        return -2;
+    
+    return dat->mode;
+}
+
+int counter_data_get_min(counter_data *dat){
+    if (!dat)
+        return -1;
+
+    return dat->min;
+}
+
+int counter_data_get_sec(counter_data *dat){
+    if (!dat)
+        return -1;
+
+    return dat->sec;
 }
 
 void bcd_a(int l, int c)
@@ -328,55 +360,71 @@ int bcd_display(int n, rect *r)
     return 0;
 }
 
-void *counter(void *a)
-{
-    int hour, minute, second;
-    rect *rs1, *rs2, *rmin1, *rmin2;
-    hour = minute = second = 0;
+void *counter(void *dat){
+    rect **r;
+    counter_data *d;
+    int blank=0,stop=0;
 
-    rs1 = rect_init(2, 160, 15, 17);
+    /*rs1 = rect_init(2, 160, 15, 17);
     rs2 = rect_init(2, 180, 15, 17);
     rmin1 = rect_init(2, 115, 15, 17);
-    rmin2 = rect_init(2, 135, 15, 17);
+    rmin2 = rect_init(2, 135, 15, 17);*/
 
-    bcd_display(second % 10, rs2);
-    bcd_display(second / 10, rs1);
-    bcd_display(minute % 10, rmin2);
-    bcd_display(minute / 10, rmin1);
+    d = (counter_data *)dat;
 
-    while (1)
+    r = d->rcounter;
+
+    while(1){
+
+    while(d->mode==0){ /*Print time 0*/
+        if(blank==0){
+            bcd_display(0, r[3]);
+            bcd_display(0, r[2]);
+            bcd_display(0, r[1]);
+            bcd_display(0, r[0]);
+            blank=1;
+        }
+        
+    }
+
+
+    while(d->mode==-1){/*Counter stopped*/
+        if(stop==0){
+            bcd_display(d->sec % 10, r[3]);
+            bcd_display(d->sec / 10, r[2]);
+            bcd_display(d->min % 10, r[1]);
+            bcd_display(d->min / 10, r[0]);
+            stop=1;
+        }
+   
+    }
+
+
+    while (d->mode==1)/*Counter running*/
     {
 
-        bcd_display(second % 10, rs2);
-        bcd_display(second / 10, rs1);
+        bcd_display(d->min % 10, r[1]);
+        bcd_display(d->min / 10, r[0]);
+        bcd_display(d->sec % 10, r[3]);
+        bcd_display(d->sec / 10, r[2]);
 
-        second++;
+        d->sec++;
 
-        if (second == 60)
+        if (d->sec == 60)
         {
-            bcd_display(minute % 10, rmin2);
-            bcd_display(minute / 10, rmin1);
-            minute += 1;
-            second = 0;
+            bcd_display(d->min % 10, r[1]);
+            bcd_display(d->min / 10, r[0]);
+            d->min += 1;
+            d->sec = 0;
         }
-        if (minute == 60)
+        if (d->min == 60)
         {
-            hour += 1;
-            minute = 0;
-        }
-        if (hour == 24)
-        {
-            hour = 0;
-            minute = 0;
-            second = 0;
+            d->min = 0;
         }
         sleep(1);
     }
 
-    rect_free(rs1);
-    rect_free(rs2);
-    rect_free(rmin2);
-    rect_free(rmin1);
+    }
 
     return 0;
 }
