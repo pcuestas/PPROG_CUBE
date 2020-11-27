@@ -21,23 +21,19 @@
 
 #define MAX_CAD 500
 
-static SDL_GLContext ctx;
-static SDL_Window *window;
-
 int main(int argc, char *argv[])
 {
-    int value, flag = 0, mov, i = 0, done, j = 0, status, w, h;
-    SDL_DisplayMode mode;
-    SDL_Event event, ev2;
-    Uint32 then, now, frames;
+    int flag = 0, i = 0, j = 0, w, h;
+    SDL_Event ev2;
     Cube3 *c = NULL;
     SDL_Event ev;
-    cprint_from_stickers printcube = c_print2;
-    char cad[MAX_CAD], *text = malloc(200);
+    char *text = malloc(200);
     short s[54], s2[54];
     double **stickers = NULL, **stickers2 = NULL;
-    char akkk = 'u', *solution = NULL;
+    char *solution = NULL;
     float angle = 0.0f;
+    SDL_GLContext ctx;
+    SDL_Window *window;
 
     c = c_init();
     if (!c)
@@ -84,7 +80,6 @@ int main(int argc, char *argv[])
         if (!stickers)
             return ERROR;
 
-        
         while (SDL_PollEvent(&ev))
         {
 
@@ -97,18 +92,6 @@ int main(int argc, char *argv[])
             case SDL_KEYDOWN:
                 switch (ev.key.keysym.sym)
                 {
-                case SDLK_UP:
-                    mov = 1;
-                    break;
-                case SDLK_DOWN:
-                    mov = 2;
-                    break;
-                case SDLK_LEFT:
-                    mov = 3;
-                    break;
-                case SDLK_RIGHT:
-                    mov = 4;
-                    break;
                 case SDLK_ESCAPE:
                     flag = 1;
                     break;
@@ -117,15 +100,14 @@ int main(int argc, char *argv[])
             case SDL_TEXTINPUT:
                 strcat(text, ev.text.text);
                 angle = 0;
-                if (text[j] == 'R'||text[j]=='L'||text[j]=='M'||text[j]=='E'||text[j]=='U'||text[j]=='D'||text[j]=='F'||text[j]=='B'||text[j]=='S'||text[j] == 'r'||text[j]=='l'||text[j]=='m'||text[j]=='e'||text[j]=='u'||text[j]=='d'||text[j]=='f'||text[j]=='b'||text[j]=='s')
+                if (text[j] == 'R' || text[j] == 'L' || text[j] == 'M' || text[j] == 'E' || text[j] == 'U' || text[j] == 'D' || text[j] == 'F' || text[j] == 'B' || text[j] == 'S' || text[j] == 'r' || text[j] == 'l' || text[j] == 'm' || text[j] == 'e' || text[j] == 'u' || text[j] == 'd' || text[j] == 'f' || text[j] == 'b' || text[j] == 's')
                 {
                     glPushMatrix();
+                    SDL_GetWindowSize(window, &w, &h);
+                    SDL_GL_MakeCurrent(window, ctx);
+                    glViewport(0, 0, w, h);
                     while (angle < 90.0f)
                     {
-
-                        SDL_GL_MakeCurrent(window, ctx);
-                        SDL_GetWindowSize(window, &w, &h);
-                        glViewport(0, 0, w, h);
                         Rot_layer(angle, stickers, text[j]);
                         SDL_GL_SwapWindow(window);
 
@@ -134,24 +116,22 @@ int main(int argc, char *argv[])
                     }
                     glPopMatrix();
                 }
-                else if (text[j] == 'x'||text[j] == 'X'||text[j] == 'y'||text[j] == 'Y'||text[j] == 'z'||text[j] == 'Z')
+                else if (text[j] == 'x' || text[j] == 'X' || text[j] == 'y' || text[j] == 'Y' || text[j] == 'z' || text[j] == 'Z')
                 {
+                    SDL_GL_MakeCurrent(window, ctx);
+                    SDL_GetWindowSize(window, &w, &h);
+                    glViewport(0, 0, w, h);
                     while (angle < 90.0f)
                     {
 
-                        SDL_GL_MakeCurrent(window, ctx);
-                        SDL_GetWindowSize(window, &w, &h);
-                        glViewport(0, 0, w, h);
                         Rot(angle, stickers, text[j]);
                         SDL_GL_SwapWindow(window);
 
                         SDL_Delay(10);
                         angle += 1.0f;
                     }
-                   
                 }
-                
-                
+
                 else if (text[j] == 'w')
                     scramble_cube(c, SCRAMBLES_TXT);
                 else if (text[j] == 'W')
@@ -178,18 +158,6 @@ int main(int argc, char *argv[])
 
                             switch (ev2.key.keysym.sym)
                             {
-                            case SDLK_UP:
-                                mov = 1;
-                                break;
-                            case SDLK_DOWN:
-                                mov = 2;
-                                break;
-                            case SDLK_LEFT:
-                                mov = 3;
-                                break;
-                            case SDLK_RIGHT:
-                                mov = 4;
-                                break;
                             case SDLK_ESCAPE:
                                 flag = 1;
                                 break;
@@ -210,7 +178,7 @@ int main(int argc, char *argv[])
                         SDL_GL_MakeCurrent(window, ctx);
                         SDL_GetWindowSize(window, &w, &h);
                         glViewport(0, 0, w, h);
-                        Render(mov, stickers2);
+                        Render(stickers2);
                         SDL_GL_SwapWindow(window);
                         i++;
                         SDL_Delay(200);
@@ -232,7 +200,7 @@ int main(int argc, char *argv[])
         SDL_GL_MakeCurrent(window, ctx);
         SDL_GetWindowSize(window, &w, &h);
         glViewport(0, 0, w, h);
-        Render(mov, stickers);
+        Render(stickers);
         SDL_GL_SwapWindow(window);
         colorSDL_free(stickers);
     }
