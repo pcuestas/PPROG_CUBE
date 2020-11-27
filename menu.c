@@ -37,9 +37,8 @@
 
  **/
 
-int MenusDisplay()
-{
-    int choice1 = 0, choice2, ret=0;
+int MenusDisplay(int *use_saved_game){
+    int choice1 = 0, choice2 = 0, ret=0;
 
     /*modifica los parámetros de la terminal para poder leer las letras sin que se presione enter*/
     _term_init();
@@ -51,11 +50,16 @@ MainMenu_choice:
     switch (choice1)
     {
     case 0:
+        /*NEW GAME*/
+        (*use_saved_game)=FALSE;
         choice2 = ShowNewGameMenu();
         goto Newgame_choice;
         break;
     case 1:
-        /*mostrat comandos ...*/
+        /*LAST GAME*/
+        (*use_saved_game)=TRUE;
+        choice2 = ShowNewGameMenu();
+        goto Newgame_choice;
         break;
 
     case 2:

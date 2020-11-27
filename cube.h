@@ -85,5 +85,20 @@ Bool is_solved(Cube3*c);
 /*function that returns the color from the centerpiece in position cp: RLFBUD*/
 short cfrom(Cube3* cube, char cp);
 
+/**
+ * saves cube c in (binary) file save_game
+ * option is where wither 3 or 2 is passed (for 3x3 or 2x2)
+ * 
+ * returns ERROR/OK
+ **/
+int save_cube(Cube3 *c, char* save_game, int *option);
+
+/**
+ * reads saved cube into c from (binary) file save_game
+ * option is where wither 3 or 2 is stored (for 3x3 or 2x2)
+ * 
+ * returns ERROR/OK
+*/
+int read_saved_cube(Cube3 *c, char* save_game, int *option);
 
 #endif
