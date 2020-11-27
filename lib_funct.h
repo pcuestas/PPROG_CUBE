@@ -57,7 +57,13 @@ void quit(int rc);
 
 void Render(double **s);
 
-/*wrapper of render with all the previous preparations*/
+/**
+ * @brief Render_wr
+ * @author Pablo Cuesta
+ * @date 2020/11/27
+ * wrapper of Render with preparations used in prueba.c 
+ *   
+ **/
 void Render_wr(int *w, int *h, double **stickers, SDL_Window *_window, SDL_GLContext _ctx);
 
 /*rotation of a layer*/
@@ -66,13 +72,33 @@ void Rot_layer(float _angle, double **s, char c);
 /*rotation of the whole cube*/
 void Rot_cube(float _angle, double **s, char c);
 
-/*rotation- calls either Rot_cube or Rot_layer*/
+/**
+ * @brief Rot
+ * @author Pablo Cuesta
+ * @date 2020/11/27
+ * wrapper of Rot_layer/Rot_cube 
+ *   
+ **/
 void Rot(float _angle, double **s, char c);
 
-/*performs the whole rotation calling Rot several times (with different angles)*/
+/**
+ * @brief Rot_full_move
+ * @author Pablo Cuesta
+ * @date 2020/11/27
+ * wrapper of Rot with modification of the angle inside to 
+ * display the full move in char move 
+ *   
+ **/
 void Rot_full_move(int *w, int *h, double **stickers, char move, SDL_Window *_window, SDL_GLContext _ctx);
 
-/*makes in cube3 c and displays moves in *moves string*/
+/**
+ * @brief SlowMoveRot
+ * @author Pablo Cuesta
+ * @date 2020/11/27
+ * Displays in screen the full string of moves in 
+ * char *moves, made in cube c
+ *   
+ **/
 void SlowMoveRot(Cube3* c, int *w, int *h, double **stickers, char *moves, SDL_Window *_window, SDL_GLContext _ctx);
 
 

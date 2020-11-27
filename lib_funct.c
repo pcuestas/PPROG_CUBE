@@ -113,6 +113,7 @@ void Render(double **s)
 
 }
 
+
 void Render_wr(int *w, int *h, double **stickers, SDL_Window *_window, SDL_GLContext _ctx){
     SDL_GL_MakeCurrent(_window, _ctx);
     SDL_GetWindowSize(_window, w, h);
@@ -234,6 +235,7 @@ void Rot_cube(float _angle, double **s, char c)
     free_sCube(sc);
 }
 
+
 void Rot(float _angle, double **s, char c){
     if (c == 'R'||c=='L'||c=='M'||c=='E'||c=='U'||c=='D'||c=='F'||c=='B'||c=='S'||c == 'r'||c=='l'||c=='m'||c=='e'||c=='u'||c=='d'||c=='f'||c=='b'||c=='s'){
         Rot_layer(_angle, s, c);
@@ -242,15 +244,18 @@ void Rot(float _angle, double **s, char c){
     }
 }
 
+
 void Rot_full_move(int *w, int *h, double **stickers, char move, SDL_Window *_window, SDL_GLContext _ctx){
     float _angle = 0.0f;
     
     glPushMatrix();
 
+    SDL_GL_MakeCurrent(_window, _ctx);
+    SDL_GetWindowSize(_window, w, h);
+    glViewport(0, 0, *w, *h);
+
     while (_angle <= 90.0f){
-        SDL_GL_MakeCurrent(_window, _ctx);
-        SDL_GetWindowSize(_window, w, h);
-        glViewport(0, 0, *w, *h);
+        
         Rot(_angle, stickers, move);
         SDL_GL_SwapWindow(_window);
         SDL_Delay(5);
@@ -258,6 +263,7 @@ void Rot_full_move(int *w, int *h, double **stickers, char move, SDL_Window *_wi
     }
     glPopMatrix();
 }
+
 
 void SlowMoveRot(Cube3* c, int *w, int *h, double **stickers, char *moves, SDL_Window *_window, SDL_GLContext _ctx){
     int i=0, len=strlen(moves);
@@ -273,10 +279,3 @@ void SlowMoveRot(Cube3* c, int *w, int *h, double **stickers, char *moves, SDL_W
     /*render changes in the cube*/
     Render_wr(w, h, stickers, _window, _ctx);
 }
-
-/*
-slow_moves(......., solucion){
-    for (i=0;i<strlen(solucion);i++){
-        funcion(....., solucion[i]);
-    }
-}*/
