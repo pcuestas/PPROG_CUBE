@@ -21,10 +21,7 @@
           dddd
 */
 
-struct _counter_data{
-    int sec, min,mode; /*Mode=0: show time 00:00. Mode=-1 Counter stopped. Mode=1 Counter running*/
-    rect *rcounter[4]; /*Array of counters where to print min(r[0],r[1]) and secs(r[2],r[3])*/
-};
+
 
 counter_data *counter_data_init(){
     counter_data *dat;
@@ -78,7 +75,7 @@ Status counter_data_set_time(counter_data* dat, int min, int sec){
 }
 
 Status counter_data_set_rects(counter_data *dat, int line, int column, int l, int h){
-    int i;
+    int i,j;
 
     if(!dat||line<1||column<1||l<0||h<0)
         return ERROR;
@@ -93,9 +90,9 @@ Status counter_data_set_rects(counter_data *dat, int line, int column, int l, in
 
     column+=20*2+5; /*20 for each rect, 5 for the separation*/
 
-    for (i = 2; i < 4; i++){
+    for (i = 2,j=0; i < 4; i++,j++){
         rect_setline(dat->rcounter[i], line);
-        rect_setcolumn(dat->rcounter[i], column + i * 20);
+        rect_setcolumn(dat->rcounter[i], column + j * 20);
         rect_setheight(dat->rcounter[i], h);
         rect_setlength(dat->rcounter[i], l);
     }

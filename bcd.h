@@ -9,6 +9,11 @@
 typedef struct _counter_data counter_data;
 
 
+struct _counter_data{
+    int sec, min, mode; /*Mode=0: show time 00:00. Mode=-1 Counter stopped. Mode=1 Counter running*/
+    rect *rcounter[4];  /*Array of counters where to print min(r[0],r[1]) and secs(r[2],r[3])*/
+};
+
 /**
  * @brief Allocates a new counter_data structure
  * @return Pointer to counter_data or NULL 

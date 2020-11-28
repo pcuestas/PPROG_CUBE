@@ -145,8 +145,7 @@ void rect_clear(rect*r){
     
 }
 
-Status rect_border(rect *r)
-{
+Status rect_border(rect *r){
 
     int line, column, l, h, i;
 

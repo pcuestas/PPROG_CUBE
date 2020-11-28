@@ -354,7 +354,7 @@ int c_print3(short *s,short*col, rect *r1, rect *r2){ /*Like cprint2 but using r
     FILE *fp;
     char firstview[30]=CUBE_3 /*, secondview[30]=CUBE_2*/;
 
-    if (!r1 || !r2||!s||!col)
+    if (!r1 ||!s||!col)
         return -1;
 
     line = rect_getline(r1);
@@ -434,7 +434,7 @@ int c_print3(short *s,short*col, rect *r1, rect *r2){ /*Like cprint2 but using r
 Status slow_moves(Cube3* c, cprint_from_stickers2 print_cube, char *moves, int delay,rect* r1, rect*r2){
     int i, len, j;
 
-    if(!c||!moves||!r1||!r2||!print_cube){
+    if(!c||!moves||!r1||!print_cube){
         return ERROR;
     }
 
