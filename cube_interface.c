@@ -139,7 +139,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
         return ERROR;
     }
 
-    pthread_create(&pth,NULL,hilo,dat); /*Call the counter, has been init in mode 0 (stopped and time=0)*/
+    pthread_create(&pth,NULL,hilo,dat); /*Call the counter. It has been initialized in mode 0 (stopped and time=0)*/
     
     while (TRUE){
         letter=fgetc(stdin);
@@ -176,8 +176,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
             continue;
         }
         
-        else if (letter == 'o')
-        {
+        else if (letter == 'o'){
             terminal_clear();
             rect_border(rborder1);
             rect_border(rcrono);
@@ -203,19 +202,17 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
             if(firstmove==0){
                 pthread_mutex_lock(&mutex);
                 counter_data_set_mode(dat,1);
-                refresh_cube2(c, rvista1, NULL, pcube);
                 pthread_mutex_unlock(&mutex);
                 firstmove=1;
-                continue;
             }
 
         }
-
-        if (refresh_cube2(c, rvista1, NULL, pcube) == ERROR)
-        {
+        pthread_mutex_lock(&mutex);
+        if (refresh_cube2(c, rvista1, NULL, pcube) == ERROR){
             flag = 1;
             break;
         }
+        pthread_mutex_unlock(&mutex);
         }
 
     rect_free(rvista1);
@@ -224,9 +221,6 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
 
     tcsetattr(fileno(stdin), TCSANOW, &initial);/*deshace los cambios hechos por _term_init()*/
 
-    /*in case the loop gets any error*/
-    if (flag == 1)
-        return ERROR;
 
     if(save_cube(c, save_game_file, &option)==ERROR)
         printf("There was an error when saving the game.\n");
@@ -235,6 +229,10 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
     pthread_cancel(pth);
     c_free(c);
     counter_data_free(dat);
+
+    /*in case the loop gets any error*/
+    if (flag == 1)
+        return ERROR;
 
     return OK;
 }
