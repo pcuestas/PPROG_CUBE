@@ -1,5 +1,6 @@
 #include "print_c.h"
 #include <string.h>
+#include <unistd.h>
 #include "types.h"
 
 #define CUBE_1 "./txt_files/cubo.txt"
@@ -431,7 +432,7 @@ int c_print3(short *s,short*col, rect *r1, rect *r2){ /*Like cprint2 but using r
     return (0);
 }
 
-Status slow_moves(Cube3* c, cprint_from_stickers2 print_cube, char *moves, int delay,rect* r1, rect*r2){
+Status slow_moves(Cube3* c, cprint_from_stickers2 print_cube, char *moves, int usec,rect* r1, rect*r2){
     int i, len, j;
 
     if(!c||!moves||!r1||!print_cube){
@@ -443,7 +444,7 @@ Status slow_moves(Cube3* c, cprint_from_stickers2 print_cube, char *moves, int d
     for(i=0;i<len;i++){
         c_make(c, moves[i]);
         refresh_cube2(c,r1,r2,print_cube);
-        for(j=0;j<delay;j++);
+        usleep(usec);
     }
     return OK;
 }

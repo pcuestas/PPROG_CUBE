@@ -171,7 +171,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
         }
         else if(letter=='a'){
             solution = solve_cube(c);
-            slow_moves(c, pcube, solution, 150000000,rvista1,NULL);
+            slow_moves(c, pcube, solution, 300000, rvista1,NULL); /*4th arg is miocroseconds between moves*/
             free(solution);
             continue;
         }
