@@ -35,6 +35,7 @@ typedef struct{
   Piece pc[NPC];
   short stickers[54];  /*Code of color of each sticker*/
   short colorsESC[54]; /*C ANSI ESC COde color*/
+  int option; /*2 or 3: 2x2 of 3x3*/
 }Cube3;
 
 /*
@@ -42,7 +43,7 @@ typedef struct{
  *         white on top, green in the front, red to the right
  * @return the cube created
 */
-Cube3 *c_init();
+Cube3 *c_init(int option);
 /*
  * @brief frees a cube (entered as parameter)
  * 
@@ -91,7 +92,7 @@ short cfrom(Cube3* cube, char cp);
  * 
  * returns ERROR/OK
  **/
-int save_cube(Cube3 *c, char* save_game, int *option);
+int save_cube(Cube3 *c, char* save_game);
 
 /**
  * reads saved cube into c from (binary) file save_game
@@ -99,6 +100,6 @@ int save_cube(Cube3 *c, char* save_game, int *option);
  * 
  * returns ERROR/OK
 */
-int read_saved_cube(Cube3 *c, char* save_game, int *option);
+int read_saved_cube(Cube3 *c, char* save_game);
 
 #endif

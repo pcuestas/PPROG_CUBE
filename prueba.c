@@ -22,7 +22,7 @@
 
 #define MAX_CAD 500
 
-int main(int argc, char *argv[])
+int main(int option)
 {
     int flag = 0, j = 0, w, h;
     Cube3 *c = NULL;
@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     SDL_GLContext ctx;
     SDL_Window *window;
 
-    c = c_init();
+    c = c_init(3);
     if (!c)
         return 1;
 

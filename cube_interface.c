@@ -106,12 +106,12 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
 
     srand(time(NULL));
 
-    c = c_init();
+    c = c_init(option);
     if (!c)
         return ERROR;
     
     if (use_saved_game==TRUE)
-        if (read_saved_cube(c, save_game_file, &option)==ERROR){
+        if (read_saved_cube(c, save_game_file)==ERROR){
             c_free(c);
             rect_free(rvista1);
             return ERROR;
@@ -132,7 +132,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
     rect_border(rborder1);
     rect_border(rcrono);
 
-    if (refresh_cube2(c,rvista1,NULL,pcube) == ERROR){
+    if (refresh_cube2(c, rvista1, NULL, pcube) == ERROR){
         c_free(c);
         rect_free(rvista1);
         tcsetattr(fileno(stdin), TCSANOW, &initial);/*deshace los cambios hechos por _term_init()*/
@@ -171,7 +171,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
         }
         else if(letter=='a'){
             solution = solve_cube(c);
-            slow_moves(c, pcube, solution, 300000, rvista1,NULL); /*4th arg is miocroseconds between moves*/
+            slow_moves(c, pcube, solution, 450000, rvista1, NULL); /*4th arg is miocroseconds between moves*/
             free(solution);
             continue;
         }
@@ -222,7 +222,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
     tcsetattr(fileno(stdin), TCSANOW, &initial);/*deshace los cambios hechos por _term_init()*/
 
 
-    if(save_cube(c, save_game_file, &option)==ERROR)
+    if(save_cube(c, save_game_file)==ERROR)
         printf("There was an error when saving the game.\n");
 
     pthread_detach(pth);
