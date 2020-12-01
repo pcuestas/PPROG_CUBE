@@ -27,6 +27,7 @@ void*hilo(void*dat){ /*same function as counter in bcd.c but using locks in cruc
     while (1){
 
         while (d->mode == 0){ /*Print time 0*/
+        stop=0;
             if (blank == 0){
                 pthread_mutex_lock(&mutex);
                 bcd_display(0, r[3]);
@@ -40,6 +41,7 @@ void*hilo(void*dat){ /*same function as counter in bcd.c but using locks in cruc
         }
 
         while (d->mode == -1){ /*Counter stopped*/
+        blank=0;
             if (stop == 0){
                 pthread_mutex_lock(&mutex);
                 bcd_display(d->sec % 10, r[3]);
@@ -154,7 +156,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
             }
             pthread_mutex_lock(&mutex);
             counter_data_set_time(dat, 0, 0); 
-            counter_data_set_mode(dat,-1);
+            counter_data_set_mode(dat,0);
             pthread_mutex_unlock(&mutex);
             firstmove=0;
         }
@@ -183,11 +185,15 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
         }
         else if (letter == 32){ /*stop crono*/
             if (stop == 0){ /*counter was running*/
-               counter_data_set_mode(dat,-1);
-               stop = 1;
-               continue;
+                pthread_mutex_lock(&mutex);
+                counter_data_set_mode(dat, -1);
+                pthread_mutex_unlock(&mutex);
+                stop = 1;
+                continue;
             }else{
+                pthread_mutex_lock(&mutex);
                 counter_data_set_mode(dat, 1);
+                pthread_mutex_unlock(&mutex);
                 stop = 0;
                 continue;
             }
