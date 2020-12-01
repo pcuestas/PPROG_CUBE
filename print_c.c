@@ -6,6 +6,7 @@
 #define CUBE_1 "./txt_files/cubo.txt"
 #define CUBE_2 "./txt_files/cubo2.txt"
 #define CUBE_3 "./txt_files/cubo3.txt"
+#define CUBE_222 "./txt_files/cubo222.txt"
 
 Status refresh_cube(Cube3* c, FILE* pf, cprint_from_stickers print_cube){
     short s[54];
@@ -29,7 +30,7 @@ Status refresh_cube2(Cube3 *c, rect *r1, rect *r2, cprint_from_stickers2 print_c
 
     /*print_cube(c->stickers,c->colorsESC,r1, r2);*/
 
-    c_print3(c->stickers, c->colorsESC, r1, r2);
+    c_print3(c->stickers, c->colorsESC, r1, r2, c->option);
 
     return OK;
 }
@@ -348,12 +349,14 @@ int c_print2(FILE *f, short *s,short *col){
     return (0);
 }
 
-int c_print3(short *s,short*col, rect *r1, rect *r2){ /*Like cprint2 but using rectangles*/
+int c_print3(short *s,short*col, rect *r1, rect *r2, int option){ /*Like cprint2 but using rectangles*/
 
     Bool flag = FALSE /*, rep = FALSE*/;
     int c, color, aux, column, line, incr = 1, code = 65, min = 65;
     FILE *fp;
-    char firstview[30]=CUBE_3 /*, secondview[30]=CUBE_2*/;
+    char *firstview=NULL, cube333[512]=CUBE_3, cube222[512]=CUBE_222 /*, secondview[30]=CUBE_2*/;
+
+    firstview = (option==3)?(cube333):(cube222);
 
     if (!r1 ||!s||!col)
         return -1;
@@ -433,7 +436,7 @@ int c_print3(short *s,short*col, rect *r1, rect *r2){ /*Like cprint2 but using r
 }
 
 Status slow_moves(Cube3* c, cprint_from_stickers2 print_cube, char *moves, int usec,rect* r1, rect*r2){
-    int i, len, j;
+    int i, len;
 
     if(!c||!moves||!r1||!print_cube){
         return ERROR;

@@ -137,13 +137,15 @@ void m_z(Cube3* c);
 
 /***********functions in cube.h***************/
 
-Cube3 *c_init(){
+Cube3 *c_init(int option){
   Cube3 *c=NULL;
   short i;
   
   if(!(c=(Cube3*)malloc(sizeof(Cube3)))){
     return NULL;
   }
+
+  c->option=option;
   
   /*center pieces:*/
   
@@ -220,7 +222,7 @@ Cube3 *c_init(){
  * 
  * returns ERROR/OK
  **/
-int save_cube(Cube3 *c, char *save_game, int *option){
+int save_cube(Cube3 *c, char *save_game){
     FILE *pf = NULL;
     int ret = 0, i = 0;
 
@@ -231,7 +233,7 @@ int save_cube(Cube3 *c, char *save_game, int *option){
         return ERROR;
 
     /*store the option at the beginning of the file*/
-    ret = fwrite(option, sizeof(option), 1, pf);
+    ret = fwrite(&(c->option), sizeof(int), 1, pf);
 
     /*store every piece of the cube*/
     for (i = 0; i < NPC && ret != 0; i++)
@@ -248,7 +250,7 @@ int save_cube(Cube3 *c, char *save_game, int *option){
  * 
  * returns ERROR/OK
  **/
-int read_saved_cube(Cube3 *c, char *save_game, int *option){
+int read_saved_cube(Cube3 *c, char *save_game){
     FILE *pf = NULL;
     int ret = 0, i = 0;
 
@@ -259,7 +261,7 @@ int read_saved_cube(Cube3 *c, char *save_game, int *option){
         return -1;
 
     /*read the option at the beginning of the file*/
-    ret = fread(option, sizeof(option), 1, pf);
+    ret = fread(&(c->option), sizeof(int), 1, pf);
 
     /*store every piece of the cube*/
     for (i = 0; i < NPC && ret != 0; i++)
@@ -278,7 +280,7 @@ Cube3 *c_copy(Cube3*c1){
     if(!c1){
         return NULL;
     }
-    if(!(c2=c_init())){
+    if(!(c2=c_init(c1->option))){
         return NULL;
     }
     

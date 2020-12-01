@@ -27,7 +27,8 @@ void solve_permcorners(Cube3 *c, char* sol);
 /*orients corners - final step*/
 void solve_oricorners(Cube3* c, char *sol);
 
-
+/*solve pll in the 222*/
+void solve_PLL222(Cube3* c2, char *sol);
 
 /*gets rid of unnecessary moves (redundancy)*/
 void clean_moves(char* m);

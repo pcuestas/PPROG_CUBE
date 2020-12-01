@@ -21,6 +21,7 @@
 char *solve_cube(Cube3* c1){
     char *sol=NULL;
     Cube3 *c2=NULL;
+    
     if(!c1){
         return NULL;
     }
@@ -33,25 +34,33 @@ char *solve_cube(Cube3* c1){
     }
     sol[0]='\0';
     /*resolvemos la cruz*/
-    solve_cross(c2,sol);
+    if(c1->option!=2)
+        solve_cross(c2, sol);
 
     /*resolver las esquinas inferiores*/
     solve_d_corners(c2, sol);
 
     /*solve the second layer*/
-    solve_finishF2L(c2, sol);
+    if(c1->option!=2)
+        solve_finishF2L(c2, sol);
     
     /*solve the top cross*/
-    solve_topcross(c2, sol);
+    if(c1->option!=2)
+        solve_topcross(c2, sol);
 
     /*permutate top edges*/
-    solve_topedges(c2, sol);
+    if(c1->option!=2)
+        solve_topedges(c2, sol);
 
     /*permutate top corners*/
-    solve_permcorners(c2, sol);
+    if(c1->option!=2)
+        solve_permcorners(c2, sol);
 
     /*orient the top corners*/
     solve_oricorners(c2, sol);
+
+    if(c1->option==2)
+        solve_PLL222(c2, sol);
     
     c_free(c2);
     clean_moves(sol);
@@ -531,6 +540,61 @@ void solve_oricorners(Cube3* c, char *sol){
         c_make(c, 'U');/*4 made, after loop the cube is untouched*/
     }
     c_moves(c, moves);
+    strncat(sol, moves, MAX_MOV);
+}
+
+
+void solve_PLL222(Cube3*c, char *sol){
+    int found=0, i=0;
+    short pos1, pos2, cf;
+    char moves[101]="";
+
+    while (found==0 && i<4){
+        /*front top corners*/
+        pos1=c_iofPos(c, 1, 1, 1);
+        pos2=c_iofPos(c, 1, -1, 1);
+        if(c->pc[pos1].c[0]==c->pc[pos2].c[0]){
+            found=1;
+        }
+        else{
+            strncat(moves, "U", 100);
+            c_make(c, 'U');
+            i++;
+        }
+    }
+    /*make perms*/
+    if(found==1){
+        /*top back corners*/
+        pos1=c_iofPos(c, -1, -1, 1);
+        pos2=c_iofPos(c, -1, 1, 1);
+        if(c->pc[pos1].c[0]!=c->pc[pos2].c[0]){
+            /*tperm*/
+            strncat(moves, "rUrFFRfrFFRR", 100);
+            c_moves(c, "rUrFFRfrFFRR");
+        }
+    }
+    else{
+        /*vperm*/
+        strncat(moves, "FRuruRUrfRUrurFRf", 100);
+        c_moves(c, "FRuruRUrfRUrurFRf");
+    }
+    /*adjust*/
+    found=0;
+    i=0;
+    pos2=c_iofPos(c, 1, 1, -1);
+    cf=c->pc[pos2].c[0];
+    while (found==0 && i<4){
+        /*front top corners*/
+        pos1=c_iofPos(c, 1, 1, 1);
+        if(cf==c->pc[pos1].c[0]){
+            found=1;
+        }
+        else{
+            strncat(moves, "U", 100);
+            c_make(c, 'U');
+            i++;
+        }
+    }
     strncat(sol, moves, MAX_MOV);
 }
 

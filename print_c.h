@@ -7,7 +7,7 @@
 
 
 typedef int (*cprint_from_stickers)(FILE*, short*);
-typedef int (*cprint_from_stickers2)(short *,short*, rect *, rect *); /*pointers to rect*/
+typedef int (*cprint_from_stickers2)(short *,short*, rect *, rect *, int); /*pointers to rect*/
 
 
 int c_print(FILE *f, short *s);
@@ -66,6 +66,6 @@ int c_print2(FILE *f, short *s,short*col);
  */ 
 Status slow_moves(Cube3* c, cprint_from_stickers2 print_cube, char *moves, int usec, rect*r1, rect*r2);
 
-int c_print3(short *s,short *col,rect *r1, rect *r2);
+int c_print3(short *s,short *col,rect *r1, rect *r2, int option);
 
 #endif 

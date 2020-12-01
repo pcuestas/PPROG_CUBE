@@ -58,8 +58,8 @@ MainMenu_choice:
     case 1:
         /*LAST GAME*/
         (*use_saved_game)=TRUE;
-        choice2 = ShowNewGameMenu();
-        goto Newgame_choice;
+        ret=2;/*da igual*/
+        goto End_MenusDisplay;
         break;
 
     case 2:
