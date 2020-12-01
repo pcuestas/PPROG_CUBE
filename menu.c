@@ -1,8 +1,3 @@
-/**
- * This file is only a test for the future menu of the game 
- * 
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -27,9 +22,6 @@
  line 2-9: new game -->pos 0
  line 12-9: ...     -->pos 1
  line 22-31: ...    -->pos2
-
- si se hace una funcin que solo mueva la flecha va a quedar más fluido. Problema como borrar solo la flecha y no el resto del menu
- submenus!
 
  nueva partida
  cargar partida
@@ -206,12 +198,10 @@ int read_keyMenu()
     if (choice == 10)
         return ENTER;
 
-    if (choice == 27 && fgetc(stdin) == '[')
-    { /* The key is an arrow key */
+    if (choice == 27 && fgetc(stdin) == '['){ 
         choice = fgetc(stdin);
 
-        switch (choice)
-        {
+        switch (choice){
         case ('A'):
             return UP;
         case ('B'):
