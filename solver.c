@@ -2,19 +2,21 @@
  * @author Pablo Cuesta Sierra 
  * @date 2020/11/01
  * 
+    This file implemets a solution of a 3x3 (or 2x2) rubiks cube 
+    using the 'beginners method'. On a cube as defined in cube.c
+    This file is called by cube_interface in order to 
+    display the solution of a given cube.
+
+    The main function of the file is char *solve_cube(Cube3*), 
+    which allocates memory for an returns a string with the solution 
+    to the cube (taking into account if the cube is 2x2 or 3x3).
+ * 
  */
 
 #include "solver.h"
 #include <string.h>
 
 #define MAX_MOV 10000
-
-/*
-    This file implemets a solution of a 3x3 ruciks cube 
-    using the 'beginners method'.
-    This file is called by cube_interface in order to 
-    display the solution of a given cube.
-*/
 
 
 
