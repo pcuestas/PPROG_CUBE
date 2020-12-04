@@ -68,7 +68,6 @@ void *counter(void *dat){
     SDL_Window *window;
     char text[200];
     int quit;
-    int h, m, s;
     TTF_Font *font;
     /*h = m = s = 0;*/
     
@@ -174,11 +173,11 @@ int main(int option)
 
     pthread_t hilo;
     counter_data dat;
-    dat.min=0;
-    dat.sec=0;
-    dat.h=0;
-    dat.mode=0;
     int stop=0,firstmove=0;
+    dat.min = 0;
+    dat.sec = 0;
+    dat.h = 0;
+    dat.mode = 0;
 
     /*************************************/
     option = 2;
@@ -332,7 +331,7 @@ int main(int option)
     dat.mode=2; /*To suicide thread*/
     pthread_mutex_unlock(&mutex);
     /*pthread_join(hilo,NULL);*/
-    /*pthread_detach(hilo);
-    pthread_cancel(hilo);*/
+    pthread_detach(hilo);
+    pthread_cancel(hilo);
     return 0;
 }
