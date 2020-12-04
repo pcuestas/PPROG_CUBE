@@ -297,6 +297,7 @@ int main(int option)
                     pthread_mutex_unlock(&mutex);
                     SlowMoveRot(c, &w, &h, stickers, solution, window, ctx, option);
                     free(solution);
+                    firstmove=0;
                 }
                 else if(a==32){
                     if (stop == 0){ /*counter was running*/
@@ -337,8 +338,11 @@ int main(int option)
     pthread_mutex_lock(&mutex);
     dat.mode=2; /*To suicide thread*/
     pthread_mutex_unlock(&mutex);
-    /*pthread_join(hilo,NULL);*/
+
+    /*pthread_join(hilo,NULL); Ya no es necesario. con mode2 hacemos que el hilo haga return*/
     /*pthread_cancel(hilo);*/
+
+
     quit(0);
     return 0;
 }
