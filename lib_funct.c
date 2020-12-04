@@ -8,76 +8,6 @@
 static SDL_GLContext ctx;
 static SDL_Window *window;
 
-float cube[56][3] = {
-        /*Cara 1*/
-        {0.6, 0.6, 0.6},
-        {0.6, 0.6, 0.2},
-        {0.6, 0.6, -0.2},
-        {0.6, 0.6, -0.6},
-        {0.6, 0.2, -0.6},
-        {0.6, -0.2, -0.6},
-        {0.6, -0.6, -0.6},
-        {0.6, -0.6, -0.2},
-        {0.6, -0.6, 0.2},
-        {0.6, -0.6, 0.6},
-        {0.6, -0.2, 0.6},
-        {0.6, 0.2, 0.6},
-        {0.6, 0.2, 0.2},
-        {0.6, 0.2, -0.2},
-        {0.6, -0.2, -0.2},
-        {0.6, -0.2, 0.2},
-
-        /*Cara 2*/
-        {0.2, 0.6, 0.6},
-        {-0.2, 0.6, 0.6},
-        {-0.6, 0.6, 0.6},
-        {-0.6, 0.6, 0.2},
-        {-0.6, 0.6, -0.2},
-        {-0.6, 0.6, -0.6},
-        {-0.2, 0.6, -0.6}, /*22*/
-        {0.2, 0.6, -0.6},
-        {0.2, 0.6, -0.2},
-        {0.2, 0.6, 0.2},
-        {-0.2, 0.6, 0.2},
-        {-0.2, 0.6, -0.2}, /*27*/
-
-        /*Cara 3*/
-        {-0.6, 0.2, 0.6},
-        {-0.6, 0.2, 0.2},
-        {-0.6, 0.2, -0.2},
-        {-0.6, 0.2, -0.6},
-        {-0.6, -0.2, -0.6},
-        {-0.6, -0.6, -0.6}, /*33*/
-        {-0.6, -0.6, -0.2},
-        {-0.6, -0.6, 0.2},
-        {-0.6, -0.6, 0.6},
-        {-0.6, -0.2, 0.6},
-        {-0.6, -0.2, 0.2},
-        {-0.6, -0.2, -0.2}, /*39*/
-
-        /*Cara 4*/
-        {-0.2, -0.6, 0.6},
-        {-0.2, -0.6, 0.2},
-        {-0.2, -0.6, -0.2},
-        {-0.2, -0.6, -0.6},
-        {0.2, -0.6, -0.6}, /*44*/
-        {0.2, -0.6, -0.2},
-        {0.2, -0.6, 0.2},
-        {0.2, -0.6, 0.6}, /*47*/
-
-        /*Cara 5*/
-        {0.2, 0.2, 0.6},
-        {0.2, -0.2, 0.6},
-        {-0.2, -0.2, 0.6},
-        {-0.2, 0.2, 0.6},
-
-        /*Cara 6*/
-        {0.2, 0.2, -0.6},
-        {0.2, -0.2, -0.6},
-        {-0.2, -0.2, -0.6},
-        {-0.2, 0.2, -0.6}
-
-    };
 
 void quit(int rc)
 {
@@ -89,7 +19,7 @@ void quit(int rc)
     exit(rc);
 }
 
-void Render(double **s)
+void Render(double **s, int option)
 {
 
     sCube *sc = NULL;
@@ -106,7 +36,7 @@ void Render(double **s)
 
     /* "paint" all pieces */
     for (i = 0; i < NPC; i++)
-        paint_sPiece(&(sc->pc[i]), cube, s);
+        paint_sPiece(&(sc->pc[i]), option, s);
     free_sCube(sc);
 
     glEnd();
@@ -114,15 +44,15 @@ void Render(double **s)
 }
 
 
-void Render_wr(int *w, int *h, double **stickers, SDL_Window *_window, SDL_GLContext _ctx){
+void Render_wr(int *w, int *h, double **stickers, SDL_Window *_window, SDL_GLContext _ctx, int option){
     SDL_GL_MakeCurrent(_window, _ctx);
     SDL_GetWindowSize(_window, w, h);
     glViewport(0, 0, *w, *h);
-    Render(stickers);
+    Render(stickers, option);
     SDL_GL_SwapWindow(_window);
 }
 
-void Rot_layer(float _angle, double **s, char c)
+void Rot_layer(float _angle, double **s, char c, int option)
 {
     
     sCube *sc = NULL;
@@ -144,7 +74,7 @@ void Rot_layer(float _angle, double **s, char c)
     {
         if (is_in_face(i, c) == 0)
         {
-            paint_sPiece(&(sc->pc[i]), cube, s);
+            paint_sPiece(&(sc->pc[i]), option, s);
         }
     }
     glEnd();
@@ -169,7 +99,7 @@ void Rot_layer(float _angle, double **s, char c)
     {
         if (is_in_face(i, c) == 1)
         {
-            paint_sPiece(&(sc->pc[i]), cube, s);
+            paint_sPiece(&(sc->pc[i]), option, s);
         }
     }
     glPopMatrix();
@@ -178,7 +108,7 @@ void Rot_layer(float _angle, double **s, char c)
     free_sCube(sc);
 }
 
-void Rot_cube(float _angle, double **s, char c)
+void Rot_cube(float _angle, double **s, char c, int option)
 {
    
     sCube *sc = NULL;
@@ -222,12 +152,9 @@ void Rot_cube(float _angle, double **s, char c)
     glBegin(GL_QUADS);
 
     /* "paint" all pieces */
-    for (i = 0; i < NPC; i++)
-    {
-
-        paint_sPiece(&(sc->pc[i]), cube, s);
+    for (i = 0; i < NPC; i++){
+        paint_sPiece(&(sc->pc[i]), option, s);
     }
-    /*paint_blackFaces(cube);*/
 
     glEnd();
     glPopMatrix();
@@ -236,16 +163,22 @@ void Rot_cube(float _angle, double **s, char c)
 }
 
 
-void Rot(float _angle, double **s, char c){
-    if (c == 'R'||c=='L'||c=='M'||c=='E'||c=='U'||c=='D'||c=='F'||c=='B'||c=='S'||c == 'r'||c=='l'||c=='m'||c=='e'||c=='u'||c=='d'||c=='f'||c=='b'||c=='s'){
-        Rot_layer(_angle, s, c);
-    }else if(c == 'x'||c == 'X'||c == 'y'||c == 'Y'||c == 'z'||c == 'Z'){
-        Rot_cube(_angle, s, c);
+void Rot(float _angle, double **s, char c, int option){
+    if(option==2){
+        if(c == 'R'||c=='L'||c=='U'||c=='D'||c=='F'||c=='B'||c == 'r'||c=='l'||c=='u'||c=='d'||c=='f'||c=='b'){
+            Rot_layer(_angle, s, c, option);
+        }
+    }else if (c == 'R'||c=='L'||c=='M'||c=='E'||c=='U'||c=='D'||c=='F'||c=='B'||c=='S'||c == 'r'||c=='l'||c=='m'||c=='e'||c=='u'||c=='d'||c=='f'||c=='b'||c=='s'){
+        Rot_layer(_angle, s, c, option);
+    }
+    
+    if(c == 'x'||c == 'X'||c == 'y'||c == 'Y'||c == 'z'||c == 'Z'){
+        Rot_cube(_angle, s, c, option);
     }
 }
 
 
-void Rot_full_move(int *w, int *h, double **stickers, char move, SDL_Window *_window, SDL_GLContext _ctx){
+void Rot_full_move(int *w, int *h, double **stickers, char move, SDL_Window *_window, SDL_GLContext _ctx, int option){
     float _angle = 0.0f;
     
     glPushMatrix();
@@ -256,7 +189,7 @@ void Rot_full_move(int *w, int *h, double **stickers, char move, SDL_Window *_wi
 
     while (_angle <= 90.0f){
         
-        Rot(_angle, stickers, move);
+        Rot(_angle, stickers, move, option);
         SDL_GL_SwapWindow(_window);
         SDL_Delay(5);
         _angle += 3.0f;
@@ -265,17 +198,17 @@ void Rot_full_move(int *w, int *h, double **stickers, char move, SDL_Window *_wi
 }
 
 
-void SlowMoveRot(Cube3* c, int *w, int *h, double **stickers, char *moves, SDL_Window *_window, SDL_GLContext _ctx){
+void SlowMoveRot(Cube3* c, int *w, int *h, double **stickers, char *moves, SDL_Window *_window, SDL_GLContext _ctx, int option){
     int i=0, len=strlen(moves);
 
     for(i=0;i<len;i++){
         /*display rotation*/
-        Rot_full_move(w, h, stickers, moves[i], _window, _ctx);
+        Rot_full_move(w, h, stickers, moves[i], _window, _ctx, option);
         /*make move in the cube*/
         c_make(c, moves[i]);
         /*update rgb matrix*/
         cube_to_SDL(c, stickers);
     }
     /*render changes in the cube*/
-    Render_wr(w, h, stickers, _window, _ctx);
+    Render_wr(w, h, stickers, _window, _ctx, option);
 }

@@ -32,7 +32,11 @@ int main(int option)
     SDL_GLContext ctx;
     SDL_Window *window;
 
-    c = c_init(3);
+    /*************************************/
+    option=2;
+    /*************************************/
+
+    c = c_init(option);
     if (!c)
         return 1;
 
@@ -54,8 +58,7 @@ int main(int option)
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     window = SDL_CreateWindow("Rubik Cube PPROG", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 940, 880, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 
-    if (!window)
-    {
+    if (!window){
         printf("SDL_Error: %s\n", SDL_GetError());
         return 1;
     }
@@ -75,8 +78,7 @@ int main(int option)
     gluLookAt(1.5, 1.0, 1.0, 0, 0, 0, 0.5, 0, 0);
     /* Main loop */
     SDL_StartTextInput();
-    while (flag == 0)
-    {   
+    while (flag == 0){   
 
         while (SDL_PollEvent(&ev)){
 
@@ -101,7 +103,7 @@ int main(int option)
                 a=text[j];/*letter read*/
                 
                 if (a=='R'||a=='L'||a=='M'||a=='E'||a=='U'||a=='D'||a=='F'||a=='B'||a=='S'||a == 'r'||a=='l'||a=='m'||a=='e'||a=='u'||a=='d'||a=='f'||a=='b'||a=='s'||a=='x'||a=='X'||a=='y'||a =='Y'||a=='z'||a=='Z'){
-                    Rot_full_move(&w, &h, stickers, a, window, ctx);
+                    Rot_full_move(&w, &h, stickers, a, window, ctx, option);
                 }
                 if (a == 'w')
                     scramble_cube(c, SCRAMBLES_TXT);
@@ -117,7 +119,7 @@ int main(int option)
                 }
                 else if (a == 'a'){
                     solution = solve_cube(c);
-                    SlowMoveRot(c, &w, &h, stickers, solution, window, ctx);
+                    SlowMoveRot(c, &w, &h, stickers, solution, window, ctx, option);
                     free(solution);
                 }
                 c_make(c, a);/*make move in the cube*/
@@ -129,7 +131,7 @@ int main(int option)
         /*update rgb matrix*/
         cube_to_SDL(c, stickers);
         /*render changes in the cube*/
-        Render_wr(&w,&h,stickers,window,ctx);
+        Render_wr(&w,&h,stickers,window,ctx, option);
     }
     SDL_StopTextInput();
 

@@ -38,10 +38,10 @@ void free_sCube(sCube *p);
 
 /*wrapper of the functions used to give color to the sticker s, using the matrix cube and the colours in rgb
 It does not paint non existing stickers (those with s->num==-1)*/
-void paint_sSticker(sSticker *s, float cube[56][3], double **rgb);
+void paint_sSticker(sSticker *s, int option, double **rgb);
 
-/*wrapper of the functions used to give color to the piece p (its three (or less) stickers), using the matrix cube and the colours in rgb*/
-void paint_sPiece(sPiece *p, float cube[56][3], double **rgb);
+/*wrapper of the functions used to give color to the piece p (its three (or less) stickers), using the option (2/3) and the colours in rgb*/
+void paint_sPiece(sPiece *p, int option, double **rgb);
 
 /**
  * this function returns 1 if 
@@ -55,7 +55,7 @@ int is_in_face(int i, char c);
 void quit(int rc);
 
 
-void Render(double **s);
+void Render(double **s, int option);
 
 /**
  * @brief Render_wr
@@ -64,13 +64,13 @@ void Render(double **s);
  * wrapper of Render with preparations used in prueba.c 
  *   
  **/
-void Render_wr(int *w, int *h, double **stickers, SDL_Window *_window, SDL_GLContext _ctx);
+void Render_wr(int *w, int *h, double **stickers, SDL_Window *_window, SDL_GLContext _ctx, int option);
 
 /*rotation of a layer*/
-void Rot_layer(float _angle, double **s, char c);
+void Rot_layer(float _angle, double **s, char c, int option);
 
 /*rotation of the whole cube*/
-void Rot_cube(float _angle, double **s, char c);
+void Rot_cube(float _angle, double **s, char c, int option);
 
 /**
  * @brief Rot
@@ -79,7 +79,7 @@ void Rot_cube(float _angle, double **s, char c);
  * wrapper of Rot_layer/Rot_cube 
  *   
  **/
-void Rot(float _angle, double **s, char c);
+void Rot(float _angle, double **s, char c, int option);
 
 /**
  * @brief Rot_full_move
@@ -89,7 +89,7 @@ void Rot(float _angle, double **s, char c);
  * display the full move in char move 
  *   
  **/
-void Rot_full_move(int *w, int *h, double **stickers, char move, SDL_Window *_window, SDL_GLContext _ctx);
+void Rot_full_move(int *w, int *h, double **stickers, char move, SDL_Window *_window, SDL_GLContext _ctx, int option);
 
 /**
  * @brief SlowMoveRot
@@ -99,7 +99,7 @@ void Rot_full_move(int *w, int *h, double **stickers, char move, SDL_Window *_wi
  * char *moves, made in cube c
  *   
  **/
-void SlowMoveRot(Cube3* c, int *w, int *h, double **stickers, char *moves, SDL_Window *_window, SDL_GLContext _ctx);
+void SlowMoveRot(Cube3* c, int *w, int *h, double **stickers, char *moves, SDL_Window *_window, SDL_GLContext _ctx, int option);
 
 
 #endif
