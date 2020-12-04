@@ -99,40 +99,54 @@ void *counter(void *dat){
 
 
         while(d->mode==1){
-        sprintf(text, "%02d:%02d:%02d", d->h, d->min, d->sec);
-        get_text_and_rect(renderer, 0, 0, text, font, &texture1, &rect1);
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-        SDL_RenderClear(renderer);
+            sprintf(text, "%02d:%02d:%02d", d->h, d->min, d->sec);
+            get_text_and_rect(renderer, 0, 0, text, font, &texture1, &rect1);
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+            SDL_RenderClear(renderer);
 
-        SDL_RenderCopy(renderer, texture1, NULL, &rect1);
+            SDL_RenderCopy(renderer, texture1, NULL, &rect1);
 
-        SDL_RenderPresent(renderer);
+            SDL_RenderPresent(renderer);
 
-        sleep(1);
-        d->sec++;
+            sleep(1);
+            d->sec++;
 
-        if (d->sec == 60){
-            d->min += 1;
-            d->sec = 0;
-        }
-        if (d->min == 60){
-            d->h += 1;
-            d->min = 0;
-        }
-        if (d->h == 24){
-            d->h = 0;
-            d->min = 0;
-            d->sec = 0;
-        }
+            if (d->sec == 60){
+                d->min += 1;
+                d->sec = 0;
+            }
+            if (d->min == 60){
+                d->h += 1;
+                d->min = 0;
+            }
+            if (d->h == 24){
+                d->h = 0;
+                d->min = 0;
+                d->sec = 0;
+            }
         
         }
 
         while(d->mode==0){
             sprintf(text, "%02d:%02d:%02d", 0, 0, 0);
+            get_text_and_rect(renderer, 0, 0, text, font, &texture1, &rect1);
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+            SDL_RenderClear(renderer);
+
+            SDL_RenderCopy(renderer, texture1, NULL, &rect1);
+
+            SDL_RenderPresent(renderer);
         }
 
         while(d->mode==-1){
             sprintf(text, "%02d:%02d:%02d", d->h, d->min, d->sec);
+            get_text_and_rect(renderer, 0, 0, text, font, &texture1, &rect1);
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+            SDL_RenderClear(renderer);
+
+            SDL_RenderCopy(renderer, texture1, NULL, &rect1);
+
+            SDL_RenderPresent(renderer);
         }
 
         if(d->mode==2)/*terminar*/
@@ -246,28 +260,58 @@ int main(int option)
                 a = text[j]; /*letter read*/
 
                 if (a == 'R' || a == 'L' || a == 'M' || a == 'E' || a == 'U' || a == 'D' || a == 'F' || a == 'B' || a == 'S' || a == 'r' || a == 'l' || a == 'm' || a == 'e' || a == 'u' || a == 'd' || a == 'f' || a == 'b' || a == 's' || a == 'x' || a == 'X' || a == 'y' || a == 'Y' || a == 'z' || a == 'Z')
-                {
+                {   
+                    if(firstmove==0){
+                        pthread_mutex_lock(&mutex);
+                        dat.mode=1; /*Counter running*/
+                        pthread_mutex_unlock(&mutex);
+                        firstmove = 1;
+                    }
                     Rot_full_move(&w, &h, stickers, a, window, ctx, option);
                 }
-                if (a == 'w')
+                if (a == 'w'){
                     scramble_cube(c, SCRAMBLES_TXT);
-                else if (a == 'W')
-                {
+                    pthread_mutex_lock(&mutex);
+                    dat.min=0;
+                    dat.sec=0;
+                    dat.h=0;
+                    dat.mode=0;
+                    pthread_mutex_unlock(&mutex);
+                    firstmove = 0;
+                }
+                else if (a == 'W'){
                     solution = solve_cube(c);
                     c_moves(c, solution);
                     free(solution);
                 }
-                else if (a == 'A')
-                {
+                else if (a == 'A'){
                     solution = solve_cube(c);
                     printf("%s", solution);
                     free(solution);
                 }
-                else if (a == 'a')
-                {
+                else if (a == 'a'){
                     solution = solve_cube(c);
                     SlowMoveRot(c, &w, &h, stickers, solution, window, ctx, option);
                     free(solution);
+                }
+                else if(a==32){
+                    if (stop == 0){ /*counter was running*/
+                        pthread_mutex_lock(&mutex);
+                        dat.mode = -1;
+                        pthread_mutex_unlock(&mutex);
+                        stop = 1;
+                        continue;
+                    }
+                    else{
+                        pthread_mutex_lock(&mutex);
+                        dat.min = 0;
+                        dat.sec = 0;
+                        dat.h = 0;
+                        dat.mode=1;
+                        pthread_mutex_unlock(&mutex);
+                        stop = 0;
+                        continue;
+                    }
                 }
                 c_make(c, a); /*make move in the cube*/
                 j++;
@@ -287,7 +331,9 @@ int main(int option)
 
     colorSDL_free(stickers);
     c_free(c);
-    pthread_detach(hilo);
-    pthread_cancel(hilo);
+    dat.mode=2; /*To suicide thread*/
+    pthread_join(hilo,NULL);
+    /*pthread_detach(hilo);
+    pthread_cancel(hilo);*/
     return 0;
 }
