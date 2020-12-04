@@ -304,10 +304,10 @@ int main(int option)
                     }
                     else{
                         pthread_mutex_lock(&mutex);
+                        dat.mode = 1;
                         dat.min = 0;
                         dat.sec = 0;
                         dat.h = 0;
-                        dat.mode=1;
                         pthread_mutex_unlock(&mutex);
                         stop = 0;
                         continue;
@@ -331,7 +331,9 @@ int main(int option)
 
     colorSDL_free(stickers);
     c_free(c);
+    pthread_mutex_lock(&mutex);
     dat.mode=2; /*To suicide thread*/
+    pthread_mutex_unlock(&mutex);
     pthread_join(hilo,NULL);
     /*pthread_detach(hilo);
     pthread_cancel(hilo);*/
