@@ -149,18 +149,17 @@ void *counter(void *dat){
             SDL_RenderPresent(renderer);
         }
 
-        if(d->mode==2)/*terminar*/
-            break;
+        if(d->mode==2){
+            SDL_DestroyTexture(texture1);
+            TTF_Quit();
+            SDL_DestroyRenderer(renderer);
+            SDL_DestroyWindow(window);
+            SDL_Quit();
+            return;
+        }
     }
 
-    /* Deinit TTF. */
-    SDL_DestroyTexture(texture1);
-    TTF_Quit();
-
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-    return EXIT_SUCCESS;
+   
 }
 
 int main(int option)
@@ -300,7 +299,6 @@ int main(int option)
                         dat.mode = -1;
                         pthread_mutex_unlock(&mutex);
                         stop = 1;
-                        continue;
                     }
                     else{
                         pthread_mutex_lock(&mutex);
@@ -310,7 +308,6 @@ int main(int option)
                         dat.h = 0;
                         pthread_mutex_unlock(&mutex);
                         stop = 0;
-                        continue;
                     }
                 }
                 c_make(c, a); /*make move in the cube*/
@@ -334,7 +331,7 @@ int main(int option)
     pthread_mutex_lock(&mutex);
     dat.mode=2; /*To suicide thread*/
     pthread_mutex_unlock(&mutex);
-    pthread_join(hilo,NULL);
+    /*pthread_join(hilo,NULL);*/
     /*pthread_detach(hilo);
     pthread_cancel(hilo);*/
     return 0;
