@@ -78,7 +78,7 @@ void *counter(void *dat){
 
     /* Inint TTF. */
     SDL_Init(SDL_INIT_TIMER | SDL_INIT_VIDEO);
-    window = SDL_CreateWindow("", 440, 200, 300, 150, SDL_WINDOW_BORDERLESS);
+    window = SDL_CreateWindow("", 440, 100, 300, 150, SDL_WINDOW_BORDERLESS);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     TTF_Init();
     font = TTF_OpenFont(FONT_TTF, 50);
