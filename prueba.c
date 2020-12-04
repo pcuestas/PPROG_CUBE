@@ -31,6 +31,14 @@
 
 #define MAX_CAD 500
 
+pthread_mutex_t mutex=PTHREAD_MUTEX_INITIALIZER;
+
+typedef struct _counter_data counter_data;
+
+struct _counter_data{
+    int sec, min, h,mode; /*Mode=0: show time 00:00. Mode=-1 Counter stopped. Mode=1 Counter running. Mode=2 kill thread*/
+};
+
 void get_text_and_rect(SDL_Renderer *renderer, int x, int y, char *text, TTF_Font *font, SDL_Texture **texture, SDL_Rect *rect)
 {
     int ancho, alto;
@@ -52,8 +60,7 @@ void get_text_and_rect(SDL_Renderer *renderer, int x, int y, char *text, TTF_Fon
     SDL_FreeSurface(surface);
 }
 
-void *counter(void *argv)
-{
+void *counter(void *dat){
     SDL_Event event;
     SDL_Rect rect1;
     SDL_Renderer *renderer;
@@ -63,7 +70,10 @@ void *counter(void *argv)
     int quit;
     int h, m, s;
     TTF_Font *font;
-    h = m = s = 0;
+    /*h = m = s = 0;*/
+    
+    counter_data *d;
+    d=(counter_data*)dat;
 
     strcpy(text, "");
 
@@ -80,16 +90,16 @@ void *counter(void *argv)
     }
 
     quit = 0;
-    while (!quit)
-    {
-        while (SDL_PollEvent(&event) == 1)
-        {
-            if (event.type == SDL_QUIT)
-            {
+    while (!quit){
+        while (SDL_PollEvent(&event) == 1){
+            if (event.type == SDL_QUIT){
                 quit = 1;
             }
         }
-        sprintf(text, "%02d:%02d:%02d", h, m, s);
+
+
+        while(d->mode==1){
+        sprintf(text, "%02d:%02d:%02d", d->h, d->min, d->sec);
         get_text_and_rect(renderer, 0, 0, text, font, &texture1, &rect1);
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
         SDL_RenderClear(renderer);
@@ -99,25 +109,34 @@ void *counter(void *argv)
         SDL_RenderPresent(renderer);
 
         sleep(1);
-        s++;
+        d->sec++;
 
-        if (s == 60)
-        {
-            m += 1;
-            s = 0;
+        if (d->sec == 60){
+            d->min += 1;
+            d->sec = 0;
         }
-        if (m == 60)
-        {
-            h += 1;
-            m = 0;
+        if (d->min == 60){
+            d->h += 1;
+            d->min = 0;
         }
-        if (h == 24)
-        {
-            h = 0;
-            m = 0;
-            s = 0;
+        if (d->h == 24){
+            d->h = 0;
+            d->min = 0;
+            d->sec = 0;
         }
         
+        }
+
+        while(d->mode==0){
+            sprintf(text, "%02d:%02d:%02d", 0, 0, 0);
+        }
+
+        while(d->mode==-1){
+            sprintf(text, "%02d:%02d:%02d", d->h, d->min, d->sec);
+        }
+
+        if(d->mode==2)/*terminar*/
+            break;
     }
 
     /* Deinit TTF. */
@@ -141,6 +160,12 @@ int main(int option)
     SDL_Window *window;
 
     pthread_t hilo;
+    counter_data dat;
+    dat.min=0;
+    dat.sec=0;
+    dat.h=0;
+    dat.mode=0;
+    int stop=0,firstmove=0;
 
     /*************************************/
     option = 2;
@@ -165,7 +190,7 @@ int main(int option)
 
     srand(time(NULL));
 
-    pthread_create(&hilo, NULL, counter, NULL);
+    pthread_create(&hilo, NULL, counter, &dat);
 
     /*Create window*/
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
