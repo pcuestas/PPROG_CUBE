@@ -67,7 +67,7 @@ void *counter(void *dat){
     SDL_Texture *texture1;
     SDL_Window *window;
     char text[200];
-    int quit;
+    int quit,stop=0,blank=0;
     TTF_Font *font;
     /*h = m = s = 0;*/
     
@@ -98,6 +98,8 @@ void *counter(void *dat){
 
 
         while(d->mode==1){
+            stop=0;
+            blank=0;
             sprintf(text, "%02d:%02d:%02d", d->h, d->min, d->sec);
             get_text_and_rect(renderer, 0, 0, text, font, &texture1, &rect1);
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
@@ -127,33 +129,39 @@ void *counter(void *dat){
         }
 
         while(d->mode==0){
+            stop=0;
+            if(blank==0){
             sprintf(text, "%02d:%02d:%02d", 0, 0, 0);
             get_text_and_rect(renderer, 0, 0, text, font, &texture1, &rect1);
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
             SDL_RenderClear(renderer);
-
             SDL_RenderCopy(renderer, texture1, NULL, &rect1);
-
             SDL_RenderPresent(renderer);
+            blank=1;
+            }
         }
 
         while(d->mode==-1){
+            blank=0;
+            if(stop==0){
             sprintf(text, "%02d:%02d:%02d", d->h, d->min, d->sec);
             get_text_and_rect(renderer, 0, 0, text, font, &texture1, &rect1);
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
             SDL_RenderClear(renderer);
-
             SDL_RenderCopy(renderer, texture1, NULL, &rect1);
-
             SDL_RenderPresent(renderer);
+            stop=1;
+            }
         }
 
         if(d->mode==2){
+            pthread_mutex_lock(&mutex);
             SDL_DestroyTexture(texture1);
             TTF_Quit();
             SDL_DestroyRenderer(renderer);
             SDL_DestroyWindow(window);
-            SDL_Quit();
+           /* SDL_Quit();*/
+            pthread_mutex_unlock(&mutex);
             return;
         }
     }
@@ -229,21 +237,17 @@ int main(int option)
     gluLookAt(1.5, 1.0, 1.0, 0, 0, 0, 0.5, 0, 0);
     /* Main loop */
     SDL_StartTextInput();
-    while (flag == 0)
-    {
+    while (flag == 0){
 
-        while (SDL_PollEvent(&ev))
-        {
+        while (SDL_PollEvent(&ev)){
 
-            switch (ev.type)
-            {
+            switch (ev.type){
             case SDL_QUIT:
                 flag = 1;
                 break;
 
             case SDL_KEYDOWN:
-                switch (ev.key.keysym.sym)
-                {
+                switch (ev.key.keysym.sym){
                 case SDLK_ESCAPE:
                     flag = 1;
                     break;
@@ -257,8 +261,7 @@ int main(int option)
 
                 a = text[j]; /*letter read*/
 
-                if (a == 'R' || a == 'L' || a == 'M' || a == 'E' || a == 'U' || a == 'D' || a == 'F' || a == 'B' || a == 'S' || a == 'r' || a == 'l' || a == 'm' || a == 'e' || a == 'u' || a == 'd' || a == 'f' || a == 'b' || a == 's' || a == 'x' || a == 'X' || a == 'y' || a == 'Y' || a == 'z' || a == 'Z')
-                {   
+                if (a == 'R' || a == 'L' || a == 'M' || a == 'E' || a == 'U' || a == 'D' || a == 'F' || a == 'B' || a == 'S' || a == 'r' || a == 'l' || a == 'm' || a == 'e' || a == 'u' || a == 'd' || a == 'f' || a == 'b' || a == 's' || a == 'x' || a == 'X' || a == 'y' || a == 'Y' || a == 'z' || a == 'Z'){   
                     if(firstmove==0){
                         pthread_mutex_lock(&mutex);
                         dat.mode=1; /*Counter running*/
@@ -289,6 +292,9 @@ int main(int option)
                 }
                 else if (a == 'a'){
                     solution = solve_cube(c);
+                    pthread_mutex_lock(&mutex);
+                    dat.mode=0;
+                    pthread_mutex_unlock(&mutex);
                     SlowMoveRot(c, &w, &h, stickers, solution, window, ctx, option);
                     free(solution);
                 }
@@ -323,15 +329,16 @@ int main(int option)
     SDL_StopTextInput();
     
     SDL_Delay(1000);
-    quit(0);
+    pthread_detach(hilo);
 
     colorSDL_free(stickers);
     c_free(c);
+
     pthread_mutex_lock(&mutex);
     dat.mode=2; /*To suicide thread*/
     pthread_mutex_unlock(&mutex);
     /*pthread_join(hilo,NULL);*/
-    pthread_detach(hilo);
-    pthread_cancel(hilo);
+    /*pthread_cancel(hilo);*/
+    quit(0);
     return 0;
 }
