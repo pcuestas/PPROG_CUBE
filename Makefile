@@ -35,7 +35,7 @@ $(MENU): $(OBJ2) $(HEADERS)
 	$(CC) $(OBJ2) -o $@
 
 $(TEMPEXE): $(OBJTEMPEXE) $(HEADERS)
-	$(CC) $(OBJTEMPEXE) $(LIB) -o $@
+	$(CC) $(OBJTEMPEXE) $(LIB) $(LIB2) -o $@
 
 #lib_struct.o: lib_struct.c lib_funct.h
 #	$(CC) $(CFLAGS) -c $<
