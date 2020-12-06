@@ -9,12 +9,9 @@
 #include <unistd.h>
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_opengl.h>
-#include <SDL2/SDL_stdinc.h>
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_ttf.h>
-#include <GL/glut.h>
 
 #include "cube.h"
 #include "print_c.h"
@@ -31,53 +28,34 @@
 
 #define MAX_CAD 500
 
-pthread_mutex_t mutex=PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 typedef struct _counter_data counter_data;
 
-struct _counter_data{
-    int sec, min, h,mode; /*Mode=0: show time 00:00. Mode=-1 Counter stopped. Mode=1 Counter running. Mode=2 kill thread*/
+struct _counter_data
+{
+    int sec, min, h, mode; /*Mode=0: show time 00:00. Mode=-1 Counter stopped. Mode=1 Counter running. Mode=2 kill thread*/
 };
 
-void get_text_and_rect(SDL_Renderer *renderer, int x, int y, char *text, TTF_Font *font, SDL_Texture **texture, SDL_Rect *rect)
+void *counter(void *dat)
 {
-    int ancho, alto;
-    SDL_Surface *surface;
-    SDL_Color textColor = {255, 255, 255, 0};
-
-    surface = TTF_RenderText_Solid(font, text, textColor);
-    *texture = SDL_CreateTextureFromSurface(renderer, surface);
-
-    ancho = surface->w;
-    alto = surface->h;
-    rect->x = x;
-    rect->y = y;
-
-    rect->w = ancho;
-    rect->h = alto;
-
-
-    SDL_FreeSurface(surface);
-}
-
-void *counter(void *dat){
     SDL_Event event;
     SDL_Rect rect1;
     SDL_Renderer *renderer;
-    SDL_Texture *texture1;
+    SDL_Texture *texture1 = NULL;
     SDL_Window *window;
-    char text[200];
-    int quit,stop=0,blank=0;
     TTF_Font *font;
-    /*h = m = s = 0;*/
-    
+
+    char text[MAX_CAD];
+    int quit, stop = 0, blank = 0;
+
     counter_data *d;
-    d=(counter_data*)dat;
+
+    d = (counter_data *)dat;
 
     strcpy(text, "");
 
     /* Inint TTF. */
-    SDL_Init(SDL_INIT_TIMER | SDL_INIT_VIDEO);
     window = SDL_CreateWindow("", 440, 150, 300, 150, SDL_WINDOW_BORDERLESS);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     TTF_Init();
@@ -89,78 +67,73 @@ void *counter(void *dat){
     }
 
     quit = 0;
-    while (!quit){
-        while (SDL_PollEvent(&event) == 1){
-            if (event.type == SDL_QUIT){
+    while (!quit)
+    {
+        while (SDL_PollEvent(&event) == 1)
+        {
+            if (event.type == SDL_QUIT)
+            {
                 quit = 1;
             }
         }
 
-
-        while(d->mode==1){
-            stop=0;
-            blank=0;
+        while (d->mode == 1)
+        {
+            stop = 0;
+            blank = 0;
             sprintf(text, "%02d:%02d:%02d", d->h, d->min, d->sec);
-            get_text_and_rect(renderer, 0, 0, text, font, &texture1, &rect1);
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-            SDL_RenderClear(renderer);
-
-            SDL_RenderCopy(renderer, texture1, NULL, &rect1);
-
-            SDL_RenderPresent(renderer);
+            SDL_chrono(renderer, text, font, rect1, texture1);
 
             sleep(1);
             d->sec++;
 
-            if (d->sec == 60){
+            if (d->sec == 60)
+            {
                 d->min += 1;
                 d->sec = 0;
             }
-            if (d->min == 60){
+            if (d->min == 60)
+            {
                 d->h += 1;
                 d->min = 0;
             }
-            if (d->h == 24){
+            if (d->h == 24)
+            {
                 d->h = 0;
                 d->min = 0;
                 d->sec = 0;
             }
-        
         }
 
-        while(d->mode==0){
-            stop=0;
-            if(blank==0){
-            sprintf(text, "%02d:%02d:%02d", 0, 0, 0);
-            get_text_and_rect(renderer, 0, 0, text, font, &texture1, &rect1);
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-            SDL_RenderClear(renderer);
-            SDL_RenderCopy(renderer, texture1, NULL, &rect1);
-            SDL_RenderPresent(renderer);
-            blank=1;
+        while (d->mode == 0)
+        {
+            stop = 0;
+            if (blank == 0)
+            {
+                sprintf(text, "%02d:%02d:%02d", 0, 0, 0);
+                SDL_chrono(renderer, text, font, rect1, texture1);
+                blank = 1;
             }
         }
 
-        while(d->mode==-1){
-            blank=0;
-            if(stop==0){
-            sprintf(text, "%02d:%02d:%02d", d->h, d->min, d->sec);
-            get_text_and_rect(renderer, 0, 0, text, font, &texture1, &rect1);
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-            SDL_RenderClear(renderer);
-            SDL_RenderCopy(renderer, texture1, NULL, &rect1);
-            SDL_RenderPresent(renderer);
-            stop=1;
+        while (d->mode == -1)
+        {
+            blank = 0;
+            if (stop == 0)
+            {
+                sprintf(text, "%02d:%02d:%02d", d->h, d->min, d->sec);
+                SDL_chrono(renderer, text, font, rect1, texture1);
             }
         }
 
-        if(d->mode==2){
+        if (d->mode == 2)
+        {
             pthread_mutex_lock(&mutex);
             SDL_DestroyTexture(texture1);
             TTF_Quit();
             SDL_DestroyRenderer(renderer);
             SDL_DestroyWindow(window);
-           /* SDL_Quit();*/
+            /* SDL_Quit();*/
             pthread_mutex_unlock(&mutex);
             return NULL;
         }
@@ -171,17 +144,19 @@ void *counter(void *dat){
 
 int main(int option)
 {
-    int flag = 0, j = 0, w, h;
     Cube3 *c = NULL;
-    SDL_Event ev;
-    char text[200] = "", a = 0, *solution = NULL;
-    double **stickers = NULL;
+
     SDL_GLContext ctx;
     SDL_Window *window;
+    SDL_Event ev;
+
+    char text[MAX_CAD] = "", a = 0, *solution = NULL;
+    double **stickers = NULL;
+    int flag = 0, j = 0, w, h;
 
     pthread_t hilo;
     counter_data dat;
-    int stop=0,firstmove=0;
+    int stop = 0, firstmove = 0;
     dat.min = 0;
     dat.sec = 0;
     dat.h = 0;
@@ -237,17 +212,21 @@ int main(int option)
     gluLookAt(1.0, 1.0, 1.0, 0, 0, 0, 0.5, 0, 0);
     /* Main loop */
     SDL_StartTextInput();
-    while (flag == 0){
+    while (flag == 0)
+    {
 
-        while (SDL_PollEvent(&ev)){
+        while (SDL_PollEvent(&ev))
+        {
 
-            switch (ev.type){
+            switch (ev.type)
+            {
             case SDL_QUIT:
                 flag = 1;
                 break;
 
             case SDL_KEYDOWN:
-                switch (ev.key.keysym.sym){
+                switch (ev.key.keysym.sym)
+                {
                 case SDLK_ESCAPE:
                     flag = 1;
                     break;
@@ -261,52 +240,61 @@ int main(int option)
 
                 a = text[j]; /*letter read*/
 
-                if (a == 'R' || a == 'L' || a == 'M' || a == 'E' || a == 'U' || a == 'D' || a == 'F' || a == 'B' || a == 'S' || a == 'r' || a == 'l' || a == 'm' || a == 'e' || a == 'u' || a == 'd' || a == 'f' || a == 'b' || a == 's' || a == 'x' || a == 'X' || a == 'y' || a == 'Y' || a == 'z' || a == 'Z'){   
-                    if(firstmove==0){
+                if (a == 'R' || a == 'L' || a == 'M' || a == 'E' || a == 'U' || a == 'D' || a == 'F' || a == 'B' || a == 'S' || a == 'r' || a == 'l' || a == 'm' || a == 'e' || a == 'u' || a == 'd' || a == 'f' || a == 'b' || a == 's' || a == 'x' || a == 'X' || a == 'y' || a == 'Y' || a == 'z' || a == 'Z')
+                {
+                    if (firstmove == 0)
+                    {
                         pthread_mutex_lock(&mutex);
-                        dat.mode=1; /*Counter running*/
+                        dat.mode = 1; /*Counter running*/
                         pthread_mutex_unlock(&mutex);
                         firstmove = 1;
                     }
                     Rot_full_move(&w, &h, stickers, a, window, ctx, option);
                 }
-                if (a == 'w'){
+                if (a == 'w')
+                {
                     scramble_cube(c, SCRAMBLES_TXT);
                     pthread_mutex_lock(&mutex);
-                    dat.min=0;
-                    dat.sec=0;
-                    dat.h=0;
-                    dat.mode=0;
+                    dat.min = 0;
+                    dat.sec = 0;
+                    dat.h = 0;
+                    dat.mode = 0;
                     pthread_mutex_unlock(&mutex);
                     firstmove = 0;
                 }
-                else if (a == 'W'){
+                else if (a == 'W')
+                {
                     solution = solve_cube(c);
                     c_moves(c, solution);
                     free(solution);
                 }
-                else if (a == 'A'){
+                else if (a == 'A')
+                {
                     solution = solve_cube(c);
                     printf("%s", solution);
                     free(solution);
                 }
-                else if (a == 'a'){
+                else if (a == 'a')
+                {
                     solution = solve_cube(c);
                     pthread_mutex_lock(&mutex);
-                    dat.mode=0;
+                    dat.mode = 0;
                     pthread_mutex_unlock(&mutex);
                     SlowMoveRot(c, &w, &h, stickers, solution, window, ctx, option);
                     free(solution);
-                    firstmove=0;
+                    firstmove = 0;
                 }
-                else if(a==32){
-                    if (stop == 0){ /*counter was running*/
+                else if (a == 32)
+                {
+                    if (stop == 0)
+                    { /*counter was running*/
                         pthread_mutex_lock(&mutex);
                         dat.mode = -1;
                         pthread_mutex_unlock(&mutex);
                         stop = 1;
                     }
-                    else{
+                    else
+                    {
                         pthread_mutex_lock(&mutex);
                         dat.mode = 1;
                         dat.min = 0;
@@ -328,7 +316,7 @@ int main(int option)
         Render_wr(&w, &h, stickers, window, ctx, option);
     }
     SDL_StopTextInput();
-    
+
     SDL_Delay(1000);
     pthread_detach(hilo);
 
@@ -336,12 +324,11 @@ int main(int option)
     c_free(c);
 
     pthread_mutex_lock(&mutex);
-    dat.mode=2; /*To suicide thread*/
+    dat.mode = 2; /*To suicide thread*/
     pthread_mutex_unlock(&mutex);
 
     /*pthread_join(hilo,NULL); Ya no es necesario. con mode2 hacemos que el hilo haga return*/
     /*pthread_cancel(hilo);*/
-
 
     quit(0);
     return 0;
