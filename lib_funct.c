@@ -65,7 +65,7 @@ void Rot_layer(float _angle, double **s, char c, int option)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(1.5, 1.0, 1.0, 0, 0, 0, 0.5, 0, 0);
+    gluLookAt(1.0, 1.0, 1.0, 0, 0, 0, 0.5, 0, 0);
 
     glBegin(GL_QUADS);
 
@@ -121,7 +121,7 @@ void Rot_cube(float _angle, double **s, char c, int option)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(1.5, 1.0, 1.0, 0, 0, 0, 0.5, 0, 0);
+    gluLookAt(1.0, 1.0, 1.0, 0, 0, 0, 0.5, 0, 0);
 
     glPushMatrix();
     if (c == 'x')
@@ -191,8 +191,8 @@ void Rot_full_move(int *w, int *h, double **stickers, char move, SDL_Window *_wi
         
         Rot(_angle, stickers, move, option);
         SDL_GL_SwapWindow(_window);
-        SDL_Delay(5);
-        _angle += 3.0f;
+        SDL_Delay(10);
+        _angle += 4.0f;
     }
     glPopMatrix();
 }

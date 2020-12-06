@@ -162,11 +162,11 @@ void *counter(void *dat){
             SDL_DestroyWindow(window);
            /* SDL_Quit();*/
             pthread_mutex_unlock(&mutex);
-            return;
+            return NULL;
         }
     }
 
-   
+    return NULL;
 }
 
 int main(int option)
@@ -188,7 +188,7 @@ int main(int option)
     dat.mode = 0;
 
     /*************************************/
-    option = 2;
+    option = 3;
     /*************************************/
 
     c = c_init(option);
@@ -234,7 +234,7 @@ int main(int option)
     glDepthFunc(GL_LESS);
     glShadeModel(GL_SMOOTH);
 
-    gluLookAt(1.5, 1.0, 1.0, 0, 0, 0, 0.5, 0, 0);
+    gluLookAt(1.0, 1.0, 1.0, 0, 0, 0, 0.5, 0, 0);
     /* Main loop */
     SDL_StartTextInput();
     while (flag == 0){
