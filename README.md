@@ -1,4 +1,5 @@
-### Autores: Álvaro Zamanillo, Ignacio Bernardez y Pablo Cuesta
+### Autores: Álvaro Zamanillo, Ignacio Bernardez y Pablo Cuesta.
+Nombre del grupo: *`is_prime()`*
 
 (se compila haciendo 'make all' y se ejecuta el juego con 'make run')
 
