@@ -1,10 +1,8 @@
-Autores: Álvaro Zamanillo, Ignacio Bernardez y Pablo Cuesta
-
-Pequeña explicación del juego.
+### Autores: Álvaro Zamanillo, Ignacio Bernardez y Pablo Cuesta
 
 (se compila haciendo 'make all' y se ejecuta el juego actual con 'make run')
 
-Controles dentro de la interfaz del cubo :
+## Controles dentro de la interfaz del cubo :
 
 **Movimientos del cubo**:
 * RLFBUD: son los movimientos de caras en sentido horario (mismas letras en minúscula, para los movimientos antihorarios)
