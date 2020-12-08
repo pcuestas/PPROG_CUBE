@@ -19,7 +19,7 @@ Todos estos movimientos son considerados estándar y se conocen como "Singmaster
 * espacio: para/reinicia el cronómetro
 
 **Solo en la interfaz de la terminal**:
-* q sale de la interfaz
+* q: sale de la interfaz
 
 **Solo en la interfaz de la biblioteca SDL**:
-*  ESC sale de la interfaz
+*  ESC: sale de la interfaz
