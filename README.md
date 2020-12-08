@@ -1,6 +1,6 @@
 ### Autores: Álvaro Zamanillo, Ignacio Bernardez y Pablo Cuesta
 
-(se compila haciendo 'make all' y se ejecuta el juego actual con 'make run')
+(se compila haciendo 'make all' y se ejecuta el juego con 'make run')
 
 ## Controles dentro de la interfaz del cubo :
 
