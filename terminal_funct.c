@@ -8,6 +8,9 @@
 #include "terminal_funct.h"
 
 
+extern int fileno(FILE*);
+
+
 /*
   Initializes the terminal in such a way that we can read the input
   without echo on the screen

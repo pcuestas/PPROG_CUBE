@@ -6,13 +6,14 @@
  * @return 3 if 3x3 cube is selected, 2 in the case of the 2x2 cube and 0 to exit the game 
  * @param use_saved_game stores after the call to this function TRUE or FALSE
  */
-int MenusDisplay(int *use_saved_game);
+int MenusDisplay(int *use_saved_game, int *SDL_window);
 
 /**
  *@brief Deals with the main menu, reading the keyboard for moving the cursor and selecting an option
  *
  * 
  */
+int ShowMenu(char *);
 int ShowMainMenu();
 
 /**

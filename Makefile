@@ -1,10 +1,10 @@
 EXE=game
-OBJ=cube.o solver.o print_c.o interface.o bcd.o terminal_funct.o cube_interface.o menu.o $(EXE).o
+OBJ=cube.o solver.o print_c.o interface.o bcd.o terminal_funct.o cube_interface.o menu.o lib_funct.o lib_struct.o SDL_interface.o $(EXE).o
 
 TEST=tests
 OBJTEST=cube.o solver.o print_c.o interface.o bcd.o terminal_funct.o cube_interface.o menu.o $(TEST).o
 
-LIB2=-lpthread
+LIB2=-lpthread -lSDL2main -lSDL2 -lSDL2_image -lglut -lGLU -lGL -lm -lSDL2_ttf
 
 TEMPEXE=prueba
 LIB=-lSDL2main -lSDL2 -lSDL2_image -lglut -lGLU -lGL -lm -lSDL2_ttf
@@ -47,6 +47,7 @@ $(TEMPEXE): $(OBJTEMPEXE) $(HEADERS)
 #	$(CC) $(CFLAGS) -c $<
 
 %.o: %.c $(HEADERS)
+	@echo Compiling $<
 	$(CC) $(CFLAGS) -c $<
 
 clean:

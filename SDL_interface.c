@@ -31,11 +31,12 @@
 
 #define MAX_CAD 500
 
-pthread_mutex_t mutex=PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t mutex_sdl=PTHREAD_MUTEX_INITIALIZER;
 
-typedef struct _counter_data counter_data;
 
-struct _counter_data{
+typedef struct _counter_data_sdl counter_data_sdl;
+
+struct _counter_data_sdl{
     int sec, min, h,mode; /*Mode=0: show time 00:00. Mode=-1 Counter stopped. Mode=1 Counter running. Mode=2 kill thread*/
 };
 
@@ -71,8 +72,8 @@ void *counter(void *dat){
     TTF_Font *font;
     /*h = m = s = 0;*/
     
-    counter_data *d;
-    d=(counter_data*)dat;
+    counter_data_sdl *d;
+    d=(counter_data_sdl*)dat;
 
     strcpy(text, "");
 
@@ -155,13 +156,13 @@ void *counter(void *dat){
         }
 
         if(d->mode==2){
-            pthread_mutex_lock(&mutex);
+            pthread_mutex_lock(&mutex_sdl);
             SDL_DestroyTexture(texture1);
             TTF_Quit();
             SDL_DestroyRenderer(renderer);
             SDL_DestroyWindow(window);
            /* SDL_Quit();*/
-            pthread_mutex_unlock(&mutex);
+            pthread_mutex_unlock(&mutex_sdl);
             return NULL;
         }
     }
@@ -169,7 +170,7 @@ void *counter(void *dat){
     return NULL;
 }
 
-int main(int option)
+int SDL_interface(int option)
 {
     int flag = 0, j = 0, w, h;
     Cube3 *c = NULL;
@@ -180,16 +181,13 @@ int main(int option)
     SDL_Window *window;
 
     pthread_t hilo;
-    counter_data dat;
+    counter_data_sdl dat;
     int stop=0,firstmove=0;
     dat.min = 0;
     dat.sec = 0;
     dat.h = 0;
     dat.mode = 0;
 
-    /*************************************/
-    option = 3;
-    /*************************************/
 
     c = c_init(option);
     if (!c)
@@ -263,21 +261,21 @@ int main(int option)
 
                 if (a == 'R' || a == 'L' || a == 'M' || a == 'E' || a == 'U' || a == 'D' || a == 'F' || a == 'B' || a == 'S' || a == 'r' || a == 'l' || a == 'm' || a == 'e' || a == 'u' || a == 'd' || a == 'f' || a == 'b' || a == 's' || a == 'x' || a == 'X' || a == 'y' || a == 'Y' || a == 'z' || a == 'Z'){   
                     if(firstmove==0){
-                        pthread_mutex_lock(&mutex);
+                        pthread_mutex_lock(&mutex_sdl);
                         dat.mode=1; /*Counter running*/
-                        pthread_mutex_unlock(&mutex);
+                        pthread_mutex_unlock(&mutex_sdl);
                         firstmove = 1;
                     }
                     Rot_full_move(&w, &h, stickers, a, window, ctx, option);
                 }
                 if (a == 'w'){
                     scramble_cube(c, SCRAMBLES_TXT);
-                    pthread_mutex_lock(&mutex);
+                    pthread_mutex_lock(&mutex_sdl);
                     dat.min=0;
                     dat.sec=0;
                     dat.h=0;
                     dat.mode=0;
-                    pthread_mutex_unlock(&mutex);
+                    pthread_mutex_unlock(&mutex_sdl);
                     firstmove = 0;
                 }
                 else if (a == 'W'){
@@ -292,27 +290,27 @@ int main(int option)
                 }
                 else if (a == 'a'){
                     solution = solve_cube(c);
-                    pthread_mutex_lock(&mutex);
+                    pthread_mutex_lock(&mutex_sdl);
                     dat.mode=0;
-                    pthread_mutex_unlock(&mutex);
+                    pthread_mutex_unlock(&mutex_sdl);
                     SlowMoveRot(c, &w, &h, stickers, solution, window, ctx, option);
                     free(solution);
                     firstmove=0;
                 }
                 else if(a==32){
                     if (stop == 0){ /*counter was running*/
-                        pthread_mutex_lock(&mutex);
+                        pthread_mutex_lock(&mutex_sdl);
                         dat.mode = -1;
-                        pthread_mutex_unlock(&mutex);
+                        pthread_mutex_unlock(&mutex_sdl);
                         stop = 1;
                     }
                     else{
-                        pthread_mutex_lock(&mutex);
+                        pthread_mutex_lock(&mutex_sdl);
                         dat.mode = 1;
                         dat.min = 0;
                         dat.sec = 0;
                         dat.h = 0;
-                        pthread_mutex_unlock(&mutex);
+                        pthread_mutex_unlock(&mutex_sdl);
                         stop = 0;
                     }
                 }
@@ -328,16 +326,19 @@ int main(int option)
         Render_wr(&w, &h, stickers, window, ctx, option);
     }
     SDL_StopTextInput();
+
+    pthread_mutex_lock(&mutex_sdl);
+    dat.mode=2; /*To suicide thread*/
+    pthread_mutex_unlock(&mutex_sdl);
     
     SDL_Delay(1000);
     pthread_detach(hilo);
+    pthread_cancel(hilo);
 
     colorSDL_free(stickers);
     c_free(c);
 
-    pthread_mutex_lock(&mutex);
-    dat.mode=2; /*To suicide thread*/
-    pthread_mutex_unlock(&mutex);
+
 
     /*pthread_join(hilo,NULL); Ya no es necesario. con mode2 hacemos que el hilo haga return*/
     /*pthread_cancel(hilo);*/

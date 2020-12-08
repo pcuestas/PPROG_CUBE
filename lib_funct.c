@@ -16,7 +16,6 @@ void quit(int rc)
 
     SDL_DestroyWindow(window);
     SDL_Quit();
-    exit(rc);
 }
 
 void Render(double **s, int option)

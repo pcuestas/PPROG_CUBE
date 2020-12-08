@@ -54,6 +54,6 @@ int bcd_display(int n, rect *r);
 * @param a Pointer to a structure of type counter_data_set_time
 * 
 **/
-void *counter(void*a);
+void *counter_bcd(void*a);
 
 #endif

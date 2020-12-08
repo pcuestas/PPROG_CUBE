@@ -13,10 +13,13 @@
 #define ENTER 0
 #define OTHER 2
 
-/*FILES WHERE ARE THE GRAPHIC CONTENT*/
+extern int fileno(FILE*);
+
+/*FILES WHERE THE GRAPHIC CONTENT IS*/
 #define MAIN_MENU "./txt_files/menu.txt"
 #define NEW_GAME_MENU "./txt_files/newgame.txt"
 #define ARROW "./txt_files/arrow.txt"
+#define INITIAL_MENU "./txt_files/initial_menu.txt"
 
 /**
  line 2-9: new game -->pos 0
@@ -29,22 +32,40 @@
 
  **/
 
-int MenusDisplay(int *use_saved_game){
-    int choice1 = 0, choice2 = 0, ret=0;
+int MenusDisplay(int *use_saved_game, int *SDL_window){
+    int choice1 = 0, ret=0;
 
     /*modifica los parámetros de la terminal para poder leer las letras sin que se presione enter*/
     _term_init();
 
+SDLWindow_choice:
+    choice1=ShowMenu("initialmenu");
+
+    switch (choice1)
+    {
+    case 0:
+        (*SDL_window)=0;
+        goto MainMenu_choice;
+        break;
+    case 1:
+        (*SDL_window)=1;
+        goto MainMenu_choice;
+        break;
+
+    case 2:
+        ret=0;
+        goto End_MenusDisplay;
+        break;
+    }
 
 MainMenu_choice:
-    choice1 = ShowMainMenu();
+    choice1 = ShowMenu("main");
 
     switch (choice1)
     {
     case 0:
         /*NEW GAME*/
         (*use_saved_game)=FALSE;
-        choice2 = ShowNewGameMenu();
         goto Newgame_choice;
         break;
     case 1:
@@ -55,22 +76,21 @@ MainMenu_choice:
         break;
 
     case 2:
-        ret=0;
-        goto End_MenusDisplay;
+        goto SDLWindow_choice;
         break;
     }
 
 Newgame_choice:
-    switch (choice2)
+    choice1 = ShowMenu("newgame");
+
+    switch (choice1)
     {
     case 0:
         /*EMPEZAR JUEGO CON 3x3*/
-        printf("3x3\n");
         ret=3;
         break;
     case 1:
         /*EMPEZAR JUEGO CON 2x2*/
-        printf("2x2\n");
         ret=2;
         break;
 
@@ -86,11 +106,16 @@ End_MenusDisplay:
     return ret;
 }
 
-int ShowMainMenu()
+/*_menu can be either "main" for the main menu, 
+                      "newgame", for the new game menu, or
+                      "initialmenu", for the initial menu
+*/
+int ShowMenu(char *_menu)
 {
     int pos = 0;
     int letter;
     rect *r_menu, *r_arrow, *r_arrowblock;
+    char *menufile=(strcmp(_menu,"main")==0)?MAIN_MENU:((strcmp(_menu,"newgame")==0)?NEW_GAME_MENU:INITIAL_MENU);
 
     r_menu = rect_init(2, 29, 113, 29);
     r_arrow = rect_init(2, 4, 20, 29);
@@ -98,7 +123,7 @@ int ShowMainMenu()
 
     printf("%c[2J", 27);
 
-    print_element(MAIN_MENU, r_menu);
+    print_element(menufile, r_menu);
     print_element(ARROW, r_arrow);
 
     do
@@ -122,6 +147,58 @@ int ShowMainMenu()
             }
         }
         else if (letter == DOWN) /*Poner flecha hacia arriba*/
+        {
+            if (pos < 2)
+            {
+                pos++;
+            }
+        }
+
+        rect_clear(r_arrowblock);
+        rect_setline(r_arrow, 13 * pos + 2);
+        print_element(ARROW, r_arrow);
+
+    } while (1);
+
+    return 0;
+}
+/*
+int ShowMainMenu()
+{
+    int pos = 0;
+    int letter;
+    rect *r_menu, *r_arrow, *r_arrowblock;
+
+    r_menu = rect_init(2, 29, 113, 29);
+    r_arrow = rect_init(2, 4, 20, 29);
+    r_arrowblock = rect_init(2, 4, 20, 30);
+
+    printf("%c[2J", 27);
+
+    print_element(MAIN_MENU, r_menu);
+    print_element(ARROW, r_arrow);
+
+    do
+    {
+
+        letter = read_keyMenu();
+
+        if (letter == ENTER) //Enter
+        {
+
+            rect_free(r_menu);
+            rect_free(r_arrowblock);
+            rect_free(r_arrow);
+            return pos;
+        }
+        else if (letter == UP) //Poner flecha hacia arriba
+        {
+            if (pos > 0)
+            {
+                pos--;
+            }
+        }
+        else if (letter == DOWN) //Poner flecha hacia arriba
         {
             if (pos < 2)
             {
@@ -189,6 +266,8 @@ int ShowNewGameMenu()
 
     return 0;
 }
+
+*/
 
 int read_keyMenu()
 {

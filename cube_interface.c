@@ -13,12 +13,17 @@
  * si se presiona 'q', se terminará el programa.
 */
 
-pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+extern int fileno(FILE*);
+pthread_mutex_t mutex=PTHREAD_MUTEX_INITIALIZER;
+
 
 void*hilo(void*dat){ /*same function as counter in bcd.c but using locks in crucial parts (painting with ANSI ESC and moving the cursor*/
     rect **r;
     counter_data *d;
     int blank = 0, stop = 0;
+
+    if (dat==NULL)
+        return NULL;
 
     d = (counter_data *)dat;
 
@@ -94,11 +99,11 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
     cprint_from_stickers2 pcube=c_print3;
     rect *rvista1,*rcrono,*rborder1;
     pthread_t pth;
-    counter_data *dat;
+    counter_data *dat=NULL;
     int stop = 0,firstmove=0;
 
 
-    if (!(dat = counter_data_init(dat)))
+    if (!(dat = counter_data_init()))
         return -1;
 
     counter_data_set_rects(dat, 4, 12, 15, 17);
@@ -219,22 +224,29 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
             break;
         }
         pthread_mutex_unlock(&mutex);
-        }
+    }
+
 
     rect_free(rvista1);
     rect_free(rcrono);
     rect_free(rborder1);
 
-    tcsetattr(fileno(stdin), TCSANOW, &initial);/*deshace los cambios hechos por _term_init()*/
+    tcsetattr(fileno(stdin), TCSANOW, &initial); /*deshace los cambios hechos por _term_init()*/
 
-
-    if(save_cube(c, save_game_file)==ERROR)
+    if (save_cube(c, save_game_file) == ERROR)
         printf("There was an error when saving the game.\n");
 
+    pthread_mutex_lock(&mutex);
     pthread_detach(pth);
     pthread_cancel(pth);
+    pthread_mutex_unlock(&mutex);
+    
     c_free(c);
+    pthread_mutex_lock(&mutex);
     counter_data_free(dat);
+    dat=NULL;
+    pthread_mutex_unlock(&mutex);
+        
 
     /*in case the loop gets any error*/
     if (flag == 1)

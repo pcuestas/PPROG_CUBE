@@ -51,8 +51,9 @@ void counter_data_free(counter_data *dat){
     int i;
 
     if(dat){
-        for(i=0;i<4;i++)
+        for(i=0;i<4;i++){
             rect_free(dat->rcounter[i]);
+        }
         free(dat);
     }
         
@@ -357,7 +358,7 @@ int bcd_display(int n, rect *r)
     return 0;
 }
 
-void *counter(void *dat){
+void *counter_bcd(void *dat){
     rect **r;
     counter_data *d;
     int blank=0,stop=0;
