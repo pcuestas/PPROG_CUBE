@@ -7,7 +7,7 @@ OBJTEST=cube.o solver.o print_c.o interface.o bcd.o terminal_funct.o cube_interf
 LIB2=-lpthread -lSDL2main -lSDL2 -lSDL2_image -lglut -lGLU -lGL -lm -lSDL2_ttf
 
 TEMPEXE=prueba
-LIB=-lSDL2main -lSDL2 -lSDL2_image -lglut -lGLU -lGL -lm -lSDL2_ttf
+LIB=-lSDL2main -lSDL2 -lSDL2_ttf -lGLU -lGL 
 OBJTEMPEXE=$(TEMPEXE).o cube.o print_c.o solver.o lib_funct.o lib_struct.o interface.o
 
 CFLAGS=-ansi -pedantic -Wall -g

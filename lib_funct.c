@@ -8,7 +8,6 @@
 static SDL_GLContext ctx;
 static SDL_Window *window;
 
-
 void quit(int rc)
 {
     if (ctx)
@@ -16,6 +15,39 @@ void quit(int rc)
 
     SDL_DestroyWindow(window);
     SDL_Quit();
+}
+
+void get_text_and_rect(SDL_Renderer *renderer, int x, int y, char *text, TTF_Font *font, SDL_Texture **texture, SDL_Rect *rect)
+{
+    SDL_Surface *surface;
+    SDL_Color textColor = {255, 255, 255, 0};
+
+    int ancho, alto;
+
+    surface = TTF_RenderText_Solid(font, text, textColor);
+    *texture = SDL_CreateTextureFromSurface(renderer, surface);
+
+    ancho = surface->w;
+    alto = surface->h;
+    rect->x = x;
+    rect->y = y;
+
+    rect->w = ancho;
+    rect->h = alto;
+
+
+    SDL_FreeSurface(surface);
+}
+
+void SDL_chrono(SDL_Renderer *renderer, char *text, TTF_Font *font, SDL_Rect rect1, SDL_Texture *texture1)
+{
+    get_text_and_rect(renderer, 0, 0, text, font, &texture1, &rect1);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+    SDL_RenderClear(renderer);
+
+    SDL_RenderCopy(renderer, texture1, NULL, &rect1);
+
+    SDL_RenderPresent(renderer);
 }
 
 void Render(double **s, int option)
@@ -39,11 +71,10 @@ void Render(double **s, int option)
     free_sCube(sc);
 
     glEnd();
-
 }
 
-
-void Render_wr(int *w, int *h, double **stickers, SDL_Window *_window, SDL_GLContext _ctx, int option){
+void Render_wr(int *w, int *h, double **stickers, SDL_Window *_window, SDL_GLContext _ctx, int option)
+{
     SDL_GL_MakeCurrent(_window, _ctx);
     SDL_GetWindowSize(_window, w, h);
     glViewport(0, 0, *w, *h);
@@ -53,7 +84,7 @@ void Render_wr(int *w, int *h, double **stickers, SDL_Window *_window, SDL_GLCon
 
 void Rot_layer(float _angle, double **s, char c, int option)
 {
-    
+
     sCube *sc = NULL;
     int i = 0;
 
@@ -80,17 +111,17 @@ void Rot_layer(float _angle, double **s, char c, int option)
     glPushMatrix();
 
     /*set up the angles and axis of rotation*/
-    if(c=='L'||c=='M'||c=='r')
+    if (c == 'L' || c == 'M' || c == 'r')
         glRotatef(_angle, 0.0f, 0.0f, 1.0f);
-    else if(c=='R'||c=='l'||c=='m')
+    else if (c == 'R' || c == 'l' || c == 'm')
         glRotatef(-_angle, 0.0f, 0.0f, 1.0f);
-    else if(c=='E'||c=='D'||c=='u')
+    else if (c == 'E' || c == 'D' || c == 'u')
         glRotatef(_angle, 1.0f, 0.0f, 0.0f);
-    else if(c=='U'||c=='e'||c=='d')
+    else if (c == 'U' || c == 'e' || c == 'd')
         glRotatef(-_angle, 1.0f, 0.0f, 0.0f);
-    else if(c=='F'||c=='S'||c=='b')
+    else if (c == 'F' || c == 'S' || c == 'b')
         glRotatef(-_angle, 0.0f, 1.0f, 0.0f);
-    else if(c=='B'||c=='f'||c=='s')
+    else if (c == 'B' || c == 'f' || c == 's')
         glRotatef(_angle, 0.0f, 1.0f, 0.0f);
 
     glBegin(GL_QUADS);
@@ -109,7 +140,7 @@ void Rot_layer(float _angle, double **s, char c, int option)
 
 void Rot_cube(float _angle, double **s, char c, int option)
 {
-   
+
     sCube *sc = NULL;
     int i = 0;
 
@@ -151,7 +182,8 @@ void Rot_cube(float _angle, double **s, char c, int option)
     glBegin(GL_QUADS);
 
     /* "paint" all pieces */
-    for (i = 0; i < NPC; i++){
+    for (i = 0; i < NPC; i++)
+    {
         paint_sPiece(&(sc->pc[i]), option, s);
     }
 
@@ -161,33 +193,39 @@ void Rot_cube(float _angle, double **s, char c, int option)
     free_sCube(sc);
 }
 
-
-void Rot(float _angle, double **s, char c, int option){
-    if(option==2){
-        if(c == 'R'||c=='L'||c=='U'||c=='D'||c=='F'||c=='B'||c == 'r'||c=='l'||c=='u'||c=='d'||c=='f'||c=='b'){
+void Rot(float _angle, double **s, char c, int option)
+{
+    if (option == 2)
+    {
+        if (c == 'R' || c == 'L' || c == 'U' || c == 'D' || c == 'F' || c == 'B' || c == 'r' || c == 'l' || c == 'u' || c == 'd' || c == 'f' || c == 'b')
+        {
             Rot_layer(_angle, s, c, option);
         }
-    }else if (c == 'R'||c=='L'||c=='M'||c=='E'||c=='U'||c=='D'||c=='F'||c=='B'||c=='S'||c == 'r'||c=='l'||c=='m'||c=='e'||c=='u'||c=='d'||c=='f'||c=='b'||c=='s'){
+    }
+    else if (c == 'R' || c == 'L' || c == 'M' || c == 'E' || c == 'U' || c == 'D' || c == 'F' || c == 'B' || c == 'S' || c == 'r' || c == 'l' || c == 'm' || c == 'e' || c == 'u' || c == 'd' || c == 'f' || c == 'b' || c == 's')
+    {
         Rot_layer(_angle, s, c, option);
     }
-    
-    if(c == 'x'||c == 'X'||c == 'y'||c == 'Y'||c == 'z'||c == 'Z'){
+
+    if (c == 'x' || c == 'X' || c == 'y' || c == 'Y' || c == 'z' || c == 'Z')
+    {
         Rot_cube(_angle, s, c, option);
     }
 }
 
-
-void Rot_full_move(int *w, int *h, double **stickers, char move, SDL_Window *_window, SDL_GLContext _ctx, int option){
+void Rot_full_move(int *w, int *h, double **stickers, char move, SDL_Window *_window, SDL_GLContext _ctx, int option)
+{
     float _angle = 0.0f;
-    
+
     glPushMatrix();
 
     SDL_GL_MakeCurrent(_window, _ctx);
     SDL_GetWindowSize(_window, w, h);
     glViewport(0, 0, *w, *h);
 
-    while (_angle <= 90.0f){
-        
+    while (_angle <= 90.0f)
+    {
+
         Rot(_angle, stickers, move, option);
         SDL_GL_SwapWindow(_window);
         SDL_Delay(10);
@@ -196,11 +234,12 @@ void Rot_full_move(int *w, int *h, double **stickers, char move, SDL_Window *_wi
     glPopMatrix();
 }
 
+void SlowMoveRot(Cube3 *c, int *w, int *h, double **stickers, char *moves, SDL_Window *_window, SDL_GLContext _ctx, int option)
+{
+    int i = 0, len = strlen(moves);
 
-void SlowMoveRot(Cube3* c, int *w, int *h, double **stickers, char *moves, SDL_Window *_window, SDL_GLContext _ctx, int option){
-    int i=0, len=strlen(moves);
-
-    for(i=0;i<len;i++){
+    for (i = 0; i < len; i++)
+    {
         /*display rotation*/
         Rot_full_move(w, h, stickers, moves[i], _window, _ctx, option);
         /*make move in the cube*/

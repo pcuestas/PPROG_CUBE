@@ -6,10 +6,9 @@
 #include <math.h>
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_opengl.h>
-#include <SDL2/SDL_stdinc.h>
 #include <SDL2/SDL_timer.h>
+#include <SDL2/SDL_ttf.h>
 #include <GL/glut.h>
 
 #include "cube.h"
@@ -53,6 +52,8 @@ int is_in_face(int i, char c);
 
 
 void quit(int rc);
+
+void SDL_chrono(SDL_Renderer *renderer, char *text, TTF_Font *font, SDL_Rect rect1, SDL_Texture *texture1);
 
 
 void Render(double **s, int option);
