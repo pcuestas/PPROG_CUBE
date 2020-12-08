@@ -8,6 +8,8 @@
 #define CUBE_3 "./txt_files/cubo3.txt"
 #define CUBE_222 "./txt_files/cubo222.txt"
 
+extern int usleep(unsigned int );
+
 Status refresh_cube(Cube3* c, FILE* pf, cprint_from_stickers print_cube){
     short s[54];
 

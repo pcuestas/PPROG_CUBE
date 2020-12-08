@@ -121,17 +121,11 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
         if (read_saved_cube(c, save_game_file)==ERROR){
             c_free(c);
             rect_free(rvista1);
+            rect_free(rcrono);
+            rect_free(rborder1);
+            counter_data_free(dat);
             return ERROR;
         }
-
-    switch(option){/*when 2x2 file is ready*/
-        case 2:
-            break;
-        case 3:
-            break;
-        default:
-            break;
-    }
 
     _term_init();/*modifica los parámetros de la terminal para poder leer las letras sin que se presione enter*/
 
@@ -152,6 +146,10 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
         letter=fgetc(stdin);
 
         if (letter=='q'){
+            pthread_mutex_lock(&mutex);
+            counter_data_set_mode(dat,1);
+            pthread_mutex_unlock(&mutex);
+
             break;
         }
         else if(letter=='w'){
@@ -226,7 +224,6 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
         pthread_mutex_unlock(&mutex);
     }
 
-
     rect_free(rvista1);
     rect_free(rcrono);
     rect_free(rborder1);
@@ -242,11 +239,9 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
     pthread_mutex_unlock(&mutex);
     
     c_free(c);
-    pthread_mutex_lock(&mutex);
     counter_data_free(dat);
     dat=NULL;
-    pthread_mutex_unlock(&mutex);
-        
+    
 
     /*in case the loop gets any error*/
     if (flag == 1)

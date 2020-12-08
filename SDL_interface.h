@@ -8,6 +8,6 @@
   new==1 iff we want a new game, else we charge a game 
   from a file
 */
-int SDL_interface(int option);
+int SDL_interface(int option, int use_saved_game, char *save_game_file);
 
 #endif

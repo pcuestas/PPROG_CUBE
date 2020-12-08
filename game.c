@@ -8,10 +8,14 @@ int main(void){
     int option=0, use_saved_game=TRUE, SDL_window=TRUE;
 
     while ((option=MenusDisplay(&use_saved_game, &SDL_window))!=0){
-        if(SDL_window==FALSE)
-            c_interface(option, use_saved_game, SAVE_FILE);
+        if(SDL_window==FALSE){
+            if(c_interface(option, use_saved_game, SAVE_FILE)==ERROR){
+                printf("ERROR in c_interface()");
+                return -1;
+            }
+        }
         else
-            SDL_interface(option);
+            SDL_interface(option, use_saved_game, SAVE_FILE);
     }
 
     return 0;

@@ -44,6 +44,8 @@ void *counter(void *dat)
     SDL_Renderer *renderer;
     SDL_Texture *texture1 = NULL;
     SDL_Window *window;
+    char text[200];
+    int quit,stop=0,blank=0;
     TTF_Font *font;
     /*h = m = s = 0;*/
     
@@ -138,7 +140,7 @@ void *counter(void *dat)
     return NULL;
 }
 
-int SDL_interface(int option)
+int SDL_interface(int option, int use_saved_game, char *save_game_file)
 {
     Cube3 *c = NULL;
 
@@ -163,6 +165,13 @@ int SDL_interface(int option)
     if (!c)
         return 1;
 
+    if (use_saved_game==TRUE){
+        if (read_saved_cube(c, save_game_file)==ERROR){
+            c_free(c);
+            return ERROR;
+        }
+        option=c->option;
+    }
     stickers = sticker_colorSDL_init();
     if (!stickers)
     {
@@ -304,6 +313,9 @@ int SDL_interface(int option)
         Render_wr(&w, &h, stickers, window, ctx, option);
     }
     SDL_StopTextInput();
+
+    if (save_cube(c, save_game_file) == ERROR)
+        printf("There was an error when saving the game.\n");
 
     pthread_mutex_lock(&mutex_sdl);
     dat.mode=2; /*To suicide thread*/
