@@ -323,7 +323,6 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
     
     SDL_Delay(1000);
     pthread_detach(hilo);
-    pthread_cancel(hilo);
 
     colorSDL_free(stickers);
     c_free(c);
