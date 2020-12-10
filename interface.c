@@ -225,7 +225,14 @@ rect* rect_expand(rect *r, int x, int y){
 }
 
 /**
- * @brief modifies the string files (and also returns a pointer to it) so that it contains the file with 'letter' as an ascii banner
+ * @brief Modifies the string files (and also returns a pointer to it) 
+ * so that it contains the name of the file with 'letter' as an ascii banner. 
+ * 
+ * This is suposed to be used as: 
+ *                      print_element(file_of_letter(filename, text[i]), rect)
+ *              where filename is a local char filename[1024];
+ * Because even though it returns a (char*), it does not allocate memory, 
+ * so there are no losses
  * */
 char *file_of_letter(char*file, char letter){
     int j;
@@ -237,5 +244,8 @@ char *file_of_letter(char*file, char letter){
     file[j]=letter;
     file[j+1]='\0';
 
+    file_of_letter
+
     return file;
 }
+
