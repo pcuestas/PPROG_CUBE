@@ -131,7 +131,6 @@ void *counter(void *dat)
             TTF_Quit();
             SDL_DestroyRenderer(renderer);
             SDL_DestroyWindow(window);
-           /* SDL_Quit();*/
             pthread_mutex_unlock(&mutex_sdl);
             return NULL;
         }
