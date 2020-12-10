@@ -5,10 +5,17 @@
 
 
 int main(void) {
-  char file[1024];
 
-    printf("|%s|", file_of_letter(file, 'R'));
+  char sol[20] = "XrRFfyzswrTmzYx";
+  rect *r;
 
+  terminal_clear();
 
-	return 0;
+  r = rect_init(4, 10, 36, 63);
+
+  print_solution(sol, r, 6);
+
+  rect_free(r);
+
+  return 0;
 }

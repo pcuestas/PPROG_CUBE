@@ -16,3 +16,7 @@
   }
   fin
   
+
+
+tamañp letras:
+  ancho x largo: 9x9 (8)

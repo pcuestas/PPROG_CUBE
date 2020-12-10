@@ -85,6 +85,7 @@ void*hilo(void*dat){ /*same function as counter in bcd.c but using locks in cruc
             }
             sleep(1);
         }
+
     }
 
     return 0;
@@ -97,7 +98,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
     char scramblefile[MAX_CAD]=SCRAMBLES_TXT;
 
     cprint_from_stickers2 pcube=c_print3;
-    rect *rvista1,*rcrono,*rborder1;
+    rect *rvista1,*rcrono,*rborder1,*rsol;
     pthread_t pth;
     counter_data *dat=NULL;
     int stop = 0,firstmove=0;
@@ -106,10 +107,11 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
     if (!(dat = counter_data_init()))
         return -1;
 
-    counter_data_set_rects(dat, 4, 12, 15, 17);
-    rvista1 = rect_init(25, 7, 177, 76);
-    rcrono=rect_init(2,8,17*5,19);
+    counter_data_set_rects(dat, 4, 194, 15, 17);
+    rvista1 = rect_init(2, 7, 177, 76);
+    rcrono=rect_init(2,190,17*5,19);
     rborder1=rect_expand(rvista1,2,2);
+    rsol=rect_init(24,190,88,70); /*8 letters per line, 10 lines --> 80 letters */
 
     srand(time(NULL));
 
@@ -165,19 +167,28 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
         }
         else if(letter=='W'){
             solution = solve_cube(c);
+            /*pthread_mutex_lock(&mutex);
+            print_solution(solution, rsol, 8);
+            pthread_mutex_unlock(&mutex);*/
             c_moves(c, solution);
             free(solution);
         }
         else if(letter=='A'){
             solution = solve_cube(c);
-            printf("%s", solution);
+            pthread_mutex_lock(&mutex);
+            print_solution(solution,rsol,8);
+            pthread_mutex_unlock(&mutex);
             free(solution);
             continue;
         }
         else if(letter=='a'){
             solution = solve_cube(c);
+            /*pthread_mutex_lock(&mutex);
+            print_solution(solution, rsol, 16);
+            pthread_mutex_unlock(&mutex);*/
             slow_moves(c, pcube, solution, 450000, rvista1, NULL); /*4th arg is miocroseconds between moves*/
             free(solution);
+            firstmove = 0;
             continue;
         }
         
@@ -227,6 +238,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
     rect_free(rvista1);
     rect_free(rcrono);
     rect_free(rborder1);
+    rect_free(rsol);
 
     tcsetattr(fileno(stdin), TCSANOW, &initial); /*deshace los cambios hechos por _term_init()*/
 

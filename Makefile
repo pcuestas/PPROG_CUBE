@@ -1,3 +1,5 @@
+
+
 CFLAGS=-ansi -pedantic -Wall -g
 CC=gcc
 HEADERS=*.h
@@ -14,7 +16,6 @@ LIB2=-lpthread $(LIB_SDL)
 #OBJTEST=cube.o solver.o print_c.o interface.o bcd.o terminal_funct.o cube_interface.o menu.o $(TEST).o
 #TEMPEXE=prueba
 #OBJTEMPEXE=$(TEMPEXE).o cube.o print_c.o solver.o lib_funct.o lib_struct.o interface.o
-
 
 all: $(EXE)
 
@@ -36,14 +37,16 @@ main: main.o interface.o
 	@echo Compiling $<
 	$(CC) $(CFLAGS) -c $<
 
+
 clean:
 	rm -f *.o $(EXE) main *.gch
 
 cleantrash:
 	rm -f *.o *.gch
 
+
 #$(TEST): $(OBJTEST) $(HEADERS)
-#	$(CC) $(OBJTEXT) $(LIB2) -o  $@
+	#$(CC) $(OBJTEXT) -o  $@
 
 #$(MENU): $(OBJ2) $(HEADERS)
 #	$(CC) $(OBJ2) -o $@

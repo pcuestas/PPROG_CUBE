@@ -28,6 +28,14 @@ rect *rect_init(int line, int column, int l, int h){
     return r;
 }
 
+rect *rect_copy(rect *r){
+    
+    if(!r)
+        return NULL;
+    
+    return rect_init(r->line,r->column,r->l,r->h);
+}
+
 void rect_free(rect*r){
     if(r)
         free(r);
@@ -244,8 +252,52 @@ char *file_of_letter(char*file, char letter){
     file[j]=letter;
     file[j+1]='\0';
 
-    file_of_letter
-
     return file;
 }
 
+Status print_solution(char *sol, rect *r, int letters_per_line){
+
+    int n,i,line,l,column,c,printed=0;
+    int dist_inter_line=7,dist_inter_letter=11;
+    char filename[MAX_LEN];
+    rect *r_aux;
+
+    if(!sol||!r||letters_per_line<1)
+        return ERROR;
+
+    /*l=strlen(LETTERS_PATH);*/
+    if((r_aux=rect_copy(r))==NULL)
+        return ERROR;
+
+    n=strlen(sol);
+    column=rect_getcolumn(r);
+    line=rect_getline(r);
+    c=column;
+    l=line;
+
+    rect_clear(r);
+
+    for(i=0;i<n;i++){
+        if(file_of_letter(filename,sol[i])==NULL)
+            return ERROR;
+        
+        if(printed==letters_per_line){
+            l+=dist_inter_line;
+            rect_setcolumn(r_aux,column);
+            rect_setline(r_aux,l);
+            c=column;
+            printed=0;
+        }
+        
+        if(print_element(filename,r_aux)==ERROR) /*an invalid letter*/
+            continue;
+
+        fflush(stdout);
+        c+=dist_inter_letter;
+        rect_setcolumn(r_aux,c);
+        printed++;
+    }
+    
+    rect_free(r_aux);
+    return OK;
+}

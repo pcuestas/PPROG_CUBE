@@ -2,6 +2,7 @@
 
 #include "menu.h"
 #include "cube_interface.h"
+#include "interface.h"
 
 #ifndef SAVE_FILE
 #define SAVE_FILE "./txt_files/save_game.dat"

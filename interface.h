@@ -12,6 +12,8 @@ rect *rect_init(int line,int column,int l,int h );
 
 void rect_free(rect*r);
 
+rect *rect_copy(rect*r);
+
 /********GETTERS AND SETTERS************/
 Status rect_setline(rect*r,int line);
 Status rect_setcolumn(rect *r, int column);
@@ -72,6 +74,16 @@ void terminal_clear();
  * so there are no losses
  * */
 char *file_of_letter(char*file, char letter);
+
+
+
+/**
+ * @brief Prints the solution of the cube in a rectangle
+ * @param sol string with the solution
+ * @param r pointer to rect where to print it (one letter is 9x9)
+ * @param letters_per_line number of letters that are written per line
+ */
+Status print_solution(char*sol,rect*r,int letters_per_line);
 
 
 #endif
