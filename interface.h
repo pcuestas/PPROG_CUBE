@@ -60,4 +60,11 @@ void terminal_clear();
  * */
  Status positionate_cursor(int line, int column);
 
+
+/**
+ * @brief modifies the string files (and also returns a pointer to it) so that it contains the file with 'letter' as an ascii banner
+ * */
+char *file_of_letter(char*file, char letter);
+
+
 #endif

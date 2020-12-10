@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include "interface.h"
 
+#define LETTERS_PATH "./txt_files/letters/"
+#define MAX_LEN 1024
+
 struct _rect{
     int line, column; /*Upper left corner*/
     int l,h; /*length and height*/
@@ -218,4 +221,20 @@ rect* rect_expand(rect *r, int x, int y){
         return NULL;
 
     return r2;
+}
+
+/**
+ * @brief modifies the string files (and also returns a pointer to it) so that it contains the file with 'letter' as an ascii banner
+ * */
+char *file_of_letter(char*file, char letter){
+    int j;
+    if(!letter)
+        return NULL;
+
+    strncpy(file, LETTERS_PATH, MAX_LEN);
+    j=strlen(file);
+    file[j]=letter;
+    file[j+1]='\0';
+
+    return file;
 }
