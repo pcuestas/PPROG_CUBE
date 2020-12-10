@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "interface.h"
 
 #define LETTERS_PATH "./txt_files/letters/"

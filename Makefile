@@ -28,13 +28,16 @@ $(EXE): $(OBJ) $(HEADERS)
 	@echo $@ :
 	$(CC) $(OBJ) $(LIB2) -o  $@
 
+main: main.o interface.o
+	@echo Compiling $@
+	$(CC) $(CFLAGS) $^ -o $@
 
 %.o: %.c $(HEADERS)
 	@echo Compiling $<
 	$(CC) $(CFLAGS) -c $<
 
 clean:
-	rm -f *.o $(EXE) $(TEST) $(TEMPEXE) *.gch
+	rm -f *.o $(EXE) main *.gch
 
 cleantrash:
 	rm -f *.o *.gch
