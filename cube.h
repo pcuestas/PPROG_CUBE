@@ -8,6 +8,7 @@
 
 #include <stdio.h> 
 #include <stdlib.h>
+#include <time.h>
 #include "types.h"
 
 
@@ -24,6 +25,8 @@ COLORS: (standard) defined so that the id of a piece is c[0]+c[1]+c[2]
 #define N 0 
 
 #define NPC 26 /*number of pieces*/
+
+#define MAX_LINE 1000
 
 typedef struct{
   short p[3];/*position x,y,z for x,y,z in {-1,0,1}*/
@@ -73,8 +76,8 @@ Status c_moves(Cube3 *c, char *s);
 Status colour_stickers(Cube3* c, short *s);
 
 
-/*scrambles a cube using a random scramble from a file with name filename*/
-Status scramble_cube(Cube3*c, char *filename);
+/*scrambles a cube using a random scramble from a file with name filename, puts the scramble string in scramble*/
+Status scramble_cube(Cube3*c, char *filename, char *scramble);
 
 
 /*prints info of a piece (for testing)*/

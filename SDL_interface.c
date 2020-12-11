@@ -147,7 +147,7 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
     SDL_Window *window;
     SDL_Event ev;
 
-    char text[MAX_CAD] = "", a = 0, *solution = NULL;
+    char text[MAX_CAD] = "", a = 0, *solution = NULL, scramble[MAX_LINE];
     double **stickers = NULL;
     int flag = 0, j = 0, w, h;
 
@@ -252,7 +252,7 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
                 }
                 if (a == 'w')
                 {
-                    scramble_cube(c, SCRAMBLES_TXT);
+                    scramble_cube(c, SCRAMBLES_TXT, scramble);
                     pthread_mutex_lock(&mutex_sdl);
                     dat.min=0;
                     dat.sec=0;
