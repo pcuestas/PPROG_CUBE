@@ -96,7 +96,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
     char cad[MAX_CAD], letter, *solution = NULL;
     short flag=0;
     char scramblefile[MAX_CAD]=SCRAMBLES_TXT, scramble[MAX_LINE];
-    int letters_per_line=15;
+    int letters_per_line=11;
 
     cprint_from_stickers2 pcube=c_print3;
     rect *rvista1,*rcrono,*rborder1,*rsol;

@@ -3,7 +3,7 @@
 #include <string.h>
 #include "interface.h"
 
-#define LETTERS_PATH "./txt_files/letters/"
+#define LETTERS_PATH "./txt_files/letters_small/"
 #define MAX_LEN 1024
 
 struct _rect{
@@ -258,7 +258,7 @@ char *file_of_letter(char*file, char letter){
 Status print_solution(char *sol, rect *r, int letters_per_line){
 
     int n,i,line,l,column,c,printed=0;
-    int dist_inter_line=7,dist_inter_letter=11;
+    int dist_inter_line=5,dist_inter_letter=8;
     char filename[MAX_LEN];
     rect *r_aux;
 
