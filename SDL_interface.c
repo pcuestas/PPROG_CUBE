@@ -251,6 +251,7 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
                 if(flag2==1){
                     SDL_DestroyRenderer(renderer);
                     SDL_DestroyWindow(window2);
+                    flag2=0;
                 }
 
                 if (a == 'R' || a == 'L' || a == 'M' || a == 'E' || a == 'U' || a == 'D' || a == 'F' || a == 'B' || a == 'S' || a == 'r' || a == 'l' || a == 'm' || a == 'e' || a == 'u' || a == 'd' || a == 'f' || a == 'b' || a == 's' || a == 'x' || a == 'X' || a == 'y' || a == 'Y' || a == 'z' || a == 'Z')
