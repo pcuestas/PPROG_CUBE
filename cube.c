@@ -6,7 +6,6 @@
 #include "cube.h"
 #include <string.h>
 
-#define MAX_LINE 1000
 
 
 /********DECLARATION OF AUXILIAR FUNCTIONS********/
@@ -383,30 +382,33 @@ Status c_moves(Cube3 *c, char *s){
 
 /*SCRAMBLE*/
 
-Status scramble_cube(Cube3*c, char *filename){
+Status scramble_cube(Cube3*c, char *filename, char *scramble){
     FILE* f=NULL;
     int i=0, n;
-    char buff[MAX_LINE];
+
+    srand(time(NULL));
 
     if(!c||!filename){
         return ERROR;
     }
+
+    strncpy(scramble, "", MAX_LINE);
     
     if(!(f=fopen(filename, "r"))){
         return ERROR;
     }
     /*count number of scambles:*/
-    for (i=0;fgets(buff, MAX_LINE, f)!=NULL;i++);
+    for (i=0;fgets(scramble, MAX_LINE, f)!=NULL;i++);
     fclose(f);
     /*take a random number between 0 and number of scrambles-1*/
     n=rand()%i;
     f=fopen(filename, "r");
     for(i=0;i<n;i++){
-        fgets(buff, MAX_LINE, f);
+        fgets(scramble, MAX_LINE, f);
     }
     fclose(f);
 
-    return c_moves(c, buff);
+    return c_moves(c, scramble);
 }
 
 

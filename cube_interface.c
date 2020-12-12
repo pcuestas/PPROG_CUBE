@@ -95,7 +95,8 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
     Cube3 *c = NULL;
     char cad[MAX_CAD], letter, *solution = NULL;
     short flag=0;
-    char scramblefile[MAX_CAD]=SCRAMBLES_TXT;
+    char scramblefile[MAX_CAD]=SCRAMBLES_TXT, scramble[MAX_LINE];
+    int letters_per_line=11;
 
     cprint_from_stickers2 pcube=c_print3;
     rect *rvista1,*rcrono,*rborder1,*rsol;
@@ -155,11 +156,12 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
             break;
         }
         else if(letter=='w'){
-            if(scramble_cube(c, scramblefile) == ERROR){
+            if(scramble_cube(c, scramblefile, scramble) == ERROR){
                 flag = 1;
                 break;
             }
             pthread_mutex_lock(&mutex);
+            print_solution(scramble,rsol,letters_per_line);
             counter_data_set_time(dat, 0, 0); 
             counter_data_set_mode(dat,0);
             pthread_mutex_unlock(&mutex);
@@ -176,7 +178,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
         else if(letter=='A'){
             solution = solve_cube(c);
             pthread_mutex_lock(&mutex);
-            print_solution(solution,rsol,8);
+            print_solution(solution,rsol,letters_per_line);
             pthread_mutex_unlock(&mutex);
             free(solution);
             continue;
