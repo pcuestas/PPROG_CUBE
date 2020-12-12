@@ -53,7 +53,9 @@ int is_in_face(int i, char c);
 
 void quit(int rc);
 
-void SDL_chrono(SDL_Renderer *renderer, char *text, TTF_Font *font, SDL_Rect rect1, SDL_Texture *texture1);
+char ** separarCadenas(char*cad);
+
+void SDL_DisplayText(SDL_Renderer *renderer, char *text, TTF_Font *font);
 
 
 void Render(double **s, int option);

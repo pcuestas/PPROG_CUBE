@@ -6,15 +6,72 @@
 #define MAX_CAD 500
 
 static SDL_GLContext ctx;
-static SDL_Window *window;
+static SDL_Window *window, *window2;
+static SDL_Renderer *renderer;
+static SDL_Texture *texture1;
 
 void quit(int rc)
 {
+    TTF_Quit();
     if (ctx)
         SDL_GL_DeleteContext(ctx);
-
+    SDL_DestroyTexture(texture1);
+    SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    SDL_DestroyWindow(window2);
     SDL_Quit();
+}
+
+char **separarCadenas(char *cad)
+{
+
+    char *texto = (char*)malloc(81);
+    char *texto2 = (char*)malloc(81);
+    char *texto3 = (char*)malloc(81);
+    char **textos = (char **)malloc(3 * sizeof(char *));
+    int i, j, len;
+    len = strlen(cad);
+    if (len < 81)
+    {
+        for (i = 0; i < len; i++)
+        {
+            texto[i] = cad[i];
+        }
+    }
+    else if (len < 161)
+    {
+        for (i = 0; i < 80; i++)
+        {
+            texto[i] = cad[i];
+        }
+        for (j = 0; i < len; i++, j++)
+        {
+            texto2[j] = cad[i];
+        }
+        texto2[j]='\0';
+        textos[1] = texto2;
+    }
+    else
+    {
+        for (i = 0; i < 80; i++)
+        {
+            texto[i] = cad[i];
+        }
+        for (j = 0; i < 160; i++, j++)
+        {
+            texto2[j] = cad[i];
+        }
+        for (j = 0; i < len; i++, j++)
+        {
+            texto3[j] = cad[i];
+        }
+        texto3[j]='\0';
+        textos[1] = texto2;
+        textos[2] = texto3;
+    }
+    textos[0] = texto;
+
+    return textos;
 }
 
 void get_text_and_rect(SDL_Renderer *renderer, int x, int y, char *text, TTF_Font *font, SDL_Texture **texture, SDL_Rect *rect)
@@ -35,19 +92,68 @@ void get_text_and_rect(SDL_Renderer *renderer, int x, int y, char *text, TTF_Fon
     rect->w = ancho;
     rect->h = alto;
 
-
     SDL_FreeSurface(surface);
 }
 
-void SDL_chrono(SDL_Renderer *renderer, char *text, TTF_Font *font, SDL_Rect rect1, SDL_Texture *texture1)
+void SDL_DisplayText(SDL_Renderer *renderer, char *text, TTF_Font *font)
 {
-    get_text_and_rect(renderer, 0, 0, text, font, &texture1, &rect1);
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-    SDL_RenderClear(renderer);
+    SDL_Rect rect1, rect2, rect3;
+    SDL_Texture *texture1, *texture2, *texture3;
+    int len_txt;
+    char **cadenas;
+    len_txt = strlen(text);
+    if (len_txt < 81)
+    {
+        get_text_and_rect(renderer, 0, 0, text, font, &texture1, &rect1);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+        SDL_RenderClear(renderer);
 
-    SDL_RenderCopy(renderer, texture1, NULL, &rect1);
+        SDL_RenderCopy(renderer, texture1, NULL, &rect1);
+        SDL_RenderPresent(renderer);
+    }
+    else if (len_txt < 161)
+    {
+        cadenas = separarCadenas(text);
+        get_text_and_rect(renderer, 0, 0, cadenas[0], font, &texture1, &rect1);
+        get_text_and_rect(renderer, 0, rect1.y + rect1.h, cadenas[1], font, &texture2, &rect2);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+        SDL_RenderClear(renderer);
 
-    SDL_RenderPresent(renderer);
+        SDL_RenderCopy(renderer, texture1, NULL, &rect1);
+        SDL_RenderCopy(renderer, texture2, NULL, &rect2);
+
+        SDL_RenderPresent(renderer);
+        SDL_DestroyTexture(texture2);
+        free(cadenas[0]);
+        free(cadenas[1]);
+        free(cadenas);
+    }
+    else
+    {
+        cadenas = separarCadenas(text);
+        get_text_and_rect(renderer, 0, 0, cadenas[0], font, &texture1, &rect1);
+        get_text_and_rect(renderer, 0, rect1.y + rect1.h, cadenas[1], font, &texture2, &rect2);
+        get_text_and_rect(renderer, 0, rect2.y + rect2.h, cadenas[2], font, &texture3, &rect3);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+        SDL_RenderClear(renderer);
+
+        SDL_RenderCopy(renderer, texture1, NULL, &rect1);
+        SDL_RenderCopy(renderer, texture2, NULL, &rect2);
+        SDL_RenderCopy(renderer, texture3, NULL, &rect3);
+
+        free(cadenas[0]);
+        free(cadenas[1]);
+        free(cadenas[2]);
+        free(cadenas);
+
+        SDL_RenderPresent(renderer);
+        SDL_DestroyTexture(texture2);
+        SDL_DestroyTexture(texture3);
+
+    }
+
+    SDL_DestroyTexture(texture1);
+    return;
 }
 
 void Render(double **s, int option)
