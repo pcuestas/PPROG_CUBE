@@ -408,6 +408,8 @@ Status scramble_cube(Cube3*c, char *filename, char *scramble){
     }
     fclose(f);
 
+    scramble[strlen(scramble)-1]=0;/*remove the \n*/
+
     return c_moves(c, scramble);
 }
 

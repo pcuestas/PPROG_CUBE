@@ -30,7 +30,6 @@
 
 pthread_mutex_t mutex_sdl = PTHREAD_MUTEX_INITIALIZER;
 
-TTF_Font *font2;
 
 typedef struct _counter_data_sdl counter_data_sdl;
 
@@ -150,7 +149,7 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
     SDL_Window *window, *window2;
     SDL_Renderer *renderer;
     SDL_Event ev;
-    TTF_Font *font2;
+    TTF_Font *font2=NULL;
 
     char text[MAX_CAD] = "", a = 0, *solution = NULL, scramble[MAX_LINE];
     double **stickers = NULL;
@@ -249,13 +248,13 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
 
                 a = text[j]; /*letter read*/
 
+                if(flag2==1){
+                    SDL_DestroyRenderer(renderer);
+                    SDL_DestroyWindow(window2);
+                }
+
                 if (a == 'R' || a == 'L' || a == 'M' || a == 'E' || a == 'U' || a == 'D' || a == 'F' || a == 'B' || a == 'S' || a == 'r' || a == 'l' || a == 'm' || a == 'e' || a == 'u' || a == 'd' || a == 'f' || a == 'b' || a == 's' || a == 'x' || a == 'X' || a == 'y' || a == 'Y' || a == 'z' || a == 'Z')
                 {
-                    if(flag2==1){
-                        SDL_DestroyRenderer(renderer);
-                        SDL_DestroyWindow(window2);
-                        flag2=0;
-                    }
                     if (firstmove == 0)
                     {
                         pthread_mutex_lock(&mutex_sdl);
@@ -267,12 +266,12 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
                 }
                 if (a == 'w')
                 {
-                    if(flag2==1){
-                        SDL_DestroyRenderer(renderer);
-                        SDL_DestroyWindow(window2);
-                        flag2=0;
-                    }
                     scramble_cube(c, SCRAMBLES_TXT, scramble);
+
+                    SDL_DisplayTextWRAPPER(&window2, scramble, &renderer, font2);
+
+                    flag2=1;
+                    
                     pthread_mutex_lock(&mutex_sdl);
                     dat.min = 0;
                     dat.sec = 0;
@@ -282,65 +281,40 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
                     firstmove = 0;
                 }
                 else if (a == 'W')
-                {
-                    if(flag2==1){
-                        SDL_DestroyRenderer(renderer);
-                        SDL_DestroyWindow(window2);
-                        flag2=0;
-                    }
-                    solution = solve_cube(c);
+                {             
+                    solution = solve_cube(c); 
+                    SDL_DisplayTextWRAPPER(&window2, solution, &renderer, font2);
+
+                    flag2=1;
+                    
                     c_moves(c, solution);
                     free(solution);
                 }
                 else if (a == 'A')
-                {
-                    if(flag2==1){
-                        SDL_DestroyRenderer(renderer);
-                        SDL_DestroyWindow(window2);
-                    }
-                    
-                    window2 = SDL_CreateWindow("Rubik Cube PPROG", 410, 250, 900, 80, SDL_WINDOW_BORDERLESS);
+                {                                       
+                    solution = solve_cube(c); 
 
-                    if (!window2)
-                    {
-                        printf("SDL_Error: %s\n", SDL_GetError());
-                        return 1;
-                    }
-                    renderer = SDL_CreateRenderer(window2, -1, SDL_RENDERER_ACCELERATED);
-                    font2 = TTF_OpenFont(FONT_TTF, 20);
-                    
-                    
-                    solution = solve_cube(c);
-                    SDL_DisplayText(renderer, solution, font2);
+                    SDL_DisplayTextWRAPPER(&window2, solution, &renderer, font2);
+
                     flag2=1;
+                    free(solution);
                 }
                 else if (a == 'a')
-                {
-                    
-                    if(flag2==1){
-                        SDL_DestroyRenderer(renderer);
-                        SDL_DestroyWindow(window2);
-                    }
-                    window2 = SDL_CreateWindow("Rubik Cube PPROG", 410, 250, 900, 80, SDL_WINDOW_BORDERLESS);
+                {                                                          
+                    solution = solve_cube(c); 
 
-                    if (!window2)
-                    {
-                        printf("SDL_Error: %s\n", SDL_GetError());
-                        return 1;
-                    }
-                    renderer = SDL_CreateRenderer(window2, -1, SDL_RENDERER_ACCELERATED);
-                    font2 = TTF_OpenFont(FONT_TTF, 20);
-                    
-                    solution = solve_cube(c);
-                    SDL_DisplayText(renderer, solution, font2);
-                    
+                    SDL_DisplayTextWRAPPER(&window2, solution, &renderer, font2);
+
+                    flag2=1;
+
                     pthread_mutex_lock(&mutex_sdl);
                     dat.mode = 0;
                     pthread_mutex_unlock(&mutex_sdl);
+
                     SlowMoveRot(c, &w, &h, stickers, solution, window, ctx, option);
+
                     free(solution);
                     firstmove = 0;
-                    flag2=1;
                 }
                 else if (a == 32)
                 {

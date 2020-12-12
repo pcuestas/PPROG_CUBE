@@ -57,6 +57,7 @@ char ** separarCadenas(char*cad);
 
 void SDL_DisplayText(SDL_Renderer *renderer, char *text, TTF_Font *font);
 
+void SDL_DisplayTextWRAPPER(SDL_Window **_window2, char *solution, SDL_Renderer **_renderer, TTF_Font *_font);
 
 void Render(double **s, int option);
 
@@ -103,6 +104,8 @@ void Rot_full_move(int *w, int *h, double **stickers, char move, SDL_Window *_wi
  *   
  **/
 void SlowMoveRot(Cube3* c, int *w, int *h, double **stickers, char *moves, SDL_Window *_window, SDL_GLContext _ctx, int option);
+
+
 
 
 #endif

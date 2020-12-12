@@ -3,6 +3,16 @@
 #include "print_c.h"
 #include "solver.h"
 
+
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>
+#include <SDL2/SDL_timer.h>
+#include <SDL2/SDL_ttf.h>
+
+#ifndef FONT_TTF
+#define FONT_TTF "/usr/share/fonts/truetype/freefont/FreeMonoOblique.ttf"
+#endif
+
 #define MAX_CAD 500
 
 static SDL_GLContext ctx;
@@ -355,4 +365,21 @@ void SlowMoveRot(Cube3 *c, int *w, int *h, double **stickers, char *moves, SDL_W
     }
     /*render changes in the cube*/
     Render_wr(w, h, stickers, _window, _ctx, option);
+}
+
+void SDL_DisplayTextWRAPPER(SDL_Window **_window2, char *solution, SDL_Renderer **_renderer, TTF_Font *_font){
+
+    (*_window2) = SDL_CreateWindow("Rubik Cube PPROG", 410, 250, 900, 80, SDL_WINDOW_BORDERLESS);
+
+    if (!(*_window2)){
+        printf("SDL_Error: %s\n", SDL_GetError());
+        exit(1);
+    }
+    _font=TTF_OpenFont(FONT_TTF, 20);
+
+    (*_renderer) = SDL_CreateRenderer(*_window2, -1, SDL_RENDERER_ACCELERATED);
+    
+    SDL_DisplayText(*_renderer, solution, _font);
+
+    free(_font);
 }
