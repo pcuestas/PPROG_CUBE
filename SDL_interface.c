@@ -272,7 +272,6 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
                         SDL_DestroyWindow(window2);
                         flag2=0;
                     }
-                    scramble_cube(c, SCRAMBLES_TXT);
                     scramble_cube(c, SCRAMBLES_TXT, scramble);
                     pthread_mutex_lock(&mutex_sdl);
                     dat.min = 0;
