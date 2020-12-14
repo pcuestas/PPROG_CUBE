@@ -369,6 +369,9 @@ void SlowMoveRot(Cube3 *c, int *w, int *h, double **stickers, char *moves, SDL_W
 
 void SDL_DisplayTextWRAPPER(SDL_Window **_window2, char *solution, SDL_Renderer **_renderer, TTF_Font *_font){
 
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window2);
+
     (*_window2) = SDL_CreateWindow("Rubik Cube PPROG", 410, 250, 900, 80, SDL_WINDOW_BORDERLESS);
 
     if (!(*_window2)){
