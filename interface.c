@@ -111,7 +111,7 @@ Status print_element(char*filename, rect*r){
 
     rect_clear(r);
 
-    printf("%c[%i;%iH", 27, line, column);
+    positionate_cursor(line, column);
 
     do{
         c = fgetc(pf);
@@ -120,12 +120,12 @@ Status print_element(char*filename, rect*r){
 
         if (c == '\n')
         { /*new line read --> update cursor position*/
-            printf("%c[%i;%iH", 27, line + incr, column);
+            positionate_cursor(line+incr, column);
             incr++;
             continue;
         }
 
-        fprintf(stdout, "%c", c);
+        printf("%c", c);
 
     } while (1);
 
@@ -257,7 +257,7 @@ char *file_of_letter(char*file, char letter){
 
 Status print_solution(char *sol, rect *r, int letters_per_line){
 
-    int n,i,line,l,column,c,printed=0;
+    int n,i,line,l,column,c,printed=0,max,total=0;
     int dist_inter_line=5,dist_inter_letter=8;
     char filename[MAX_LEN];
     rect *r_aux;
@@ -268,6 +268,8 @@ Status print_solution(char *sol, rect *r, int letters_per_line){
     /*l=strlen(LETTERS_PATH);*/
     if((r_aux=rect_copy(r))==NULL)
         return ERROR;
+    
+    max=(r->l/dist_inter_letter)*(r->h/dist_inter_line);
 
     n=strlen(sol);
     column=rect_getcolumn(r);
@@ -277,7 +279,7 @@ Status print_solution(char *sol, rect *r, int letters_per_line){
 
     rect_clear(r);
 
-    for(i=0;i<n;i++){
+    for(i=0;i<n && total<max;i++){
         if(file_of_letter(filename,sol[i])==NULL)
             return ERROR;
         
@@ -289,7 +291,7 @@ Status print_solution(char *sol, rect *r, int letters_per_line){
             printed=0;
         }
         
-        if(print_element(filename,r_aux)==ERROR) /*an invalid letter*/
+        if(print_letter(filename,r_aux)==ERROR) /*an invalid letter*/
             continue;
 
         fflush(stdout);

@@ -6,12 +6,11 @@
 
 int main(void) {
 
-  char sol[20] = "XrRFfyzswrTmzYx";
+  char sol[30] = "bBdDeEfFILmMrRssuUxyYzz";
   rect *r;
 
-  terminal_clear();
 
-  r = rect_init(4, 10, 36, 63);
+  r = rect_init(4, 10, 54, 54);
 
   print_solution(sol, r, 6);
 

@@ -18,5 +18,7 @@ int main(void){
             SDL_interface(option, use_saved_game, SAVE_FILE);
     }
 
+    terminal_clear();
+    positionate_cursor(1,1);
     return 0;
 }

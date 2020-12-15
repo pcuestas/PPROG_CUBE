@@ -25,18 +25,21 @@ int rect_getl(rect*r);
 int rect_geth(rect*r);
 
 /**
- * @brief Prints the content of a file starting on a specif position (line,column)
- * @param h height of the element
- * @param l length of the element
+ * @brief Prints the content of a file starting on a rect
  * @return OK or ERROR in case of error opening File
  */
 Status print_element(char *filename,rect*r);
 
 /**
+ * @brief Prints a letter from file starting on a rect
+ * @return OK or ERROR in case of error opening File
+ */
+Status print_letter(char *filename, rect *r);
+
+/**
  * @brief Clears the part of the terminal delimited by the rectangle
  */
-void rect_clear(rect *r);
-
+    void rect_clear(rect *r);
 
 /**
  * @brief Prints the border of a rectangle using unicode chars

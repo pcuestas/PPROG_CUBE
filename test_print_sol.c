@@ -4,7 +4,7 @@
 
 int main(){
 
-    char *sol[10]="XrRnFfyzs";
+    char *sol[10]="a";
     rect *r;
 
     r=rect_init(4,10,36,63);
