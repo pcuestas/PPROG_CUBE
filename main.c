@@ -6,15 +6,8 @@
 
 int main(void) {
 
-  char sol[30] = "bBdDeEfFILmMrRssuUxyYzz";
-  rect *r;
-
-
-  r = rect_init(4, 10, 54, 54);
-
-  print_solution(sol, r, 6);
-
-  rect_free(r);
+  printf("hpañaña");
+  printf("%c[8;%i;%it%c[3J", 27, 100, 100, 27);
 
   return 0;
 }

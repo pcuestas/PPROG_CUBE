@@ -60,6 +60,8 @@ rect* rect_expand(rect*r, int x,int y);
  * */
 void terminal_clear();
 
+Status terminal_resize(int h, int w);
+
 /**
  * @brief positiones the cursor in a line and column (starting by 1) using C ANSI ESC codes
  * */

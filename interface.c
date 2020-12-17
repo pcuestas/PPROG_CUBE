@@ -210,6 +210,13 @@ void terminal_clear(){
     printf("%c[2J", 27);
 }
 
+Status terminal_resize(int h, int w){
+    if(h<1 || w<1)
+        return ERROR;
+    
+    printf("%c[8;%i;%it%c[3J",27,h,w,27);
+}
+
 Status positionate_cursor(int line, int column){
 
     if(line<1||column<1)
@@ -291,7 +298,7 @@ Status print_solution(char *sol, rect *r, int letters_per_line){
             printed=0;
         }
         
-        if(print_letter(filename,r_aux)==ERROR) /*an invalid letter*/
+        if(print_element(filename,r_aux)==ERROR) /*an invalid letter*/
             continue;
 
         fflush(stdout);
