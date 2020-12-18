@@ -22,6 +22,8 @@
  * just equal to the size of the data in the file. The
  * string will have a '\0' at the end. This function
  * allocates memory for the new string.
+ * If the file does not exist, it returns NULL, 
+ * and does not create it.
  * The maximum size to be read is MAX_BUF
 */
 char *ftobuffer(char*file);
