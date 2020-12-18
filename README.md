@@ -3,7 +3,7 @@ Nombre del grupo: *`is_prime()`*
 
 (se compila haciendo 'make all' y se ejecuta el juego con 'make run')
 
-## Comandos para instalar en Ubuntu lsa librerías necesarias para compilar el juego
+## Comandos para instalar en Ubuntu las librerías necesarias para compilar el juego
 ```
 sudo apt-get install libsdl2-2.0
 sudo aptitude install libsdl1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev
