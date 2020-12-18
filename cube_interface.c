@@ -1,5 +1,19 @@
 #include "cube_interface.h"
 
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <pthread.h>
+#include <termios.h>
+
+#include "terminal_funct.h"
+#include "cube.h"
+#include "solver.h"
+#include "print_c.h"
+#include "interface.h"
+#include "bcd.h"
+
 #define MAX_CAD 100
 
 #ifndef SCRAMBLES_TXT

@@ -1,6 +1,11 @@
+#include <stdio.h>
+
+#include"types.h"
 #include "menu.h"
 #include "cube_interface.h"
+#include "interface.h"
 #include "SDL_interface.h"
+
 
 #define SAVE_FILE "./txt_files/save_game.dat"
 
