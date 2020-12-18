@@ -5,36 +5,36 @@ CC=gcc
 HEADERS=*.h
 
 EXE=game
-OBJ=cube.o solver.o print_c.o interface.o bcd.o terminal_funct.o cube_interface.o menu.o lib_funct.o lib_struct.o SDL_interface.o $(EXE).o
+OBJ=cube.o solver.o print_c.o interface.o bcd.o terminal_funct.o cube_interface.o menu.o lib_funct.o lib_struct.o SDL_interface.o ftobuff.o $(EXE).o
 
 
 LIB_SDL=-lSDL2main -lSDL2 -lSDL2_ttf -lGLU -lGL 
 LIB2=-lpthread $(LIB_SDL)
 
 
-#TEST=tests
-#OBJTEST=cube.o solver.o print_c.o interface.o bcd.o terminal_funct.o cube_interface.o menu.o $(TEST).o
-#TEMPEXE=prueba
-#OBJTEMPEXE=$(TEMPEXE).o cube.o print_c.o solver.o lib_funct.o lib_struct.o interface.o
+MAIN=main
+MAINOBJ=main.o ftobuff.o
 
 all: $(EXE)
 
-#prueba: $(TEMPEXE)
 
-run:
+run: $(EXE)
 	./$(EXE)
 
 
 $(EXE): $(OBJ) $(HEADERS)
-	@echo $@ :
+	@echo "# -------------------------------"
+	@echo "Linking $@" 
 	$(CC) $(OBJ) $(LIB2) -o  $@
 
-main: main.o interface.o
-	@echo Compiling $@
-	$(CC) $(CFLAGS) $^ -o $@
+$(MAIN): $(MAINOBJ) $(HEADERS)
+	@echo "# -------------------------------"
+	@echo "Linking $@" 
+	$(CC) $(CFLAGS) $(MAINOBJ) -o $@
 
 %.o: %.c $(HEADERS)
-	@echo Compiling $<
+	@echo "# -------------------------------"
+	@echo "# Compiling $<"
 	$(CC) $(CFLAGS) -c $<
 
 

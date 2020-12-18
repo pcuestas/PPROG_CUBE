@@ -129,6 +129,9 @@ Status print_element(char*filename, rect*r){
 
     } while (1);
 
+    /****************************/
+    fflush(stdout);
+    /****************************/
 
     fclose(pf);
     return OK;
@@ -215,6 +218,8 @@ Status terminal_resize(int h, int w){
         return ERROR;
     
     printf("%c[8;%i;%it%c[3J",27,h,w,27);
+
+    return OK;
 }
 
 Status positionate_cursor(int line, int column){

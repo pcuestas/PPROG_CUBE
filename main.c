@@ -1,13 +1,30 @@
 /*first attempt to check cube.h*/
 
 #include <stdio.h>
-#include "interface.h"
+#include <stdlib.h>
+#include "ftobuff.h"
 
+#define MAX_BUF (15000)
+#define CUBE__3 "./txt_files/cubo3.txt"
+
+#define _TEST_ "test.txt"
 
 int main(void) {
+    char *new=NULL;
 
-  printf("hpañaña");
-  printf("%c[8;%i;%it%c[3J", 27, 100, 100, 27);
+    printf("Size of new1:%d\n", (int)sizeof(new));
 
-  return 0;
+    new=ftobuffer(_TEST_);
+
+    if(!new){
+        printf("err in ftobuffer");
+        return -1;
+    }
+
+    printf("Size of new2:%d\n", (int)sizeof(new));
+
+    printf("string:|%s|\n", new);
+
+    free(new);
+    return 0;
 }

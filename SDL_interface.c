@@ -41,7 +41,6 @@ struct _counter_data_sdl
 void *counter(void *dat)
 {
     SDL_Event event;
-    SDL_Rect rect1;
     SDL_Renderer *renderer;
     SDL_Texture *texture1 = NULL;
     SDL_Window *window;
@@ -153,7 +152,7 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
 
     char text[MAX_CAD] = "", a = 0, *solution = NULL, scramble[MAX_LINE];
     double **stickers = NULL;
-    int flag = 0, j = 0, w, h, flag2=0;
+    int flag = 0, j = 0, w, h;
 
     
 
@@ -266,7 +265,6 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
 
                     SDL_DisplayTextWRAPPER(&window2, scramble, &renderer, font2);
 
-                    flag2=1;
                     
                     pthread_mutex_lock(&mutex_sdl);
                     dat.min = 0;
@@ -281,7 +279,6 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
                     solution = solve_cube(c); 
                     SDL_DisplayTextWRAPPER(&window2, solution, &renderer, font2);
 
-                    flag2=1;
                     
                     c_moves(c, solution);
                     free(solution);
@@ -292,7 +289,6 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
 
                     SDL_DisplayTextWRAPPER(&window2, solution, &renderer, font2);
 
-                    flag2=1;
                     free(solution);
                 }
                 else if (a == 'a')
@@ -301,7 +297,6 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
 
                     SDL_DisplayTextWRAPPER(&window2, solution, &renderer, font2);
 
-                    flag2=1;
 
                     pthread_mutex_lock(&mutex_sdl);
                     dat.mode = 0;
