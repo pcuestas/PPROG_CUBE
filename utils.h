@@ -1,6 +1,6 @@
 /**
  * @file utils.h
- * @author Pablo Cuesta Sierra
+ * @author Pablo Cuesta, Álvaro Zamanillo
  */
 
 #ifndef UTILS_H

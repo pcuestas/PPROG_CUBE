@@ -1,6 +1,6 @@
 /**
- * @file ftobuff.c
- * @author Pablo Cuesta Sierra
+ * @file utils.c
+ * @author Pablo Cuesta, Álvaro Zamanillo
  * @brief functions to read files of the project to buffers
  *        to avoid constant file reading
  */
