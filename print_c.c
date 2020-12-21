@@ -40,6 +40,8 @@ Status refresh_cube3(Cube3 *c, rect *r1, char *buf, int size, cprint_from_sticke
 
     print_cube(c->stickers, c->colorsESC, r1, buf, size);
 
+    fflush(stdout);
+
     return OK;
 }
 
