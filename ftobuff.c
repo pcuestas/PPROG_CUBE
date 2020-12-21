@@ -19,27 +19,28 @@ extern char *strndup(const char *, size_t );
  * and does not create it.
  * The maximum size to be read is MAX_BUF
 */
-char *ftobuffer(char*file){
-    FILE* pfrom=NULL;
-    char buf[MAX_BUF], *new=NULL;
+int ftobuffer(char *file, char **res){
+    FILE *pfrom = NULL;
+    char buf[MAX_BUF], *new = NULL;
     int count;
 
-    if(file==NULL)
-        return NULL;
+    if (file == NULL)
+        return -1;
 
-    if(!(pfrom=fopen(file, "r"))){
+    if (!(pfrom = fopen(file, "r"))){
         printf("Could not open %s\n", file);
-        return NULL;
+        return -1;
     }
-    count=fread(buf, sizeof(char), MAX_BUF, pfrom);
-    
-    /*
-      if there is an error, strndup returns NULL, 
-      no need to check, as the function does nothing
-      more and returns 'new'
-    */
-    new=strndup(buf, count);
+    count = fread(buf, sizeof(char), MAX_BUF, pfrom);
+
+   
+    new = strndup(buf, count);
 
     fclose(pfrom);
-    return new;
+    *res = new;
+
+    if (res == NULL)
+        return -1;
+
+    return count;
 }

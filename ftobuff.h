@@ -26,6 +26,6 @@
  * and does not create it.
  * The maximum size to be read is MAX_BUF
 */
-char *ftobuffer(char*file);
+int ftobuffer(char *file, char **res);
 
 #endif

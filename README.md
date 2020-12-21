@@ -1,4 +1,4 @@
-### Autores: Álvaro Zamanillo, Ignacio Bernardez y Pablo Cuesta.
+### Autores: Ignacio Bernardez, Pablo Cuesta y Álvaro Zamanillo.
 Nombre del grupo: *`is_prime()`*
 
 (se compila haciendo 'make all' y se ejecuta el juego con 'make run')
@@ -30,6 +30,7 @@ Todos estos movimientos son considerados estándar y se conocen como "Singmaster
 * A: muestra en la pantalla la string generada por el solver.h
 * a: resuelve el cubo ejecutando cada movimiento con una pequeña espera antes de cada uno para que se vea en la pantalla cómo el algoritmo utilizado resuelve el cubo.
 * espacio: para/reinicia el cronómetro
+* o: limpia la terminal y vuelve a imprimir el contenido por si hubiese ocurrido algún error.
 
 **Solo en la interfaz de la terminal**:
 * q: sale de la interfaz

@@ -137,6 +137,38 @@ Status print_element(char*filename, rect*r){
     return OK;
 }
 
+Status print_buffer(char *buf, int size, rect *r){
+
+    int line, column, incr = 1, c, i = 0;
+
+    if (!buf || !r || size == -1)
+        return ERROR;
+
+    line = r->line;
+    column = r->column;
+
+    rect_clear(r);
+
+    positionate_cursor(line, column);
+
+    do{
+        c = buf[i];
+        i++;
+
+        if (c == '\n'){
+            positionate_cursor(line + incr, column);
+            incr++;
+            continue;
+        }
+
+        printf("%c", c);
+
+    } while (i < size);
+
+    fflush(stdout);
+
+    return OK;
+}
 
 void rect_clear(rect*r){
 

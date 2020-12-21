@@ -3,10 +3,6 @@
 #include <unistd.h>
 #include "types.h"
 
-#define CUBE_1 "./txt_files/cubo.txt"
-#define CUBE_2 "./txt_files/cubo2.txt"
-#define CUBE_3 "./txt_files/cubo3.txt"
-#define CUBE_222 "./txt_files/cubo222.txt"
 
 extern int usleep(unsigned int );
 
@@ -33,6 +29,16 @@ Status refresh_cube2(Cube3 *c, rect *r1, rect *r2, cprint_from_stickers2 print_c
     /*print_cube(c->stickers,c->colorsESC,r1, r2);*/
 
     c_print3(c->stickers, c->colorsESC, r1, r2, c->option);
+
+    return OK;
+}
+
+Status refresh_cube3(Cube3 *c, rect *r1, char *buf, int size, cprint_from_stickers2 print_cube){
+
+    if (colour_stickers(c, c->stickers) == ERROR)
+        return ERROR;
+
+    c_print4(c->stickers, c->colorsESC, r1, buf, size);
 
     return OK;
 }
@@ -434,6 +440,61 @@ int c_print3(short *s,short*col, rect *r1, rect *r2, int option){ /*Like cprint2
         goto print;
     }**********************/
     fclose(fp);
+    return (0);
+}
+
+int c_print4(short *s, short *col, rect *r1, char *buf, int size){
+     /*Like cprint3 but using buffers*/
+
+    int c, color, aux, column, line, incr = 1, code = 65, min = 65;
+    int i = 0;
+
+    if (!r1 || !s || !col || !buf || size == -1)
+        return -1;
+
+    line = rect_getline(r1);
+    column = rect_getcolumn(r1);
+
+    sticker_to_color(s, col);
+
+    positionate_cursor(line, column);
+
+    do{
+        c = buf[i];
+        i++;
+
+        if (c >= min && c <= min + 53) /*54 is the number of stickers**/
+        {                              /*If you have reached the begining of a sticker */
+
+            aux = c;
+            printf(" ");
+            color = col[aux - code];       /*limits of stickers are letters between ASCII(min) and ACII(min+26).*/
+            printf("%c[;;%im", 27, color); /*stablish color of the sticker*/
+
+            do{
+                c = buf[i];
+                i++;
+
+                if (c == aux)
+                {
+                    printf("%c[0m", 27);
+                    break;
+                }
+
+                printf(" ");
+
+            } while (i < size);
+        }
+
+        if (c == '\n'){
+            printf("%c[%i;%iH", 27, line + incr, column);
+            incr++;
+            continue;
+        }
+
+        printf(" ");
+    } while (i < size);
+
     return (0);
 }
 

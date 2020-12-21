@@ -31,10 +31,16 @@ int rect_geth(rect*r);
 Status print_element(char *filename,rect*r);
 
 /**
+ * @brief Prints the content of a buffer starting on a rect
+ */
+Status print_buffer(char *buf, int size, rect *r);
+
+
+ /**
  * @brief Prints a letter from file starting on a rect
  * @return OK or ERROR in case of error opening File
  */
-Status print_letter(char *filename, rect *r);
+    Status print_letter(char *filename, rect *r);
 
 /**
  * @brief Clears the part of the terminal delimited by the rectangle

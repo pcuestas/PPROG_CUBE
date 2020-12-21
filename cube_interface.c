@@ -13,6 +13,7 @@
 #include "print_c.h"
 #include "interface.h"
 #include "bcd.h"
+#include "ftobuff.h"
 
 #define MAX_CAD 100
 
@@ -20,34 +21,36 @@
 #define SCRAMBLES_TXT "./txt_files/scrambles.txt"
 #endif
 
-
 /*
  * si se escribe cualquier letra que corresponda a un movimiento, se realizara en el cubo en pantalla
  * si se presiona 'w'. se mezclará el cubo con una mezcla aleatoria elegida de entre las mezclas del fichero SRAMBLES_TXT
  * si se presiona 'q', se terminará el programa.
 */
 
-extern int fileno(FILE*);
-pthread_mutex_t mutex=PTHREAD_MUTEX_INITIALIZER;
+extern int fileno(FILE *);
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
-
-void*hilo(void*dat){ /*same function as counter in bcd.c but using locks in crucial parts (painting with ANSI ESC and moving the cursor*/
+void *hilo(void *dat)
+{ /*same function as counter in bcd.c but using locks in crucial parts (painting with ANSI ESC and moving the cursor*/
     rect **r;
     counter_data *d;
     int blank = 0, stop = 0;
 
-    if (dat==NULL)
+    if (dat == NULL)
         return NULL;
 
     d = (counter_data *)dat;
 
     r = d->rcounter;
 
-    while (1){
+    while (1)
+    {
 
-        while (d->mode == 0){ /*Print time 0*/
-        stop=0;
-            if (blank == 0){
+        while (d->mode == 0)
+        { /*Print time 0*/
+            stop = 0;
+            if (blank == 0)
+            {
                 pthread_mutex_lock(&mutex);
                 bcd_display(0, r[3]);
                 bcd_display(0, r[2]);
@@ -59,9 +62,11 @@ void*hilo(void*dat){ /*same function as counter in bcd.c but using locks in cruc
             }
         }
 
-        while (d->mode == -1){ /*Counter stopped*/
-        blank=0;
-            if (stop == 0){
+        while (d->mode == -1)
+        { /*Counter stopped*/
+            blank = 0;
+            if (stop == 0)
+            {
                 pthread_mutex_lock(&mutex);
                 bcd_display(d->sec % 10, r[3]);
                 bcd_display(d->sec / 10, r[2]);
@@ -73,9 +78,10 @@ void*hilo(void*dat){ /*same function as counter in bcd.c but using locks in cruc
             }
         }
 
-        while (d->mode == 1) /*Counter running*/{
-            stop=0;
-            blank=0;
+        while (d->mode == 1) /*Counter running*/
+        {
+            stop = 0;
+            blank = 0;
             pthread_mutex_lock(&mutex);
             bcd_display(d->min % 10, r[1]);
             bcd_display(d->min / 10, r[0]);
@@ -85,7 +91,8 @@ void*hilo(void*dat){ /*same function as counter in bcd.c but using locks in cruc
             pthread_mutex_unlock(&mutex);
             d->sec++;
 
-            if (d->sec == 60){
+            if (d->sec == 60)
+            {
                 pthread_mutex_lock(&mutex);
                 bcd_display(d->min % 10, r[1]);
                 bcd_display(d->min / 10, r[0]);
@@ -94,48 +101,61 @@ void*hilo(void*dat){ /*same function as counter in bcd.c but using locks in cruc
                 d->min += 1;
                 d->sec = 0;
             }
-            if (d->min == 60){
+            if (d->min == 60)
+            {
                 d->min = 0;
             }
             sleep(1);
         }
-
     }
 
     return 0;
 }
 
-int c_interface(int option, int use_saved_game, char *save_game_file){
+int c_interface(int option, int use_saved_game, char *save_game_file)
+{
     Cube3 *c = NULL;
     char cad[MAX_CAD], letter, *solution = NULL;
-    short flag=0;
-    char scramblefile[MAX_CAD]=SCRAMBLES_TXT, scramble[MAX_LINE];
-    int letters_per_line=11;
+    short flag = 0;
+    char scramblefile[MAX_CAD] = SCRAMBLES_TXT, scramble[MAX_LINE];
+    int letters_per_line = 11, size;
+    char *cube_file;
 
-    cprint_from_stickers2 pcube=c_print3;
-    rect *rvista1,*rcrono,*rborder1,*rsol;
+    cprint_from_stickers2 pcube = c_print4;
+    rect *rvista1, *rcrono, *rborder1, *rsol;
     pthread_t pth;
-    counter_data *dat=NULL;
-    int stop = 0,firstmove=0;
-
+    counter_data *dat = NULL;
+    int stop = 0, firstmove = 0;
 
     if (!(dat = counter_data_init()))
         return -1;
 
+    /*Read the files and fill in the buffers*/
+    if (option == 3){
+        size = ftobuffer(CUBE_3, &cube_file);
+        if (size == -1)
+            return -1;
+    }
+    else{
+        size = ftobuffer(CUBE_222, &cube_file);
+        if (size == -1)
+            return -1;
+    }
+
     counter_data_set_rects(dat, 4, 194, 15, 17);
     rvista1 = rect_init(2, 7, 177, 76);
-    rcrono=rect_init(2,190,17*5,19);
-    rborder1=rect_expand(rvista1,2,2);
-    rsol=rect_init(24,190,88,70); /*8 letters per line, 10 lines --> 80 letters */
+    rcrono = rect_init(2, 190, 17 * 5, 19);
+    rborder1 = rect_expand(rvista1, 2, 2);
+    rsol = rect_init(24, 190, 88, 70); /*8 letters per line, 10 lines --> 80 letters */
 
     srand(time(NULL));
 
     c = c_init(option);
     if (!c)
         return ERROR;
-    
-    if (use_saved_game==TRUE)
-        if (read_saved_cube(c, save_game_file)==ERROR){
+
+    if (use_saved_game == TRUE)
+        if (read_saved_cube(c, save_game_file) == ERROR){
             c_free(c);
             rect_free(rvista1);
             rect_free(rcrono);
@@ -144,44 +164,45 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
             return ERROR;
         }
 
-    _term_init();/*modifica los parámetros de la terminal para poder leer las letras sin que se presione enter*/
+    _term_init(); /*modifica los parámetros de la terminal para poder leer las letras sin que se presione enter*/
 
     terminal_clear();
     rect_border(rborder1);
     rect_border(rcrono);
 
-    if (refresh_cube2(c, rvista1, NULL, pcube) == ERROR){
+    if (refresh_cube3(c, rvista1, cube_file, size, pcube) == ERROR){
         c_free(c);
         rect_free(rvista1);
-        tcsetattr(fileno(stdin), TCSANOW, &initial);/*deshace los cambios hechos por _term_init()*/
+        tcsetattr(fileno(stdin), TCSANOW, &initial); /*deshace los cambios hechos por _term_init()*/
         return ERROR;
     }
 
-    pthread_create(&pth,NULL,hilo,dat); /*Call the counter. It has been initialized in mode 0 (stopped and time=0)*/
-    
-    while (TRUE){
-        letter=fgetc(stdin);
+    pthread_create(&pth, NULL, hilo, dat); /*Call the counter. It has been initialized in mode 0 (stopped and time=0)*/
 
-        if (letter=='q'){
+    while (TRUE){
+        letter = fgetc(stdin);
+
+        if (letter == 'q'){
             pthread_mutex_lock(&mutex);
-            counter_data_set_mode(dat,1);
+            counter_data_set_mode(dat, 1);
             pthread_mutex_unlock(&mutex);
 
             break;
         }
-        else if(letter=='w'){
-            if(scramble_cube(c, scramblefile, scramble) == ERROR){
+        else if (letter == 'w'){
+            if (scramble_cube(c, scramblefile, scramble) == ERROR){
                 flag = 1;
                 break;
             }
             pthread_mutex_lock(&mutex);
-            print_solution(scramble,rsol,letters_per_line);
-            counter_data_set_time(dat, 0, 0); 
-            counter_data_set_mode(dat,0);
+            print_solution(scramble, rsol, letters_per_line);
+            counter_data_set_time(dat, 0, 0);
+            counter_data_set_mode(dat, 0);
             pthread_mutex_unlock(&mutex);
-            firstmove=0;
+            firstmove = 0;
         }
-        else if(letter=='W'){
+
+        else if (letter == 'W'){
             solution = solve_cube(c);
             pthread_mutex_lock(&mutex);
             print_solution(solution, rsol, letters_per_line);
@@ -189,15 +210,17 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
             c_moves(c, solution);
             free(solution);
         }
-        else if(letter=='A'){
+
+        else if (letter == 'A'){
             solution = solve_cube(c);
             pthread_mutex_lock(&mutex);
-            print_solution(solution,rsol,letters_per_line);
+            print_solution(solution, rsol, letters_per_line);
             pthread_mutex_unlock(&mutex);
             free(solution);
             continue;
         }
-        else if(letter=='a'){
+
+        else if (letter == 'a'){
             solution = solve_cube(c);
             pthread_mutex_lock(&mutex);
             print_solution(solution, rsol, letters_per_line);
@@ -207,7 +230,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
             firstmove = 0;
             continue;
         }
-        
+
         else if (letter == 'o'){
             terminal_clear();
             rect_border(rborder1);
@@ -220,31 +243,32 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
                 pthread_mutex_unlock(&mutex);
                 stop = 1;
                 continue;
-            }else{
+            }
+            else{
                 pthread_mutex_lock(&mutex);
                 counter_data_set_mode(dat, 1);
                 pthread_mutex_unlock(&mutex);
                 stop = 0;
                 continue;
             }
-        }else{
-            cad[0]=letter;
-            cad[1]='\0';
+        }
+        else{
+            cad[0] = letter;
+            cad[1] = '\0';
             if (c_moves(c, cad) == ERROR){
                 flag = 1;
                 break;
             }
 
-            if(firstmove==0){
+            if (firstmove == 0){
                 pthread_mutex_lock(&mutex);
-                counter_data_set_mode(dat,1);
+                counter_data_set_mode(dat, 1);
                 pthread_mutex_unlock(&mutex);
-                firstmove=1;
+                firstmove = 1;
             }
-
         }
         pthread_mutex_lock(&mutex);
-        if (refresh_cube2(c, rvista1, NULL, pcube) == ERROR){
+        if (refresh_cube3(c, rvista1, cube_file, size, pcube) == ERROR){
             flag = 1;
             break;
         }
@@ -256,6 +280,8 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
     rect_free(rborder1);
     rect_free(rsol);
 
+    free(cube_file);
+
     tcsetattr(fileno(stdin), TCSANOW, &initial); /*deshace los cambios hechos por _term_init()*/
 
     if (save_cube(c, save_game_file) == ERROR)
@@ -265,11 +291,10 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
     pthread_detach(pth);
     pthread_cancel(pth);
     pthread_mutex_unlock(&mutex);
-    
+
     c_free(c);
     counter_data_free(dat);
-    dat=NULL;
-    
+    dat = NULL;
 
     /*in case the loop gets any error*/
     if (flag == 1)

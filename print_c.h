@@ -5,6 +5,10 @@
 #include "types.h"
 #include "interface.h"
 
+#define CUBE_1 "./txt_files/cubo.txt"
+#define CUBE_2 "./txt_files/cubo2.txt"
+#define CUBE_3 "./txt_files/cubo3.txt"
+#define CUBE_222 "./txt_files/cubo222.txt"
 
 typedef int (*cprint_from_stickers)(FILE*, short*);
 typedef int (*cprint_from_stickers2)(short *,short*, rect *, rect *, int); /*pointers to rect*/
@@ -22,6 +26,8 @@ int c_print(FILE *f, short *s);
 Status refresh_cube(Cube3*, FILE*, cprint_from_stickers);
 
 Status refresh_cube2(Cube3 *, rect *,rect*, cprint_from_stickers2);
+
+Status refresh_cube3(Cube3 *c, rect *r1, char *buf, int size, cprint_from_stickers2 print_cube);
 
 /**
  * @brief ALLOCATES an array. Translates the array of colors of the stickers into the color code for ANSI ESC
@@ -67,5 +73,12 @@ int c_print2(FILE *f, short *s,short*col);
 Status slow_moves(Cube3* c, cprint_from_stickers2 print_cube, char *moves, int usec, rect*r1, rect*r2);
 
 int c_print3(short *s,short *col,rect *r1, rect *r2, int option);
+
+/**
+ * @brief cube print with buffers 
+ * @param size size of the buffer
+ * 
+ */
+int c_print4(short *s, short *col, rect *r1, char *buf, int size);
 
 #endif 
