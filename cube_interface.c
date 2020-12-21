@@ -121,7 +121,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
     int letters_per_line = 11, size;
     char *cube_file;
 
-    cprint_from_stickers2 pcube = c_print4;
+    cprint_from_stickers3 pcube = c_print4;
     rect *rvista1, *rcrono, *rborder1, *rsol;
     pthread_t pth;
     counter_data *dat = NULL;
@@ -225,7 +225,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
             pthread_mutex_lock(&mutex);
             print_solution(solution, rsol, letters_per_line);
             pthread_mutex_unlock(&mutex);
-            slow_moves(c, pcube, solution, 450000, rvista1, NULL); /*4th arg is microseconds between moves*/
+            slow_moves2(c, pcube, solution, 450000, rvista1, cube_file, size); /*4th arg is microseconds between moves*/
             free(solution);
             firstmove = 0;
             continue;

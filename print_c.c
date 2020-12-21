@@ -33,12 +33,12 @@ Status refresh_cube2(Cube3 *c, rect *r1, rect *r2, cprint_from_stickers2 print_c
     return OK;
 }
 
-Status refresh_cube3(Cube3 *c, rect *r1, char *buf, int size, cprint_from_stickers2 print_cube){
+Status refresh_cube3(Cube3 *c, rect *r1, char *buf, int size, cprint_from_stickers3 print_cube){
 
     if (colour_stickers(c, c->stickers) == ERROR)
         return ERROR;
 
-    c_print4(c->stickers, c->colorsESC, r1, buf, size);
+    print_cube(c->stickers, c->colorsESC, r1, buf, size);
 
     return OK;
 }
@@ -510,6 +510,23 @@ Status slow_moves(Cube3* c, cprint_from_stickers2 print_cube, char *moves, int u
     for(i=0;i<len;i++){
         c_make(c, moves[i]);
         refresh_cube2(c,r1,r2,print_cube);
+        usleep(usec);
+    }
+    return OK;
+}
+
+Status slow_moves2(Cube3* c, cprint_from_stickers3 print_cube, char *moves, int usec,rect* r1, char *buf, int size){
+    int i, len;
+
+    if(!c||!moves||!r1||!print_cube||!buf){
+        return ERROR;
+    }
+
+    len=strlen(moves);
+
+    for(i=0;i<len;i++){
+        c_make(c, moves[i]);
+        refresh_cube3(c,r1,buf,size, print_cube);
         usleep(usec);
     }
     return OK;

@@ -12,7 +12,9 @@
 
 
 typedef int (*cprint_from_stickers)(FILE*, short*);
-typedef int (*cprint_from_stickers2)(short *,short*, rect *, rect *, int); /*pointers to rect*/
+typedef int (*cprint_from_stickers2)(short *,short*, rect *, rect *, int); 
+typedef int (*cprint_from_stickers3)(short *,short*, rect *, char *, int); 
+/*pointers to rect*/
 
 
 int c_print(FILE *f, short *s);
@@ -28,7 +30,7 @@ Status refresh_cube(Cube3*, FILE*, cprint_from_stickers);
 
 Status refresh_cube2(Cube3 *, rect *,rect*, cprint_from_stickers2);
 
-Status refresh_cube3(Cube3 *c, rect *r1, char *buf, int size, cprint_from_stickers2 print_cube);
+Status refresh_cube3(Cube3 *c, rect *r1, char *buf, int size, cprint_from_stickers3 print_cube);
 
 /**
  * @brief ALLOCATES an array. Translates the array of colors of the stickers into the color code for ANSI ESC
@@ -72,6 +74,9 @@ int c_print2(FILE *f, short *s,short*col);
  * @return 
  */ 
 Status slow_moves(Cube3* c, cprint_from_stickers2 print_cube, char *moves, int usec, rect*r1, rect*r2);
+
+/*same as slow_moves, but with buffer*/
+Status slow_moves2(Cube3* c, cprint_from_stickers3 print_cube, char *moves, int usec,rect* r1, char *buf, int size);
 
 int c_print3(short *s,short *col,rect *r1, rect *r2, int option);
 

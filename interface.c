@@ -6,6 +6,8 @@
 #define LETTERS_PATH "./txt_files/letters_small/"
 #define MAX_LEN 1024
 
+extern int usleep(unsigned int );
+
 struct _rect{
     int line, column; /*Upper left corner*/
     int l,h; /*length and height*/
