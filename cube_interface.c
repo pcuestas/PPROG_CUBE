@@ -183,9 +183,9 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
         }
         else if(letter=='W'){
             solution = solve_cube(c);
-            /*pthread_mutex_lock(&mutex);
-            print_solution(solution, rsol, 8);
-            pthread_mutex_unlock(&mutex);*/
+            pthread_mutex_lock(&mutex);
+            print_solution(solution, rsol, letters_per_line);
+            pthread_mutex_unlock(&mutex);
             c_moves(c, solution);
             free(solution);
         }
@@ -199,10 +199,10 @@ int c_interface(int option, int use_saved_game, char *save_game_file){
         }
         else if(letter=='a'){
             solution = solve_cube(c);
-            /*pthread_mutex_lock(&mutex);
-            print_solution(solution, rsol, 16);
-            pthread_mutex_unlock(&mutex);*/
-            slow_moves(c, pcube, solution, 450000, rvista1, NULL); /*4th arg is miocroseconds between moves*/
+            pthread_mutex_lock(&mutex);
+            print_solution(solution, rsol, letters_per_line);
+            pthread_mutex_unlock(&mutex);
+            slow_moves(c, pcube, solution, 450000, rvista1, NULL); /*4th arg is microseconds between moves*/
             free(solution);
             firstmove = 0;
             continue;
