@@ -10,6 +10,7 @@
 #define CUBE_3 "./txt_files/cubo3.txt"
 #define CUBE_222 "./txt_files/cubo222.txt"
 
+
 typedef int (*cprint_from_stickers)(FILE*, short*);
 typedef int (*cprint_from_stickers2)(short *,short*, rect *, rect *, int); /*pointers to rect*/
 

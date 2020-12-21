@@ -129,9 +129,9 @@ Status print_element(char*filename, rect*r){
 
     } while (1);
 
-    /****************************/
+
     fflush(stdout);
-    /****************************/
+   
 
     fclose(pf);
     return OK;
@@ -280,11 +280,6 @@ rect* rect_expand(rect *r, int x, int y){
  * @brief Modifies the string files (and also returns a pointer to it) 
  * so that it contains the name of the file with 'letter' as an ascii banner. 
  * 
- * This is suposed to be used as: 
- *                      print_element(file_of_letter(filename, text[i]), rect)
- *              where filename is a local char filename[1024];
- * Because even though it returns a (char*), it does not allocate memory, 
- * so there are no losses
  * */
 char *file_of_letter(char*file, char letter){
     int j;
@@ -345,5 +340,107 @@ Status print_solution(char *sol, rect *r, int letters_per_line){
     }
     
     rect_free(r_aux);
+    return OK;
+}
+
+Status print_confeti(rect *r, int ndots){
+    int line, column, height, width,i,j;
+    int h_frac, w_frac,x,y;
+    int **positions;
+
+    if(ndots<1)
+        return ERROR;
+    
+    if(!(positions=(int**)calloc(ndots,sizeof(int*))))
+        return ERROR;
+    
+    for(i=0;i<ndots;i++){
+        if(!(positions[i]=(int*)calloc(2,sizeof(int*)))){
+            for (j = 0; j < i; i++){
+                free(positions[j]);
+            }
+            free(positions);
+            return ERROR;
+        }
+            
+    }
+
+    if(!r){
+        line=1;
+        column=1;
+        height=100;
+        width=100;
+    }else{
+        line=r->line;
+        column=r->column;
+        height=r->h;
+        width=r->l;
+    }
+
+    h_frac=height/5;
+    w_frac=width/5;
+
+    for(i=0,j=0;i<ndots;i++){
+
+        /*Distribute more dots in the center of the rectangle*/
+        if(i%3==0){
+            y=random_num(line, line + height);
+            x=random_num(column, column + width);
+            positionate_cursor(y,x);
+            positions[i][0]=y;
+            positions[i][1]=x;
+        }else{
+            y = random_num(line + h_frac, line + 4* h_frac);
+            x = random_num(column + w_frac, column + 4* w_frac);
+            positionate_cursor(y,x);
+            positions[i][0] = y;
+            positions[i][1] = x;
+        }
+        
+
+        switch (random_num(1, 6)){
+        case 1:
+            printf(HRED, 27);
+            break;
+        case 2:
+            printf(HBLU, 27);
+            break;
+        case 3:
+            printf(HCYN, 27);
+            break;
+        case 4:
+            printf(HMAG, 27);
+            break;
+        case 5:
+            printf(HYEL, 27);
+            break;
+        case 6:
+            printf(HWHT, 27);
+            break;
+        case 7:
+            printf(HGRN, 27);
+            break;
+        }
+
+        printf("x");
+        usleep(1000);
+
+        if(i>ndots/3){ /*33% of the dots have been printed. we start deleting them*/
+            printf(color_reset, 27);
+            positionate_cursor(positions[j][0],positions[j][1]);
+            printf(" ");
+        }
+
+    }
+    printf(color_reset, 27);
+
+    for(;j<ndots;j++){
+        printf(color_reset, 27);
+        positionate_cursor(positions[j][0], positions[j][1]);
+        printf(" ");
+    }
+
+    free(positions);
+
     return OK;
 }

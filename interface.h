@@ -2,6 +2,14 @@
 #define INTERFACE_H
 
 #include "types.h"
+#include "utils.h"
+
+#define WHITE 7
+#define YELLOW 103
+#define ORANGE 45
+#define GREEN 42
+#define BLUE 44
+#define RED 41
 
 typedef struct _rect rect;
 
@@ -14,6 +22,24 @@ void rect_free(rect*r);
 
 rect *rect_copy(rect*r);
 
+/**
+ * @brief Clears the part of the terminal delimited by the rectangle
+ */
+void rect_clear(rect *r);
+
+/**
+ * @brief Prints the border of a rectangle using unicode chars
+ */
+Status rect_border(rect *r);
+
+/**
+ * @brief inits a rectangle with the values of an existin rectangle expanded in x direction and y.
+ * @param x changes column--> column-x && l+x
+ * @param y changes line-->line-y && h+y
+ * @return pointer to rect or NULL in case of error;
+ */
+rect *rect_expand(rect *r, int x, int y);
+
 /********GETTERS AND SETTERS************/
 Status rect_setline(rect*r,int line);
 Status rect_setcolumn(rect *r, int column);
@@ -23,6 +49,8 @@ int rect_getline(rect*r);
 int rect_getcolumn(rect*r);
 int rect_getl(rect*r);
 int rect_geth(rect*r);
+/**************************************/
+
 
 /**
  * @brief Prints the content of a file starting on a rect
@@ -40,32 +68,22 @@ Status print_buffer(char *buf, int size, rect *r);
  * @brief Prints a letter from file starting on a rect
  * @return OK or ERROR in case of error opening File
  */
-    Status print_letter(char *filename, rect *r);
-
-/**
- * @brief Clears the part of the terminal delimited by the rectangle
- */
-    void rect_clear(rect *r);
-
-/**
- * @brief Prints the border of a rectangle using unicode chars
- */
-Status rect_border(rect *r);
+Status print_letter(char *filename, rect *r);
 
 
-/**
- * @brief inits a rectangle with the values of an existin rectangle expanded in x direction and y.
- * @param x changes column--> column-x && l+x
- * @param y changes line-->line-y && h+y
- * @return pointer to rect or NULL in case of error;
- */ 
-rect* rect_expand(rect*r, int x,int y);
+
 
 /**
  * @brief Clears the screen using the C ANSI ESC code
  * */
 void terminal_clear();
 
+
+/**
+ * @brief Resizes the terminal window, 
+ * @param h height
+ * @param w width
+ */ 
 Status terminal_resize(int h, int w);
 
 /**
@@ -77,12 +95,6 @@ Status terminal_resize(int h, int w);
 /**
  * @brief Modifies the string files (and also returns a pointer to it) 
  * so that it contains the name of the file with 'letter' as an ascii banner. 
- * 
- * This is suposed to be used as: 
- *                      print_element(file_of_letter(filename, text[i]), rect)
- *              where filename is a local char filename[1024];
- * Because even though it returns a (char*), it does not allocate memory, 
- * so there are no losses
  * */
 char *file_of_letter(char*file, char letter);
 
@@ -95,6 +107,14 @@ char *file_of_letter(char*file, char letter);
  * @param letters_per_line number of letters that are written per line
  */
 Status print_solution(char*sol,rect*r,int letters_per_line);
+
+
+/**
+ * @brief displys confetti in a rectangle
+ * @param r if r is NULL the confetti is display in the whole terminal
+ * @param ndots number of dots to be displyed
+ */  
+Status print_confeti(rect*r, int ndots);
 
 
 #endif

@@ -13,7 +13,7 @@
 #include "print_c.h"
 #include "interface.h"
 #include "bcd.h"
-#include "ftobuff.h"
+#include "utils.h"
 
 #define MAX_CAD 100
 

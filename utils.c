@@ -5,7 +5,10 @@
  *        to avoid constant file reading
  */
 
-#include "ftobuff.h"
+
+
+#include "utils.h"
+#include <stdlib.h>
 
 extern char *strndup(const char *, size_t );
 
@@ -43,4 +46,16 @@ int ftobuffer(char *file, char **res){
         return -1;
 
     return count;
+}
+
+int random_num(int inf, int sup){
+    double t;
+
+    if (inf > sup){
+        return -1;
+    }
+
+    t = (double)rand() / ((double)RAND_MAX + 1.);
+
+    return inf + ((int)(t * (sup - inf + 1)));
 }

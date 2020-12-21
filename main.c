@@ -2,29 +2,32 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "ftobuff.h"
+#include "utils.h"
+#include "interface.h"
 
-#define MAX_BUF (15000)
-#define CUBE__3 "./txt_files/cubo3.txt"
 
-#define _TEST_ "test.txt"
 
 int main(void) {
-    char *new=NULL;
+   int i;
+   rect *r, *r2, *r3;
+   char *victory;
 
-    printf("Size of new1:%d\n", (int)sizeof(new));
+   srand(time(NULL));
+   terminal_clear();
+   positionate_cursor(1, 1);
 
-    new=ftobuffer(_TEST_);
+   
 
-    if(!new){
-        printf("err in ftobuffer");
-        return -1;
-    }
+ r = rect_init(2, 5, 20, 50);
+   r2=rect_init(25,20,1,1);
+   r3=rect_init(2, 45, 1, 1);
 
-    printf("Size of new2:%d\n", (int)sizeof(new));
-
-    printf("string:|%s|\n", new);
-
-    free(new);
-    return 0;
+   print_buffer(victory, ftobuffer("test.txt", &victory), r2);
+   for(i=0;i<5;i++){
+       print_confeti(r, 300);
+       print_confeti(r3, 300);
+   }
+   
+   rect_free(r);
+   return 0;
 }

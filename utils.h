@@ -1,13 +1,10 @@
 /**
- * @file ftobuff.h
+ * @file utils.h
  * @author Pablo Cuesta Sierra
- * @brief functions to read files of the project to buffers
- *        to avoid constant file reading
  */
 
-#ifndef _FILE_TO_BUFF_
-#define _FILE_TO_BUFF_
-
+#ifndef UTILS_H
+#define UTILS_H
 
 #include <string.h>
 #include <stdio.h>
@@ -15,6 +12,17 @@
 #define MAX_BUF (15000)
 
 
+/*C ANSI CODES FOR COLOR TEXT*/
+/*The %c is for the escape, number 27 in decimal in ansi*/
+#define HBLK "%c[0;90m"
+#define HRED "%c[0;91m"
+#define HGRN "%c[0;92m"
+#define HYEL "%c[0;93m"
+#define HBLU "%c[0;94m"
+#define HMAG "%c[0;95m"
+#define HCYN "%c[0;96m"
+#define HWHT "%c[0;97m"
+#define color_reset "%c[0m"
 
 /**
  * @brief This function reads the whole file with name 
@@ -27,5 +35,11 @@
  * The maximum size to be read is MAX_BUF
 */
 int ftobuffer(char *file, char **res);
+
+
+/**
+ * @brief Generates a pseudo-random number between inf and sup
+ */
+int random_num(int inf, int sup);
 
 #endif

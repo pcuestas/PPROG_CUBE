@@ -147,22 +147,22 @@ Status sticker_to_color(short *s,short *c){
     for (i = 0; i < 54; i++){
         switch (s[i]){
         case W:
-            c[i] = 7;
+            c[i] = WHITE;
             break;
         case Y:
-            c[i] = 103;
+            c[i] = YELLOW;
             break;
         case O:
-            c[i] = 45;
+            c[i] = ORANGE;
             break;
         case G:
-            c[i] = 42;
+            c[i] = GREEN;
             break;
         case B:
-            c[i] = 44;
+            c[i] = BLUE;
             break;
         case R:
-            c[i] = 101;
+            c[i] = RED;
             break;
 
         default:
