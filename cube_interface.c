@@ -211,7 +211,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
                 break;
             }
             pthread_mutex_lock(&mutex);
-            print_solution_2(solution, rsol, l_buff, letters_per_line);
+            print_solution_2(scramble, rsol, l_buff, letters_per_line);
             counter_data_set_time(dat, 0, 0);
             counter_data_set_mode(dat, 0);
             pthread_mutex_unlock(&mutex);
