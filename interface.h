@@ -60,6 +60,7 @@ Status print_element(char *filename,rect*r);
 
 /**
  * @brief Prints the content of a buffer starting on a rect
+ * @param size if size==-2, it is a terminanting \0 string, so size will be calculated with strlen
  */
 Status print_buffer(char *buf, int size, rect *r);
 
@@ -108,13 +109,48 @@ char *file_of_letter(char*file, char letter);
  */
 Status print_solution(char*sol,rect*r,int letters_per_line);
 
+/**
+ * @brief Prints the solution of the cube in a rectangle using le letters_buffer
+ * @param l_buffer array of buffers where the letters have been filled with fill_buffer_letter
+ * @param sol string with the solution
+ * @param r pointer to rect where to print it (one letter is 9x9)
+ * @param letters_per_line number of letters that are written per line
+ */
+Status print_solution_2(char *sol, rect *r, char **l_buffer, int letters_per_line);
+
 
 /**
  * @brief displys confetti in a rectangle
  * @param r if r is NULL the confetti is display in the whole terminal
  * @param ndots number of dots to be displyed
- */  
-Status print_confeti(rect*r, int ndots);
+ */
+    Status print_confeti(rect *r, int ndots);
 
+/**
+ * @brief returns the position of the array of buffers where the letter is stored
+ * @param letter must be RUFLBDMESXYZ in capital or lower
+ */ 
+int hash_letter(char letter);
+
+
+
+/**
+ * @brief allocates memory for an array of buffers where the letters are stored. 
+ * each letter is stores in buf[hash_letter(l)]. Should be called with 
+ * RUFLBDMESXYZruflbdmesxyz
+ * @param letters array of the letters to be filled.
+ * @param buff has to be allocated outside. Size should be 34
+ */ 
+Status fill_buffer_letter(char *letters, char **buff);
+
+
+/**
+ * @brief allocates the array of buffers that will be filled with the letters
+ * @param size number of buffers of the array (it should be 34)
+ * 
+ */ 
+char **allocate_array_lettersbuffer(int size);
+
+void free_array_lettersbuffer(char **buff, int size);
 
 #endif

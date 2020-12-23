@@ -149,7 +149,10 @@ Status print_buffer(char *buf, int size, rect *r){
     line = r->line;
     column = r->column;
 
-    rect_clear(r);
+    /*rect_clear(r);*/
+
+    if(size==-2)
+        size=strlen(buf);
 
     positionate_cursor(line, column);
 
@@ -296,6 +299,84 @@ char *file_of_letter(char*file, char letter){
     return file;
 }
 
+int hash_letter(char letter){
+    
+    if(letter>90){
+        if(letter=='s')
+            return 4;
+        if(letter=='u')
+            return 5;
+        
+        return letter%17;
+    }else{
+        if(letter=='U')
+            return 17+6;
+        if(letter=='S')
+            return 17+9;
+        
+        return 17+letter%17;
+    }
+}
+
+void free_letter_buffer(char **buff, int size){
+
+    int i;
+
+    if(buff){
+        for(i=0;i<size;i++){
+            if(buff[i]!=NULL)
+                free(buff[i]);
+        }
+    }
+}
+
+char ** allocate_array_lettersbuffer(int size){
+    int i;
+    char **buff;
+
+    if(!(buff=(char**)calloc(size,sizeof(char*))))
+        return NULL;
+    
+    for(i=0;i<size;i++)
+        buff[i]=NULL;
+    
+    return buff;
+}
+
+void free_array_lettersbuffer(char ** buff, int size){
+    int i;
+
+    if(buff){
+        for(i=0;i<size;i++){
+            if(buff[i]!=NULL)
+                free(buff[i]);
+        }
+    }
+}
+
+Status fill_buffer_letter(char* letters, char **buff){
+
+    int i,pos,size;
+    char filename[MAX_LEN];
+
+    if(!letters||!buff)
+        return ERROR;
+    
+    size=strlen(letters);
+
+    for(i=0;i<size;i++){
+        pos=hash_letter(letters[i]);
+        if(ftobuffer(file_of_letter(filename, letters[i]),&(buff[pos]))==-1){
+            free_letter_buffer(buff,34); /*We are assuming the size of **buf*/
+            return ERROR;
+        }
+        
+    }
+
+    return OK;
+    
+}
+
 Status print_solution(char *sol, rect *r, int letters_per_line){
 
     int n,i,line,l,column,c,printed=0,max,total=0;
@@ -310,6 +391,8 @@ Status print_solution(char *sol, rect *r, int letters_per_line){
     if((r_aux=rect_copy(r))==NULL)
         return ERROR;
     
+    r_aux->l=dist_inter_letter;
+    r_aux->h=dist_inter_line;
     max=(r->l/dist_inter_letter)*(r->h/dist_inter_line);
 
     n=strlen(sol);
@@ -341,6 +424,56 @@ Status print_solution(char *sol, rect *r, int letters_per_line){
         printed++;
     }
     
+    rect_free(r_aux);
+    return OK;
+}
+
+Status print_solution_2(char *sol, rect *r, char**l_buffer, int letters_per_line){
+
+    int n, i, line, l, column, c, printed = 0, max, total = 0;
+    int dist_inter_line = 5, dist_inter_letter = 8,pos;
+    rect *r_aux;
+
+    if (!sol || !r || letters_per_line < 1||!l_buffer)
+        return ERROR;
+
+    if ((r_aux = rect_copy(r)) == NULL)
+        return ERROR;
+
+    max = (r->l / dist_inter_letter) * (r->h / dist_inter_line);
+
+    n = strlen(sol);
+    column = rect_getcolumn(r);
+    line = rect_getline(r);
+    c = column;
+    l = line;
+
+    rect_clear(r);
+
+    for (i = 0; i < n && total < max; i++){
+
+        if (printed == letters_per_line){
+            l += dist_inter_line;
+            rect_setcolumn(r_aux, column);
+            rect_setline(r_aux, l);
+            c = column;
+            printed = 0;
+        }
+
+   
+        pos=hash_letter(sol[i]);
+        if(pos>33)
+            continue;
+
+        if(print_buffer(l_buffer[pos],-2,r_aux)==ERROR) /*an invalid letter*/
+            continue;
+
+        fflush(stdout);
+        c += dist_inter_letter;
+        rect_setcolumn(r_aux, c);
+        printed++;
+    }
+
     rect_free(r_aux);
     return OK;
 }

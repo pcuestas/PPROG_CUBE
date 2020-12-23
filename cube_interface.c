@@ -120,6 +120,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
     char scramblefile[MAX_CAD] = SCRAMBLES_TXT, scramble[MAX_LINE];
     int letters_per_line = 11, size;
     char *cube_file;
+    char *letters = "RUFLBDMESXYZruflbdmesxyz",**l_buff;
 
     cprint_from_stickers3 pcube = c_print4;
     rect *rvista1, *rcrono, *rborder1, *rsol;
@@ -130,16 +131,30 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
     if (!(dat = counter_data_init()))
         return -1;
 
+    if((l_buff=allocate_array_lettersbuffer(34))==NULL){
+        counter_data_free(dat);
+        return -1;
+    }
+
+    fill_buffer_letter(letters,l_buff);
+
     /*Read the files and fill in the buffers*/
     if (option == 3){
         size = ftobuffer(CUBE_3, &cube_file);
-        if (size == -1)
+        if (size == -1){
+            counter_data_free(dat);
+            free_array_lettersbuffer(l_buff,34);
             return -1;
+        }
+            
     }
     else{
         size = ftobuffer(CUBE_222, &cube_file);
-        if (size == -1)
+        if (size == -1){
+            counter_data_free(dat);
+            free_array_lettersbuffer(l_buff,34);
             return -1;
+        }
     }
 
     counter_data_set_rects(dat, 4, 194, 15, 17);
@@ -161,6 +176,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
             rect_free(rcrono);
             rect_free(rborder1);
             counter_data_free(dat);
+            free_array_lettersbuffer(l_buff, 34);
             return ERROR;
         }
 
@@ -195,7 +211,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
                 break;
             }
             pthread_mutex_lock(&mutex);
-            print_solution(scramble, rsol, letters_per_line);
+            print_solution_2(solution, rsol, l_buff, letters_per_line);
             counter_data_set_time(dat, 0, 0);
             counter_data_set_mode(dat, 0);
             pthread_mutex_unlock(&mutex);
@@ -205,7 +221,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
         else if (letter == 'W'){
             solution = solve_cube(c);
             pthread_mutex_lock(&mutex);
-            print_solution(solution, rsol, letters_per_line);
+            print_solution_2(solution, rsol, l_buff, letters_per_line);
             pthread_mutex_unlock(&mutex);
             c_moves(c, solution);
             free(solution);
@@ -214,7 +230,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
         else if (letter == 'A'){
             solution = solve_cube(c);
             pthread_mutex_lock(&mutex);
-            print_solution(solution, rsol, letters_per_line);
+            print_solution_2(solution, rsol, l_buff, letters_per_line);
             pthread_mutex_unlock(&mutex);
             free(solution);
             continue;
@@ -223,7 +239,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
         else if (letter == 'a'){
             solution = solve_cube(c);
             pthread_mutex_lock(&mutex);
-            print_solution(solution, rsol, letters_per_line);
+            print_solution_2(solution, rsol,l_buff, letters_per_line);
             pthread_mutex_unlock(&mutex);
             slow_moves2(c, pcube, solution, 450000, rvista1, cube_file, size); /*4th arg is microseconds between moves*/
             free(solution);
@@ -291,6 +307,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
     pthread_detach(pth);
     pthread_cancel(pth);
     pthread_mutex_unlock(&mutex);
+    free_array_lettersbuffer(l_buff, 34);
 
     c_free(c);
     counter_data_free(dat);
