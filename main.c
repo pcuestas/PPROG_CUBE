@@ -13,33 +13,15 @@ int main(void) {
    int i;
    rect *r;
 
-   r=rect_init(5,5,100,100);
+   r=rect_init(20,20,100,100);
    terminal_clear();
 
-   buff=(char**)calloc(34,sizeof(char*));
-   for(i=0;i<34;i++){
-     buff[i]=NULL;
-   }
+  print_element("test.txt",r); 
 
 
-
-   fill_buffer_letter(letters, buff);
-
-
-   /*print_buffer(buff[hash_letter('R')],-2,r);*/
-  /*for(i=0;i<strlen(letters);i++){
-    printf("letra %c posicion %i \n", letters[i], hash_letter(letters[i]));
-    if (buff[hash_letter(letters[i])]==NULL){
-      printf("\testa NULL\n");
-    }
-  }*/
-
-
-
-   print_solution_2("BFubmxYz",r,buff,5);
-   rect_free(r);
-
-
+  usleep(50000);
+  fade_to_black(50,50,1000);
+  
 
    return 0;
 }
