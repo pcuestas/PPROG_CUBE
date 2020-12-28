@@ -59,3 +59,16 @@ int random_num(int inf, int sup){
 
     return inf + ((int)(t * (sup - inf + 1)));
 }
+
+
+int get_linesfromterm(){
+    struct winsize w;
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+    return  w.ws_row; 
+}
+
+int get_columnsfromterm(){
+    struct winsize w;
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+    return w.ws_col;
+}

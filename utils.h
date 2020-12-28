@@ -8,6 +8,8 @@
 
 #include <string.h>
 #include <stdio.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
 
 #define MAX_BUF (15000)
 
@@ -42,4 +44,8 @@ int ftobuffer(char *file, char **res);
  */
 int random_num(int inf, int sup);
 
+
+/***Return the number of lines & columns of the terminal**/
+int get_linesfromterm();
+int get_columnsfromterm();
 #endif

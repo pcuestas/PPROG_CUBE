@@ -580,45 +580,30 @@ Status print_confeti(rect *r, int ndots){
     return OK;
 }
 
-Status fade_to_black(int line, int column, int expand){
+Status fade_to_black(){
 
-    int n,side=3,i;
-    int l,c,w;
+    int columns,lines,n,i;
+    int w=5;
     rect *r;
 
-    /*
+    columns=get_columnsfromterm();
+    lines=get_linesfromterm();
 
-        | side       side 
-        |<--->center<--->|
-        |                |
-        |________________|
+    if(columns<lines)
+        lines=columns;
+    
+    n=lines/w;
 
-
-    */
-
-    if(line<1||column<1||expand<1)
+    if(!(r=rect_init(1,1,w,w)))
         return ERROR;
     
-    if(!(r=rect_init(line-side,column-side,2*side,2*side)))
-        return ERROR;
-
-    n=expand/side;
-    l=line-side;
-    c=column-side;
-    w=2*side;
-
-    for(i=0;i<n && l>=1 && c>=1 && w>=1 ;i++){
+    for(i=0;i<n;i++){
         rect_clear(r);
-        l-=side;
-        c-=side;
-        w*=2;
-        rect_setcolumn(r,c);
+        w+=w;
         rect_setheight(r,w);
         rect_setlength(r,w);
-        rect_setline(r,l);
-
         sleep(1);
-    }   
+    }
 
     terminal_clear();
 

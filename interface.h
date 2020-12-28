@@ -154,13 +154,6 @@ char **allocate_array_lettersbuffer(int size);
 void free_array_lettersbuffer(char **buff, int size);
 
 
-/**
- * @brief fade to black animation starting from a given point and drawing squares
- * @param line y coordinate of the center
- * @param column x coordinate of the center
- * @param expand distance from the center to the biggest square to be drawn
- * @return ERROR in case of invalid parameters
- */  
-Status fade_to_black(int line, int column, int expand);
+Status fade_to_black();
 
 #endif
