@@ -430,7 +430,7 @@ Status print_solution(char *sol, rect *r, int letters_per_line){
 
 Status print_solution_2(char *sol, rect *r, char**l_buffer, int letters_per_line){
 
-    int n, i, line, l, column, c, printed = 0, max, total = 0;
+    int n, i, line, l, column, c, printed = 0, max_line, total = 0;
     int dist_inter_line = 5, dist_inter_letter = 8,pos;
     rect *r_aux;
 
@@ -440,7 +440,7 @@ Status print_solution_2(char *sol, rect *r, char**l_buffer, int letters_per_line
     if ((r_aux = rect_copy(r)) == NULL)
         return ERROR;
 
-    max = (r->l / dist_inter_letter) * (r->h / dist_inter_line);
+    max_line =(r->h / dist_inter_line);
 
     n = strlen(sol);
     column = rect_getcolumn(r);
@@ -450,7 +450,7 @@ Status print_solution_2(char *sol, rect *r, char**l_buffer, int letters_per_line
 
     rect_clear(r);
 
-    for (i = 0; i < n && total < max; i++){
+    for (i = 0; i < n ; i++){
 
         if (printed == letters_per_line){
             l += dist_inter_line;
@@ -458,9 +458,12 @@ Status print_solution_2(char *sol, rect *r, char**l_buffer, int letters_per_line
             rect_setline(r_aux, l);
             c = column;
             printed = 0;
+            total++;
         }
 
-   
+        if(total==max_line)
+            break;
+
         pos=hash_letter(sol[i]);
         if(pos>33)
             continue;
@@ -583,7 +586,7 @@ Status print_confeti(rect *r, int ndots){
 Status fade_to_black(){
 
     int columns,lines,n,i;
-    int w=5;
+    int incr=5,w;
     rect *r;
 
     columns=get_columnsfromterm();
@@ -591,7 +594,7 @@ Status fade_to_black(){
 
     if(columns<lines)
         lines=columns;
-    
+    w=incr;
     n=lines/w;
 
     if(!(r=rect_init(1,1,w,w)))
@@ -599,14 +602,14 @@ Status fade_to_black(){
     
     for(i=0;i<n;i++){
         rect_clear(r);
-        w+=w;
+        w+=incr;
         rect_setheight(r,w);
         rect_setlength(r,w);
-        sleep(1);
+        usleep(500000);
     }
 
     terminal_clear();
-
+    printf("%i veces el total es %i. \t",i, n);
     rect_free(r);
     return OK;
 }

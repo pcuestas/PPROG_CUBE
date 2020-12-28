@@ -20,3 +20,10 @@
 
 
 
+
+
+15. Hacer que el counter no se inicie con cualquier tecla
+16. impimir la solucion por partes (variable para ver si la letra enterior es w)
+
+
+

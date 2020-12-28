@@ -119,21 +119,24 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
     short flag = 0;
     char scramblefile[MAX_CAD] = SCRAMBLES_TXT, scramble[MAX_LINE];
     int letters_per_line = 11, size;
-    char *cube_file;
-    char *letters = "RUFLBDMESXYZruflbdmesxyz",**l_buff;
+    char *cube_file=NULL;
+    char *letters = "RUFLBDMESXYZruflbdmesxyz",**l_buff=NULL;
 
     cprint_from_stickers3 pcube = c_print4;
-    rect *rvista1, *rcrono, *rborder1, *rsol;
+    rect *rvista1=NULL, *rcrono=NULL, *rborder1=NULL, *rsol=NULL,*rsol_border=NULL;
     pthread_t pth;
     counter_data *dat = NULL;
     int stop = 0, firstmove = 0;
 
-    if (!(dat = counter_data_init()))
+    _term_init(); /*modifica los parámetros de la terminal para poder leer las letras sin que se presione enter*/
+
+    if (!(dat = counter_data_init())){
         return -1;
+    }
 
     if((l_buff=allocate_array_lettersbuffer(34))==NULL){
-        counter_data_free(dat);
-        return -1;
+        flag=1;
+        goto free;
     }
 
     fill_buffer_letter(letters,l_buff);
@@ -142,26 +145,31 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
     if (option == 3){
         size = ftobuffer(CUBE_3, &cube_file);
         if (size == -1){
-            counter_data_free(dat);
-            free_array_lettersbuffer(l_buff,34);
-            return -1;
+            flag=1;
+            goto free;
         }
             
     }
     else{
         size = ftobuffer(CUBE_222, &cube_file);
         if (size == -1){
-            counter_data_free(dat);
-            free_array_lettersbuffer(l_buff,34);
-            return -1;
+            flag=1;
+            goto free;
         }
     }
 
-    counter_data_set_rects(dat, 4, 194, 15, 17);
-    rvista1 = rect_init(2, 7, 177, 76);
-    rcrono = rect_init(2, 190, 17 * 5, 19);
-    rborder1 = rect_expand(rvista1, 2, 2);
-    rsol = rect_init(24, 190, 88, 70); /*8 letters per line, 10 lines --> 80 letters */
+    /*Initialize rectangles for all the elements of the interface*/
+    counter_data_set_rects(dat, 15+2, 15+198, 15, 17);
+    rvista1 = rect_init(15+3, 15+7, 180, 78);
+    rcrono = rect_init(15+1, 15+192, 17 * 5+3, 19);
+    rborder1 = rect_expand(rvista1, 3, 2);
+    rsol = rect_init(15+24, 15+194, 88, 57); /*8 letters per line, 10 lines --> 80 letters */
+    rsol_border=rect_expand(rsol,2,2);
+
+    if(!rvista1||!rcrono||!rborder1||!rsol){
+        flag=1;
+        goto free;
+    }
 
     srand(time(NULL));
 
@@ -171,30 +179,23 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
 
     if (use_saved_game == TRUE)
         if (read_saved_cube(c, save_game_file) == ERROR){
-            c_free(c);
-            rect_free(rvista1);
-            rect_free(rcrono);
-            rect_free(rborder1);
-            counter_data_free(dat);
-            free_array_lettersbuffer(l_buff, 34);
-            return ERROR;
+            flag=1;
+            goto free;
         }
 
-    _term_init(); /*modifica los parámetros de la terminal para poder leer las letras sin que se presione enter*/
 
     terminal_clear();
     rect_border(rborder1);
     rect_border(rcrono);
+    rect_border(rsol_border);
 
     if (refresh_cube3(c, rvista1, cube_file, size, pcube) == ERROR){
-        c_free(c);
-        rect_free(rvista1);
-        tcsetattr(fileno(stdin), TCSANOW, &initial); /*deshace los cambios hechos por _term_init()*/
-        return ERROR;
+        flag = 1;
+        goto free;
     }
 
     pthread_create(&pth, NULL, hilo, dat); /*Call the counter. It has been initialized in mode 0 (stopped and time=0)*/
-
+    
     while (TRUE){
         letter = fgetc(stdin);
 
@@ -256,6 +257,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
             if (stop == 0){ /*counter was running*/
                 pthread_mutex_lock(&mutex);
                 counter_data_set_mode(dat, -1);
+                counter_data_set_time(dat,0,0);
                 pthread_mutex_unlock(&mutex);
                 stop = 1;
                 continue;
@@ -291,27 +293,44 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
         pthread_mutex_unlock(&mutex);
     }
 
-    rect_free(rvista1);
-    rect_free(rcrono);
-    rect_free(rborder1);
-    rect_free(rsol);
-
-    free(cube_file);
-
-    tcsetattr(fileno(stdin), TCSANOW, &initial); /*deshace los cambios hechos por _term_init()*/
 
     if (save_cube(c, save_game_file) == ERROR)
         printf("There was an error when saving the game.\n");
+
+    
 
     pthread_mutex_lock(&mutex);
     pthread_detach(pth);
     pthread_cancel(pth);
     pthread_mutex_unlock(&mutex);
-    free_array_lettersbuffer(l_buff, 34);
-
-    c_free(c);
-    counter_data_free(dat);
+  
     dat = NULL;
+
+    free:
+
+    tcsetattr(fileno(stdin), TCSANOW, &initial); /*deshace los cambios hechos por _term_init()*/
+    
+    if(l_buff!=NULL)
+        free_array_lettersbuffer(l_buff,34);
+    
+    if(dat!=NULL)
+        counter_data_free(dat);
+
+    if(rvista1!=NULL)
+        rect_free(rvista1);
+    if (rcrono != NULL)
+        rect_free(rcrono);
+    if (rborder1 != NULL)
+        rect_free(rborder1);
+    if (rsol != NULL)
+        rect_free(rsol);
+    if(rsol_border!=NULL)
+        rect_free(rsol_border);
+    if(c!=NULL)
+        c_free(c);
+    
+    if(cube_file!=NULL)
+        free(cube_file);
 
     /*in case the loop gets any error*/
     if (flag == 1)
