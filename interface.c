@@ -312,7 +312,7 @@ int hash_letter(char letter){
         if(letter=='U')
             return 17+6;
         if(letter=='S')
-            return 17+9;
+            return 17+7;
         
         return 17+letter%17;
     }
@@ -358,7 +358,7 @@ Status fill_buffer_letter(char* letters, char **buff){
     for(i=0;i<size;i++){
         pos=hash_letter(letters[i]);
         if(ftobuffer(file_of_letter(filename, letters[i]),&(buff[pos]))==-1){
-            free_letter_buffer(buff,34); /*We are assuming the size of **buf*/
+            free_array_lettersbuffer(buff,34); /*We are assuming the size of **buf*/
             return ERROR;
         }
         

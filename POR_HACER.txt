@@ -1,14 +1,7 @@
 
-
-4. Ver como se puede modificar el tamaño del api HACER ZOOM OUT
-
-7. Print element in rectangle., que tenga en cuenta los bordes y no se pueda salir
-
 8. COMPILA BIEN ???? problrma con initial de terminal_funct
 
-9. Pasar ficheros a buffers!!!!!
-
-10. Cargar juego SDL --> da errro?
+10. Cargar juego SDL --> da error ?????
 
 11. Ruta de txt/font en SDL
 
@@ -16,14 +9,5 @@
 
 13. Parar la ejecución de alguna manera?
 
-14. Guía para descargar librerias / script
-
-
-
-
-
 15. Hacer que el counter no se inicie con cualquier tecla
-16. impimir la solucion por partes (variable para ver si la letra enterior es w)
-
-
 

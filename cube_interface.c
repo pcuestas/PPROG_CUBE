@@ -243,7 +243,6 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
             print_from=print_solution_2(solution, rsol, l_buff, letters_per_line,print_from);
             pthread_mutex_unlock(&mutex);
             /*free(solution);*/
-            continue;
         }
 
         else if (letter == 'a'){
@@ -254,7 +253,6 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
             slow_moves2(c, pcube, solution, 450000, rvista1, cube_file, size); /*4th arg is microseconds between moves*/
             free(solution);
             firstmove = 0;
-            continue;
         }
 
         else if (letter == 'o'){
@@ -269,16 +267,21 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
                 counter_data_set_time(dat,0,0);
                 pthread_mutex_unlock(&mutex);
                 stop = 1;
-                continue;
             }
             else{
                 pthread_mutex_lock(&mutex);
                 counter_data_set_mode(dat, 1);
                 pthread_mutex_unlock(&mutex);
                 stop = 0;
-                continue;
             }
+            /*if(is_solved(c)==TRUE){
+                enhorabuena();
+                rect_border(rborder1);
+                rect_border(rcrono);
+            }*/
         }
+
+        
         else{
             cad[0] = letter;
             cad[1] = '\0';
@@ -303,20 +306,20 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
         last_letter=letter;
     }
 
-
-    if (save_cube(c, save_game_file) == ERROR)
-        printf("There was an error when saving the game.\n");
-
-    
-
-    pthread_mutex_lock(&mutex);
-    pthread_detach(pth);
-    pthread_cancel(pth);
-    pthread_mutex_unlock(&mutex);
   
    
 
     free:
+
+    if(flag==0){
+        pthread_mutex_lock(&mutex);
+        pthread_detach(pth);
+        pthread_cancel(pth);
+        pthread_mutex_unlock(&mutex);
+        if (save_cube(c, save_game_file) == ERROR)
+            printf("There was an error when saving the game.\n");
+    }
+
 
     tcsetattr(fileno(stdin), TCSANOW, &initial); /*deshace los cambios hechos por _term_init()*/
     
@@ -345,7 +348,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
 
     /*in case the loop gets any error*/
     if (flag == 1)
-        return ERROR;
+        exit(EXIT_FAILURE);
 
     return OK;
 }

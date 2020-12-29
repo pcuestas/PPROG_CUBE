@@ -23,7 +23,7 @@
 #endif
 
 #ifndef FONT_TTF
-#define FONT_TTF "/usr/share/fonts/truetype/freefont/FreeMonoOblique.ttf"
+#define FONT_TTF "./fonts/FreeMono.ttf"
 #endif
 
 #define MAX_CAD 500
