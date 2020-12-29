@@ -115,8 +115,10 @@ Status print_solution(char*sol,rect*r,int letters_per_line);
  * @param sol string with the solution
  * @param r pointer to rect where to print it (one letter is 9x9)
  * @param letters_per_line number of letters that are written per line
+ * @param print_from position of the string to start printing
+ * @return -1 if all the sol has been printed or the number of chars printed
  */
-Status print_solution_2(char *sol, rect *r, char **l_buffer, int letters_per_line);
+int print_solution_2(char *sol, rect *r, char **l_buffer, int letters_per_line,int print_from);
 
 
 /**
@@ -145,7 +147,7 @@ Status fill_buffer_letter(char *letters, char **buff);
 
 
 /**
- * @brief allocates the array of buffers that will be filled with the letters
+ * @brief allocates the array of buffers (only the char** not the 34 char*) that will be filled with the letters
  * @param size number of buffers of the array (it should be 34)
  * 
  */ 

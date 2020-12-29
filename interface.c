@@ -318,17 +318,6 @@ int hash_letter(char letter){
     }
 }
 
-void free_letter_buffer(char **buff, int size){
-
-    int i;
-
-    if(buff){
-        for(i=0;i<size;i++){
-            if(buff[i]!=NULL)
-                free(buff[i]);
-        }
-    }
-}
 
 char ** allocate_array_lettersbuffer(int size){
     int i;
@@ -351,6 +340,8 @@ void free_array_lettersbuffer(char ** buff, int size){
             if(buff[i]!=NULL)
                 free(buff[i]);
         }
+
+        free(buff);
     }
 }
 
@@ -428,17 +419,17 @@ Status print_solution(char *sol, rect *r, int letters_per_line){
     return OK;
 }
 
-Status print_solution_2(char *sol, rect *r, char**l_buffer, int letters_per_line){
+int print_solution_2(char *sol, rect *r, char**l_buffer, int letters_per_line,int print_from){
 
     int n, i, line, l, column, c, printed = 0, max_line, total = 0;
     int dist_inter_line = 5, dist_inter_letter = 8,pos;
     rect *r_aux;
 
     if (!sol || !r || letters_per_line < 1||!l_buffer)
-        return ERROR;
+        return -2;
 
     if ((r_aux = rect_copy(r)) == NULL)
-        return ERROR;
+        return -2;
 
     max_line =(r->h / dist_inter_line);
 
@@ -450,7 +441,7 @@ Status print_solution_2(char *sol, rect *r, char**l_buffer, int letters_per_line
 
     rect_clear(r);
 
-    for (i = 0; i < n ; i++){
+    for (i = print_from; i < n ; i++){
 
         if (printed == letters_per_line){
             l += dist_inter_line;
@@ -478,7 +469,9 @@ Status print_solution_2(char *sol, rect *r, char**l_buffer, int letters_per_line
     }
 
     rect_free(r_aux);
-    return OK;
+    if(i==n-1)
+        return -1;
+    return i;
 }
 
 Status print_confeti(rect *r, int ndots){

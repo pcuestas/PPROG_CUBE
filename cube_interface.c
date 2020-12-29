@@ -115,10 +115,10 @@ void *hilo(void *dat)
 int c_interface(int option, int use_saved_game, char *save_game_file)
 {
     Cube3 *c = NULL;
-    char cad[MAX_CAD], letter, *solution = NULL;
+    char cad[MAX_CAD], letter,last_letter=' ', *solution = NULL;
     short flag = 0;
     char scramblefile[MAX_CAD] = SCRAMBLES_TXT, scramble[MAX_LINE];
-    int letters_per_line = 11, size;
+    int letters_per_line = 11, size,print_from=0;
     char *cube_file=NULL;
     char *letters = "RUFLBDMESXYZruflbdmesxyz",**l_buff=NULL;
 
@@ -199,6 +199,12 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
     while (TRUE){
         letter = fgetc(stdin);
 
+        if(last_letter!='A' && solution!=NULL){
+            free(solution);
+            solution=NULL;
+        }
+            
+
         if (letter == 'q'){
             pthread_mutex_lock(&mutex);
             counter_data_set_mode(dat, 1);
@@ -212,7 +218,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
                 break;
             }
             pthread_mutex_lock(&mutex);
-            print_solution_2(scramble, rsol, l_buff, letters_per_line);
+            print_solution_2(scramble, rsol, l_buff, letters_per_line,0);
             counter_data_set_time(dat, 0, 0);
             counter_data_set_mode(dat, 0);
             pthread_mutex_unlock(&mutex);
@@ -222,25 +228,28 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
         else if (letter == 'W'){
             solution = solve_cube(c);
             pthread_mutex_lock(&mutex);
-            print_solution_2(solution, rsol, l_buff, letters_per_line);
+            print_solution_2(solution, rsol, l_buff, letters_per_line,0);
             pthread_mutex_unlock(&mutex);
             c_moves(c, solution);
             free(solution);
         }
 
         else if (letter == 'A'){
-            solution = solve_cube(c);
+            if(last_letter!='A'){
+                solution = solve_cube(c);
+                print_from=0;
+            }
             pthread_mutex_lock(&mutex);
-            print_solution_2(solution, rsol, l_buff, letters_per_line);
+            print_from=print_solution_2(solution, rsol, l_buff, letters_per_line,print_from);
             pthread_mutex_unlock(&mutex);
-            free(solution);
+            /*free(solution);*/
             continue;
         }
 
         else if (letter == 'a'){
             solution = solve_cube(c);
             pthread_mutex_lock(&mutex);
-            print_solution_2(solution, rsol,l_buff, letters_per_line);
+            print_solution_2(solution, rsol,l_buff, letters_per_line,0);
             pthread_mutex_unlock(&mutex);
             slow_moves2(c, pcube, solution, 450000, rvista1, cube_file, size); /*4th arg is microseconds between moves*/
             free(solution);
@@ -291,6 +300,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
             break;
         }
         pthread_mutex_unlock(&mutex);
+        last_letter=letter;
     }
 
 
@@ -304,7 +314,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
     pthread_cancel(pth);
     pthread_mutex_unlock(&mutex);
   
-    dat = NULL;
+   
 
     free:
 
@@ -315,6 +325,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
     
     if(dat!=NULL)
         counter_data_free(dat);
+    dat = NULL;
 
     if(rvista1!=NULL)
         rect_free(rvista1);
