@@ -23,7 +23,7 @@
 #endif
 
 #ifndef FONT_TTF
-#define FONT_TTF "./fonts/FreeMono.ttf"
+#define FONT_TTF "./fonts/FreeMonoOblique.ttf"
 #endif
 
 #define MAX_CAD 500
@@ -145,8 +145,8 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
     Cube3 *c = NULL;
 
     SDL_GLContext ctx;
-    SDL_Window *window, *window2;
-    SDL_Renderer *renderer;
+    SDL_Window *window=NULL, *window2=NULL;
+    SDL_Renderer *renderer=NULL;
     SDL_Event ev;
     TTF_Font *font2=NULL;
 
