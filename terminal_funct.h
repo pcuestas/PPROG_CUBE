@@ -11,7 +11,7 @@
 
 struct termios initial;
 
-/*
+/** @brief
   Initializes the terminal in such a way that we can read the input
   without echo on the screen
 */
