@@ -118,7 +118,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
     char cad[MAX_CAD], letter,last_letter=' ', *solution = NULL;
     short flag = 0;
     char scramblefile[MAX_CAD] = SCRAMBLES_TXT, scramble[MAX_LINE];
-    int letters_per_line = 11, size,print_from=0;
+    int letters_per_line = 11, size,print_from=-1;
     char *cube_file=NULL;
     char *letters = "RUFLBDMESXYZruflbdmesxyz",**l_buff=NULL;
 
@@ -199,7 +199,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
     while (TRUE){
         letter = fgetc(stdin);
 
-        if(last_letter!='A' && solution!=NULL){
+        if((last_letter!='A'||print_from==-1) && solution!=NULL){
             free(solution);
             solution=NULL;
         }
@@ -232,10 +232,11 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
             pthread_mutex_unlock(&mutex);
             c_moves(c, solution);
             free(solution);
+            solution=NULL;
         }
 
         else if (letter == 'A'){
-            if(last_letter!='A'){
+            if(last_letter!='A'||print_from==-1){
                 solution = solve_cube(c);
                 print_from=0;
             }
@@ -252,6 +253,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
             pthread_mutex_unlock(&mutex);
             slow_moves2(c, pcube, solution, 450000, rvista1, cube_file, size); /*4th arg is microseconds between moves*/
             free(solution);
+            solution=NULL;
             firstmove = 0;
         }
 
@@ -259,6 +261,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
             terminal_clear();
             rect_border(rborder1);
             rect_border(rcrono);
+            rect_border(rsol_border);
         }
         else if (letter == 32){ /*stop crono*/
             if (stop == 0){ /*counter was running*/
@@ -278,6 +281,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
                 enhorabuena();
                 rect_border(rborder1);
                 rect_border(rcrono);
+                rect_border(rsol_border);
             }*/
         }
 

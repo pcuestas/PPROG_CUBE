@@ -469,7 +469,7 @@ int print_solution_2(char *sol, rect *r, char**l_buffer, int letters_per_line,in
     }
 
     rect_free(r_aux);
-    if(i==n-1)
+    if(i==n)
         return -1;
     return i;
 }

@@ -343,6 +343,13 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
     if (save_cube(c, save_game_file) == ERROR)
         printf("There was an error when saving the game.\n");
 
+    if((renderer)!=NULL)
+        SDL_DestroyRenderer(renderer);
+    if((window2)!=NULL)
+        SDL_DestroyWindow(window2);
+    if((window)!=NULL)
+        SDL_DestroyWindow(window);
+
     pthread_mutex_lock(&mutex_sdl);
     dat.mode = 2; /*To suicide thread*/
     pthread_mutex_unlock(&mutex_sdl);
