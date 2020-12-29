@@ -10,7 +10,7 @@
 #include <SDL2/SDL_ttf.h>
 
 #ifndef FONT_TTF
-#define FONT_TTF "/usr/share/fonts/truetype/freefont/FreeMonoOblique.ttf"
+#define FONT_TTF "./fonts/FreeMonoOblique.ttf"
 #endif
 
 #define MAX_CAD 500
