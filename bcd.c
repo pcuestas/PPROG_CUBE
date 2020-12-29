@@ -6,7 +6,7 @@
 #define GROSOR 3 /*grosor del tramo*/
 #define LONG 5   /*longitud del tramo*/
 #define CHAR 32  /*char used to draw bcd*/
-#define COLOR 7
+#define COLOR 7   /*Color of the segments in the bcd*/
 
 /*
 
