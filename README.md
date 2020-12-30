@@ -6,13 +6,10 @@ Nombre del grupo: *`is_prime()`*
 ## Comandos para instalar en Ubuntu las librerías necesarias para compilar el juego
 ```
 sudo apt-get install libsdl2-2.0
-sudo aptitude install libsdl1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev
 sudo apt install libsdl1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev
-sudo apt-get install libsdl2-image-dev
 sudo apt-get install libsdl2-mixer-dev 
 sudo apt-get install libsdl2-ttf-dev 
 sudo apt-get install libglu1-mesa-dev freeglut3-dev mesa-common-dev
-sudo apt-get install freeglut3-dev
 ```
 
 ## Controles dentro de la interfaz del cubo 
