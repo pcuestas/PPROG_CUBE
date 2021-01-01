@@ -3,7 +3,6 @@
 #include "print_c.h"
 #include "solver.h"
 
-
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 #include <SDL2/SDL_timer.h>
@@ -15,29 +14,12 @@
 
 #define MAX_CAD 500
 
-static SDL_GLContext ctx;
-static SDL_Window *window, *window2;
-static SDL_Renderer *renderer;
-static SDL_Texture *texture1;
-
-void quit(int rc)
-{
-    TTF_Quit();
-    if (ctx)
-        SDL_GL_DeleteContext(ctx);
-    SDL_DestroyTexture(texture1);
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_DestroyWindow(window2);
-    SDL_Quit();
-}
-
 char **separarCadenas(char *cad)
 {
 
-    char *texto = (char*)malloc(81);
-    char *texto2 = (char*)malloc(81);
-    char *texto3 = (char*)malloc(81);
+    char *texto = (char *)malloc(81);
+    char *texto2 = (char *)malloc(81);
+    char *texto3 = (char *)malloc(81);
     char **textos = (char **)malloc(3 * sizeof(char *));
     int i, j, len;
     len = strlen(cad);
@@ -58,7 +40,7 @@ char **separarCadenas(char *cad)
         {
             texto2[j] = cad[i];
         }
-        texto2[j]='\0';
+        texto2[j] = '\0';
         textos[1] = texto2;
     }
     else
@@ -75,7 +57,7 @@ char **separarCadenas(char *cad)
         {
             texto3[j] = cad[i];
         }
-        texto3[j]='\0';
+        texto3[j] = '\0';
         textos[1] = texto2;
         textos[2] = texto3;
     }
@@ -159,7 +141,6 @@ void SDL_DisplayText(SDL_Renderer *renderer, char *text, TTF_Font *font)
         SDL_RenderPresent(renderer);
         SDL_DestroyTexture(texture2);
         SDL_DestroyTexture(texture3);
-
     }
 
     SDL_DestroyTexture(texture1);
@@ -367,23 +348,25 @@ void SlowMoveRot(Cube3 *c, int *w, int *h, double **stickers, char *moves, SDL_W
     Render_wr(w, h, stickers, _window, _ctx, option);
 }
 
-void SDL_DisplayTextWRAPPER(SDL_Window **_window2, char *solution, SDL_Renderer **_renderer, TTF_Font *_font){
-    if((*_renderer)!=NULL)
+void SDL_DisplayTextWRAPPER(SDL_Window **_window2, char *solution, SDL_Renderer **_renderer, TTF_Font *_font)
+{
+    if ((*_renderer) != NULL)
         SDL_DestroyRenderer(*_renderer);
-    if((*_window2)!=NULL)
+    if ((*_window2) != NULL)
         SDL_DestroyWindow(*_window2);
 
     (*_window2) = SDL_CreateWindow("Rubik Cube PPROG", 410, 250, 900, 80, SDL_WINDOW_BORDERLESS);
 
-    if (!(*_window2)){
+    if (!(*_window2))
+    {
         printf("SDL_Error: %s\n", SDL_GetError());
         exit(1);
     }
-    _font=TTF_OpenFont(FONT_TTF, 20);
+    _font = TTF_OpenFont(FONT_TTF, 20);
 
     (*_renderer) = SDL_CreateRenderer(*_window2, -1, SDL_RENDERER_ACCELERATED);
-    
+
     SDL_DisplayText(*_renderer, solution, _font);
 
-    free(_font);
+    TTF_CloseFont(_font);
 }

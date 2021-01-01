@@ -30,7 +30,6 @@
 
 pthread_mutex_t mutex_sdl = PTHREAD_MUTEX_INITIALIZER;
 
-
 typedef struct _counter_data_sdl counter_data_sdl;
 
 struct _counter_data_sdl
@@ -38,12 +37,13 @@ struct _counter_data_sdl
     int sec, min, h, mode; /*Mode=0: show time 00:00. Mode=-1 Counter stopped. Mode=1 Counter running. Mode=2 kill thread*/
 };
 
+SDL_Window *window_clock;
+
 void *counter(void *dat)
 {
     SDL_Event event;
     SDL_Renderer *renderer;
     SDL_Texture *texture1 = NULL;
-    SDL_Window *window;
     char text[200];
     int quit, stop = 0, blank = 0;
     TTF_Font *font;
@@ -55,8 +55,8 @@ void *counter(void *dat)
     strcpy(text, "");
 
     /* Inint TTF. */
-    window = SDL_CreateWindow("", 440, 150, 300, 150, SDL_WINDOW_BORDERLESS);
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    window_clock = SDL_CreateWindow("", 440, 150, 300, 100, SDL_WINDOW_BORDERLESS);
+    renderer = SDL_CreateRenderer(window_clock, -1, SDL_RENDERER_ACCELERATED);
 
     font = TTF_OpenFont(FONT_TTF, 50);
     if (font == NULL)
@@ -129,9 +129,10 @@ void *counter(void *dat)
         {
             pthread_mutex_lock(&mutex_sdl);
             SDL_DestroyTexture(texture1);
+            TTF_CloseFont(font);
 
             SDL_DestroyRenderer(renderer);
-            SDL_DestroyWindow(window);
+            SDL_DestroyWindow(window_clock);
             pthread_mutex_unlock(&mutex_sdl);
             return NULL;
         }
@@ -145,16 +146,16 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
     Cube3 *c = NULL;
 
     SDL_GLContext ctx;
-    SDL_Window *window=NULL, *window2=NULL;
-    SDL_Renderer *renderer=NULL;
+    SDL_Window *window = NULL, *window2 = NULL;
+    SDL_Renderer *renderer = NULL;
     SDL_Event ev;
-    TTF_Font *font2=NULL;
+    TTF_Font *font2 = NULL;
 
     char text[MAX_CAD] = "", a = 0, *solution = NULL, scramble[MAX_LINE];
     double **stickers = NULL;
     int flag = 0, j = 0, w, h;
 
-    
+    int x, y;
 
     pthread_t hilo;
     counter_data_sdl dat;
@@ -222,6 +223,15 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
     while (flag == 0)
     {
 
+        SDL_GetWindowPosition(window, &x, &y);
+        if (x != 400 || y != 100)
+        {
+            SDL_SetWindowPosition(window, 400, 100);
+            if (window2 != NULL)
+                SDL_RaiseWindow(window2);
+            SDL_RaiseWindow(window_clock);
+        }
+
         while (SDL_PollEvent(&ev))
         {
 
@@ -247,7 +257,6 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
 
                 a = text[j]; /*letter read*/
 
-
                 if (a == 'R' || a == 'L' || a == 'M' || a == 'E' || a == 'U' || a == 'D' || a == 'F' || a == 'B' || a == 'S' || a == 'r' || a == 'l' || a == 'm' || a == 'e' || a == 'u' || a == 'd' || a == 'f' || a == 'b' || a == 's' || a == 'x' || a == 'X' || a == 'y' || a == 'Y' || a == 'z' || a == 'Z')
                 {
                     if (firstmove == 0)
@@ -265,7 +274,6 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
 
                     SDL_DisplayTextWRAPPER(&window2, scramble, &renderer, font2);
 
-                    
                     pthread_mutex_lock(&mutex_sdl);
                     dat.min = 0;
                     dat.sec = 0;
@@ -275,28 +283,26 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
                     firstmove = 0;
                 }
                 else if (a == 'W')
-                {             
-                    solution = solve_cube(c); 
+                {
+                    solution = solve_cube(c);
                     SDL_DisplayTextWRAPPER(&window2, solution, &renderer, font2);
 
-                    
                     c_moves(c, solution);
                     free(solution);
                 }
                 else if (a == 'A')
-                {                                       
-                    solution = solve_cube(c); 
+                {
+                    solution = solve_cube(c);
 
                     SDL_DisplayTextWRAPPER(&window2, solution, &renderer, font2);
 
                     free(solution);
                 }
                 else if (a == 'a')
-                {                                                          
-                    solution = solve_cube(c); 
+                {
+                    solution = solve_cube(c);
 
                     SDL_DisplayTextWRAPPER(&window2, solution, &renderer, font2);
-
 
                     pthread_mutex_lock(&mutex_sdl);
                     dat.mode = 0;
@@ -343,18 +349,18 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
     if (save_cube(c, save_game_file) == ERROR)
         printf("There was an error when saving the game.\n");
 
-    if((renderer)!=NULL)
+    if ((renderer) != NULL)
         SDL_DestroyRenderer(renderer);
-    if((window2)!=NULL)
+    if ((window2) != NULL)
         SDL_DestroyWindow(window2);
-    if((window)!=NULL)
+    if ((window) != NULL)
         SDL_DestroyWindow(window);
 
     pthread_mutex_lock(&mutex_sdl);
     dat.mode = 2; /*To suicide thread*/
     pthread_mutex_unlock(&mutex_sdl);
 
-    SDL_Delay(1000);
+    SDL_Delay(500);
     pthread_detach(hilo);
     pthread_cancel(hilo);
 
@@ -363,8 +369,11 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
 
     /*pthread_join(hilo,NULL); Ya no es necesario. con mode2 hacemos que el hilo haga return*/
     /*pthread_cancel(hilo);*/
-     
+
     TTF_Quit();
-    quit(0);
+    if ((ctx) != NULL)
+        SDL_GL_DeleteContext(ctx);
+    SDL_Quit();
+
     return 0;
 }
