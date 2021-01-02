@@ -581,7 +581,7 @@ Status print_confeti(rect *r, int ndots){
 Status fade_to_black(){
 
     int columns,lines,i, center[2];
-    int incr_l,w,l, incr_w,times=5;
+    int incr_l,w,l, incr_w,times=15;
     rect *r;
 
     columns=get_columnsfromterm();
@@ -610,7 +610,7 @@ Status fade_to_black(){
         rect_setlength(r,w);
         rect_setline(r,center[1]-l);
         rect_setcolumn(r,center[0]-w);
-        usleep(500000);
+        usleep(60000);
     }
 
     terminal_clear();

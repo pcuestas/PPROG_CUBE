@@ -278,6 +278,8 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
                 stop = 0;
             }
             if(is_solved(c)==TRUE){
+                if(firstmove==0)
+                    goto refresh;
                 congratulations();
                 rect_border(rborder1);
                 rect_border(rcrono);
@@ -306,6 +308,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
                 firstmove = 1;
             }
         }
+        refresh: 
         pthread_mutex_lock(&mutex);
         if (refresh_cube3(c, rvista1, cube_file, size, pcube) == ERROR){
             flag = 1;
