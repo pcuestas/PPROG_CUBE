@@ -199,6 +199,31 @@ void rect_clear(rect*r){
     
 }
 
+void rect_clear_black(rect*r){
+    int line, column, h, l;
+    int i, j;
+
+    if (!r)
+        return;
+
+    line = r->line;
+    column = r->column;
+    h = r->h;
+    l = r->l;
+
+    printf("%c[;;0m",27);
+
+    for (i = 0; i < h; i++)
+    {
+        printf("%c[%i;%iH", 27, line + i, column);
+        for (j = 0; j < l; j++){
+            printf(" ");
+        }
+    }
+
+    printf("%c[0m", 27);
+}
+
 Status rect_border(rect *r){
 
     int line, column, l, h, i;

@@ -264,6 +264,8 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
             rect_border(rsol_border);
         }
         else if (letter == 32){ /*stop crono*/
+            if(firstmove==0)
+                continue;
             if (stop == 0){ /*counter was running*/
                 pthread_mutex_lock(&mutex);
                 counter_data_set_mode(dat, -1);
