@@ -360,6 +360,9 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
     if(cube_file!=NULL)
         free(cube_file);
 
+    if(solution!=NULL)
+        free(solution);
+
     /*in case the loop gets any error*/
     if (flag == 1)
         exit(EXIT_FAILURE);

@@ -663,4 +663,5 @@ void congratulations(){
 
     fade_to_black();
 
+    rect_free(r);
 }
