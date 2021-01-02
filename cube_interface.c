@@ -267,22 +267,27 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
             if (stop == 0){ /*counter was running*/
                 pthread_mutex_lock(&mutex);
                 counter_data_set_mode(dat, -1);
-                counter_data_set_time(dat,0,0);
                 pthread_mutex_unlock(&mutex);
                 stop = 1;
             }
             else{
                 pthread_mutex_lock(&mutex);
+                counter_data_set_time(dat, 0, 0);
                 counter_data_set_mode(dat, 1);
                 pthread_mutex_unlock(&mutex);
                 stop = 0;
             }
-            /*if(is_solved(c)==TRUE){
-                enhorabuena();
+            if(is_solved(c)==TRUE){
+                congratulations();
                 rect_border(rborder1);
                 rect_border(rcrono);
                 rect_border(rsol_border);
-            }*/
+                counter_data_set_time(dat, 0, 0);
+                counter_data_set_mode(dat, 0);
+                pthread_mutex_unlock(&mutex);
+                stop = 0;
+                firstmove = 0;
+            }
         }
 
         

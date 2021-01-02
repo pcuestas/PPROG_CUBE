@@ -13,7 +13,7 @@ LIB2=-lpthread $(LIB_SDL)
 
 
 MAIN=main
-MAINOBJ=main.o utils.o interface.o
+MAINOBJ=main.o utils.o interface.o 
 
 all: $(EXE)
 

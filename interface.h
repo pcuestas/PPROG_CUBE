@@ -156,6 +156,11 @@ char **allocate_array_lettersbuffer(int size);
 void free_array_lettersbuffer(char **buff, int size);
 
 
+/**
+ * @brief Effect of fade to black starting from the center of the screen
+ */
 Status fade_to_black();
 
+
+void congratulations();
 #endif

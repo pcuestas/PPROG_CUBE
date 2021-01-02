@@ -2,8 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include "interface.h"
+#include <termios.h>
 
 #define LETTERS_PATH "./txt_files/letters_small/"
+#define CONGRATULATIONS_PATH "./txt_files/congratulations.txt"
 #define MAX_LEN 1024
 
 extern int usleep(unsigned int );
@@ -578,31 +580,62 @@ Status print_confeti(rect *r, int ndots){
 
 Status fade_to_black(){
 
-    int columns,lines,n,i;
-    int incr=5,w;
+    int columns,lines,i, center[2];
+    int incr_l,w,l, incr_w,times=5;
     rect *r;
 
     columns=get_columnsfromterm();
     lines=get_linesfromterm();
 
-    if(columns<lines)
-        lines=columns;
-    w=incr;
-    n=lines/w;
+    center[0]=columns/2;
+    center[1]=lines/2;
 
-    if(!(r=rect_init(1,1,w,w)))
+    incr_l=lines/(2*times);
+    incr_w=columns/(2*times);
+    
+
+    l=incr_l;
+    w=incr_w;
+
+    if(!(r=rect_init(center[1],center[0],incr_l,incr_w)))
         return ERROR;
     
-    for(i=0;i<n;i++){
+    for(i=0;i<times;i++){
         rect_clear(r);
-        w+=incr;
+        
+        l+=incr_l;
+        w+=incr_w;
+
         rect_setheight(r,w);
         rect_setlength(r,w);
+        rect_setline(r,center[1]-l);
+        rect_setcolumn(r,center[0]-w);
         usleep(500000);
     }
 
     terminal_clear();
-    printf("%i veces el total es %i. \t",i, n);
     rect_free(r);
     return OK;
+}
+
+
+void congratulations(){
+
+    rect *r=NULL;
+    char c;
+
+    if(!(r=rect_init(20,20,1,1)))
+        return;
+
+
+    terminal_clear();
+ 
+    print_element(CONGRATULATIONS_PATH,r);
+
+    while(scanf("%c",&c)==0){
+        continue;
+    }
+
+    fade_to_black();
+
 }

@@ -24,7 +24,7 @@ Todos estos movimientos son considerados estándar y se conocen como "Singmaster
 **Además se puede usar**: 
 * w: selecciona (pseudo)aleatoriamente una de entre todas las mezclas en el fichero scrambles.txt y pone el cronómetro a cero
 * W: utiliza el algoritmo de solver.c para generar una string que resuelve el cubo, la ejecuta de una vez e imprime el cubo (resuelto)
-* A: muestra en la pantalla la string generada por el solver.h
+* A: muestra en la pantalla la string generada por el solver.h, si no cabe de una vez se puede ver la siguiente parte de la solución volviendo a pulsar 'A'.
 * a: resuelve el cubo ejecutando cada movimiento con una pequeña espera antes de cada uno para que se vea en la pantalla cómo el algoritmo utilizado resuelve el cubo.
 * espacio: para/reinicia el cronómetro
 * o: limpia la terminal y vuelve a imprimir el contenido por si hubiese ocurrido algún error.
