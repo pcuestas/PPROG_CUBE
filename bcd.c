@@ -43,6 +43,7 @@ counter_data *counter_data_init(){
     dat->min=0;
     dat->sec=0;
     dat->mode=0;
+    dat->display=0;
 
     return dat;
 }
@@ -63,6 +64,14 @@ Status counter_data_set_mode(counter_data *dat, int mode){
         return ERROR;
     
     dat->mode=mode;
+    return OK;
+}
+
+Status counter_data_set_display(counter_data *dat, int display){
+    if(!dat||display>1||display<0)
+        return ERROR;
+    
+    dat->display=display;
     return OK;
 }
 

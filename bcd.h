@@ -8,10 +8,9 @@
 
 typedef struct _counter_data counter_data;
 
-
 struct _counter_data{
-    int sec, min, mode; /*Mode=0: show time 00:00. Mode=-1 Counter stopped. Mode=1 Counter running*/
-    rect *rcounter[4];  /*Array of counters where to print min(r[0],r[1]) and secs(r[2],r[3])*/
+    int sec, min, mode, display; /*Mode=0: show time 00:00. Mode=-1 Counter stopped. Mode=1 Counter running*/
+    rect *rcounter[4];           /*Array of counters where to print min(r[0],r[1]) and secs(r[2],r[3])*/
 };
 
 /**
@@ -27,7 +26,7 @@ void counter_data_free(counter_data *dat);
 
 Status counter_data_set_time(counter_data* dat,int min, int sec);
 Status counter_data_set_mode(counter_data* dat, int mode);
-
+Status counter_data_set_display(counter_data*dat, int display);
 /**
  * @brief Stablish the data of each rectangle of the struct. Should be called with l=15,h=17
  */

@@ -6,7 +6,7 @@
 #include <termios.h>
 
 #define LETTERS_PATH "./txt_files/letters_small/"
-#define CONGRATULATIONS_PATH "./txt_files/congratulations.txt"
+
 #define MAX_LEN 1024
 
 
@@ -203,19 +203,19 @@ void rect_clear(rect*r){
     
 }
 
-void rect_clear_black(rect*r){
+Status rect_color(rect*r, int color){
     int line, column, h, l;
     int i, j;
 
-    if (!r)
-        return;
+    if (!r||color<0)
+        return ERROR;
 
     line = r->line;
     column = r->column;
     h = r->h;
     l = r->l;
 
-    printf("%c[;;0m",27);
+    printf("%c[;;%im",27,color);
 
     for (i = 0; i < h; i++)
     {
@@ -226,6 +226,8 @@ void rect_clear_black(rect*r){
     }
 
     printf("%c[0m", 27);
+
+    return OK;
 }
 
 Status rect_border(rect *r){
@@ -610,7 +612,7 @@ Status print_confeti(rect *r, int ndots){
 Status fade_to_black(){
 
     int columns,lines,i, center[2];
-    int incr_l,w,l, incr_w,times=15;
+    int incr_l,h,l, incr_h,times=15;
     rect *r;
 
     columns=get_columnsfromterm();
@@ -619,26 +621,30 @@ Status fade_to_black(){
     center[0]=columns/2;
     center[1]=lines/2;
 
-    incr_l=lines/(2*times);
-    incr_w=columns/(2*times);
+    incr_h=lines/(2*times);
+    incr_l=columns/(2*times);
     
 
     l=incr_l;
-    w=incr_w;
+    h=incr_h;
 
-    if(!(r=rect_init(center[1],center[0],incr_l,incr_w)))
+    if(!(r=rect_init(center[1],center[0],2*incr_l,2*incr_h)))
         return ERROR;
     
     for(i=0;i<times;i++){
-        rect_clear(r);
+
+        if(i!=0){
+            rect_color(r, WHITE);
+        }
         
         l+=incr_l;
-        w+=incr_w;
+        h+=incr_h;
 
-        rect_setheight(r,w);
-        rect_setlength(r,w);
-        rect_setline(r,center[1]-l);
-        rect_setcolumn(r,center[0]-w);
+        rect_setheight(r,2*h);
+        rect_setlength(r,2*l);
+        
+        rect_setline(r,center[1]-h);
+        rect_setcolumn(r,center[0]-l);
         usleep(60000);
     }
 
@@ -648,38 +654,3 @@ Status fade_to_black(){
 }
 
 
-void congratulations(){
-
-    rect *r=NULL;
-    char c;
-
-    if(!(r=rect_init(20,20,1,1)))
-        return;
-
-
-    terminal_clear();
- 
-    print_element(CONGRATULATIONS_PATH,r);
-
-    usleep(500000); /*wait a halve second, to avoid bugs*/
-
-    tcsetattr(fileno(stdin), TCSAFLUSH, &initial); /*reestablece los valores iniciales de la terminal en la terminal*/
-    _term_init(); /*modifica los parámetros de la terminal para poder leer las letras sin que se presione enter*/
-
-
-    while(scanf("%c",&c)==0){
-        continue;
-    }
-
-    fade_to_black();
-
-    rect_free(r);
-
-    fflush(stdin);
-
-    usleep(500000); /*wait a halve second, to avoid bugs*/
-    
-    tcsetattr(fileno(stdin), TCSAFLUSH, &initial); /*reestablece los valores iniciales de la terminal en la terminal*/
-    _term_init(); /*modifica los parámetros de la terminal para poder leer las letras sin que se presione enter*/
-
-}

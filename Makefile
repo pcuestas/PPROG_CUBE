@@ -5,7 +5,7 @@ CC=gcc
 HEADERS=*.h
 
 EXE=game
-OBJ=cube.o solver.o print_c.o interface.o bcd.o terminal_funct.o cube_interface.o menu.o lib_funct.o lib_struct.o SDL_interface.o utils.o $(EXE).o
+OBJ=cube.o extra.o solver.o print_c.o interface.o bcd.o terminal_funct.o cube_interface.o menu.o lib_funct.o lib_struct.o SDL_interface.o utils.o $(EXE).o
 
 
 LIB_SDL=-lSDL2main -lSDL2 -lSDL2_ttf -lGLU -lGL 
@@ -13,7 +13,7 @@ LIB2=-lpthread $(LIB_SDL)
 
 
 MAIN=main
-MAINOBJ=main.o utils.o interface.o 
+MAINOBJ=main.o utils.o interface.o  terminal_funct.o
 
 all: $(EXE)
 

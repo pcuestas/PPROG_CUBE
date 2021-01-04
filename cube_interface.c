@@ -7,6 +7,7 @@
 #include <pthread.h>
 #include <termios.h>
 
+#include "extra.h"
 #include "terminal_funct.h"
 #include "cube.h"
 #include "solver.h"
@@ -79,6 +80,7 @@ void *hilo(void *dat)
                 pthread_mutex_unlock(&mutex);
                 stop = 1;
             }
+
         }
 
         while (d->mode == 1) /*Counter running*/
@@ -146,11 +148,11 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
     fill_buffer_letter(letters,l_buff);
 
     /*Initialize rectangles for all the elements of the interface*/
-    counter_data_set_rects(dat, 15+2, 15+198, 15, 17);
-    rvista1 = rect_init(15+3, 15+7, 180, 78);
-    rcrono = rect_init(15+1, 15+192, 17 * 5+3, 19);
+    counter_data_set_rects(dat, 10+2, 72+198, 15, 17);
+    rvista1 = rect_init(10+3, 72+7, 180, 78);
+    rcrono = rect_init(10+1, 72+192, 17 * 5+3+1, 19);
     rborder1 = rect_expand(rvista1, 3, 2);
-    rsol = rect_init(15+24, 15+194, 88, 57); /*8 letters per line, 10 lines --> 80 letters */
+    rsol = rect_init(10+24, 72+194, 88, 57); /*8 letters per line, 10 lines --> 80 letters */
     rsol_border=rect_expand(rsol,2,2);
 
     if(!rvista1||!rcrono||!rborder1||!rsol){
@@ -292,7 +294,8 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
             }
             if(is_solved(c)==TRUE){
                 if(firstmove!=0){
-                    congratulations();
+
+                    congratulations(dat);
 
                     rect_border(rborder1);
                     rect_border(rcrono);

@@ -13,6 +13,7 @@
 
 typedef struct _rect rect;
 
+
 /**
  * @brief Allocates a rectangle and sets its data.
  */
@@ -39,6 +40,15 @@ Status rect_border(rect *r);
  * @return pointer to rect or NULL in case of error;
  */
 rect *rect_expand(rect *r, int x, int y);
+
+
+/**
+ * @brief paint a rectangle of a specfic color
+ * @param r pointer to rectangle already allocated
+ * @param color code of the color for the ESC sequence
+ * @return OK or ERROR in case of invalid inputs
+ */ 
+Status rect_color(rect*r, int color);
 
 /********GETTERS AND SETTERS************/
 Status rect_setline(rect*r,int line);
@@ -162,5 +172,5 @@ void free_array_lettersbuffer(char **buff, int size);
 Status fade_to_black();
 
 
-void congratulations();
+
 #endif
