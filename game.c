@@ -33,6 +33,9 @@ int main(void){
         }
         else
             SDL_interface(option, use_saved_game, SAVE_FILE);
+
+        
+        tcsetattr(fileno(stdin), TCSANOW, &ini__); /*reestablece los valores iniciales de la terminal en la terminal*/
     }
 
 

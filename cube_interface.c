@@ -114,6 +114,7 @@ void *hilo(void *dat)
 
 int c_interface(int option, int use_saved_game, char *save_game_file)
 {
+
     Cube3 *c = NULL;
     char cad[MAX_CAD], letter,last_letter=' ', *solution = NULL;
     short flag = 0;
@@ -206,10 +207,6 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
             
 
         if (letter == 'q'){
-            pthread_mutex_lock(&mutex);
-            counter_data_set_mode(dat, 1);
-            pthread_mutex_unlock(&mutex);
-
             break;
         }
         else if (letter == 'w'){
@@ -282,9 +279,12 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
             if(is_solved(c)==TRUE){
                 if(firstmove!=0){
                     congratulations();
+
                     rect_border(rborder1);
                     rect_border(rcrono);
                     rect_border(rsol_border);
+
+                    pthread_mutex_lock(&mutex);
                     counter_data_set_time(dat, 0, 0);
                     counter_data_set_mode(dat, 0);
                     pthread_mutex_unlock(&mutex);

@@ -2,11 +2,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include "interface.h"
+#include "terminal_funct.h"
 #include <termios.h>
 
 #define LETTERS_PATH "./txt_files/letters_small/"
 #define CONGRATULATIONS_PATH "./txt_files/congratulations.txt"
 #define MAX_LEN 1024
+
+
+extern int fileno(FILE*);
 
 extern int usleep(unsigned int );
 
@@ -657,6 +661,12 @@ void congratulations(){
  
     print_element(CONGRATULATIONS_PATH,r);
 
+    usleep(500000); /*wait a halve second, to avoid bugs*/
+
+    tcsetattr(fileno(stdin), TCSAFLUSH, &initial); /*reestablece los valores iniciales de la terminal en la terminal*/
+    _term_init(); /*modifica los parámetros de la terminal para poder leer las letras sin que se presione enter*/
+
+
     while(scanf("%c",&c)==0){
         continue;
     }
@@ -666,4 +676,8 @@ void congratulations(){
     rect_free(r);
 
     fflush(stdin);
+    
+    tcsetattr(fileno(stdin), TCSAFLUSH, &initial); /*reestablece los valores iniciales de la terminal en la terminal*/
+    _term_init(); /*modifica los parámetros de la terminal para poder leer las letras sin que se presione enter*/
+
 }
