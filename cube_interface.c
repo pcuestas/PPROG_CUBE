@@ -109,7 +109,7 @@ void *hilo(void *dat)
         }
     }
 
-    return 0;
+    return NULL;
 }
 
 int c_interface(int option, int use_saved_game, char *save_game_file)
