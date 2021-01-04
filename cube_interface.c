@@ -28,6 +28,9 @@
 */
 
 extern int fileno(FILE *);
+
+extern int usleep(unsigned int );
+
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 void *hilo(void *dat)
@@ -206,7 +209,17 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
         }
             
 
-        if (letter == 'q'){
+        if (letter == 'q'){/*salir de la interfaz*/
+            /*estas líneas son necesarias para que no se rompa el juego*/
+            pthread_mutex_lock(&mutex);
+            counter_data_set_mode(dat, 1);
+            pthread_mutex_unlock(&mutex);
+
+            usleep(50000); /*wait a bit, to avoid bugs*/
+    
+            tcsetattr(fileno(stdin), TCSAFLUSH, &initial); /*reestablece los valores iniciales de la terminal en la terminal*/
+            _term_init(); /*modifica los parámetros de la terminal para poder leer las letras sin que se presione enter */
+            
             break;
         }
         else if (letter == 'w'){
@@ -333,7 +346,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
     pthread_detach(pth);
     pthread_cancel(pth);
     pthread_mutex_unlock(&mutex);
-    
+
     if (save_cube(c, save_game_file) == ERROR)
         printf("There was an error when saving the game.\n");
 
