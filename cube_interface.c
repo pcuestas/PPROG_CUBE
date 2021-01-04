@@ -141,23 +141,6 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
 
     fill_buffer_letter(letters,l_buff);
 
-    /*Read the files and fill in the buffers*/
-    if (option == 3){
-        size = ftobuffer(CUBE_3, &cube_file);
-        if (size == -1){
-            flag=1;
-            goto free;
-        }
-            
-    }
-    else{
-        size = ftobuffer(CUBE_222, &cube_file);
-        if (size == -1){
-            flag=1;
-            goto free;
-        }
-    }
-
     /*Initialize rectangles for all the elements of the interface*/
     counter_data_set_rects(dat, 15+2, 15+198, 15, 17);
     rvista1 = rect_init(15+3, 15+7, 180, 78);
@@ -182,6 +165,23 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
             flag=1;
             goto free;
         }
+    
+    /*Read the files and fill in the buffers*/
+    if (c->option == 3){
+        size = ftobuffer(CUBE_3, &cube_file);
+        if (size == -1){
+            flag=1;
+            goto free;
+        }
+            
+    }
+    else{
+        size = ftobuffer(CUBE_222, &cube_file);
+        if (size == -1){
+            flag=1;
+            goto free;
+        }
+    }
 
 
     terminal_clear();
@@ -280,21 +280,19 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
                 stop = 0;
             }
             if(is_solved(c)==TRUE){
-                if(firstmove==0)
-                    goto refresh;
-                congratulations();
-                rect_border(rborder1);
-                rect_border(rcrono);
-                rect_border(rsol_border);
-                counter_data_set_time(dat, 0, 0);
-                counter_data_set_mode(dat, 0);
-                pthread_mutex_unlock(&mutex);
-                stop = 0;
-                firstmove = 0;
+                if(firstmove!=0){
+                    congratulations();
+                    rect_border(rborder1);
+                    rect_border(rcrono);
+                    rect_border(rsol_border);
+                    counter_data_set_time(dat, 0, 0);
+                    counter_data_set_mode(dat, 0);
+                    pthread_mutex_unlock(&mutex);
+                    stop = 0;
+                    firstmove = 0;
+                }
             }
-        }
-
-        
+        }        
         else{
             cad[0] = letter;
             cad[1] = '\0';
@@ -310,7 +308,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
                 firstmove = 1;
             }
         }
-        refresh: 
+        /*refresh:*/ 
         pthread_mutex_lock(&mutex);
         if (refresh_cube3(c, rvista1, cube_file, size, pcube) == ERROR){
             flag = 1;
@@ -330,9 +328,10 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
         pthread_detach(pth);
         pthread_cancel(pth);
         pthread_mutex_unlock(&mutex);
-        if (save_cube(c, save_game_file) == ERROR)
-            printf("There was an error when saving the game.\n");
     }
+
+    if (save_cube(c, save_game_file) == ERROR)
+        printf("There was an error when saving the game.\n");
 
 
     tcsetattr(fileno(stdin), TCSANOW, &initial); /*deshace los cambios hechos por _term_init()*/

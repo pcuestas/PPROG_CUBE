@@ -414,8 +414,6 @@ Status scramble_cube(Cube3*c, char *filename, char *scramble){
 }
 
 
-
-
 Status colour_stickers(Cube3* c, short *s){
   int i;
   if(!s||!c){
@@ -536,16 +534,30 @@ Status colour_stickers(Cube3* c, short *s){
 
 Bool is_solved(Cube3 *c){
   int i,j;
-  short s[54];
+  short *s=c->stickers;
 
   colour_stickers(c, s);
  
   for(j=0;j<6;j++){
     i=9*j;
-    if (s[i]==s[i+1] && s[i]==s[i+2] && s[i]==s[i+3] && s[i]==s[i+4] && s[i]==s[i+5] && s[i]==s[i+6]){
-      continue;
-    }else{
-      return FALSE;
+    switch(c->option){
+        case 2:{
+            if (s[i]==s[i+2] && s[i]==s[i+6] && s[i]==s[i+8]){
+                continue;
+            }else{
+                return FALSE;
+            }
+            break;
+        }
+
+        default:{
+            if (s[i]==s[i+1] && s[i]==s[i+2] && s[i]==s[i+3] && s[i]==s[i+4] && s[i]==s[i+5] && s[i]==s[i+6]){
+                continue;
+            }else{
+                return FALSE;
+            }
+            break;
+        }
     }
   }
   
@@ -851,8 +863,6 @@ void m_z(Cube3* c){
 
 /***********AUXILIARY FUNTIONS***********/
 
-
-
 void paint_piece(Piece *pc){
   short aux[3][2]={{G,B},{R,O},{W,Y}},i;
 
@@ -871,14 +881,11 @@ void paint_piece(Piece *pc){
 
 }
 
-
-
 void assign(short *p, short a, short b, short c){
   p[0]=a;
   p[1]=b;
   p[2]=c;
 }
-
 
 /******PIECE ROTATION********/
 
