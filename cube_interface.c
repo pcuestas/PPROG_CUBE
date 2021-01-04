@@ -125,7 +125,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
     short flag = 0;
     char scramblefile[MAX_CAD] = SCRAMBLES_TXT, scramble[MAX_LINE];
     int letters_per_line = 11, size,print_from=-1;
-    char *cube_file=NULL;
+    char *cube_file=NULL, *victory=NULL;
     char *letters = "RUFLBDMESXYZruflbdmesxyz",**l_buff=NULL;
 
     cprint_from_stickers3 pcube = c_print4;
@@ -141,6 +141,11 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
     }
 
     if((l_buff=allocate_array_lettersbuffer(34))==NULL){
+        flag=1;
+        goto free;
+    }
+
+    if(ftobuffer(CONGRATULATIONS_PATH,&victory)==-1){
         flag=1;
         goto free;
     }
@@ -295,7 +300,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
             if(is_solved(c)==TRUE){
                 if(firstmove!=0){
 
-                    congratulations(dat);
+                    congratulations(dat,victory);
 
                     rect_border(rborder1);
                     rect_border(rcrono);

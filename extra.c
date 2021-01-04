@@ -4,19 +4,19 @@
 #include <termios.h>
 
 
-#define CONGRATULATIONS_PATH "./txt_files/congratulations.txt"
 
-Status congratulations(counter_data *dat){
+
+Status congratulations(counter_data *dat, char *buff){
 
     rect **r = NULL, *r_aux,*r_border;
     char c;
 
     r = dat->rcounter;
 
-    if (!dat)
+    if (!dat||!buff)
         return ERROR;
 
-    if (!(r_aux = rect_init(20, 20, 15*10, 10)))
+    if (!(r_aux = rect_init(-2+20, 50+20, 16*8, 10)))
         return ERROR;
 
     if(!(r_border=rect_expand(r_aux,4,4))){
@@ -25,7 +25,7 @@ Status congratulations(counter_data *dat){
     }
 
     fade_to_black();
-    print_element(CONGRATULATIONS_PATH, r_aux);
+    print_buffer(buff, -2,r_aux);
     rect_border(r_border);
 
     bcd_display(dat->sec % 10, r[3]);
