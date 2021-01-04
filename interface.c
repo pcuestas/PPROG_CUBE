@@ -676,6 +676,8 @@ void congratulations(){
     rect_free(r);
 
     fflush(stdin);
+
+    usleep(500000); /*wait a halve second, to avoid bugs*/
     
     tcsetattr(fileno(stdin), TCSAFLUSH, &initial); /*reestablece los valores iniciales de la terminal en la terminal*/
     _term_init(); /*modifica los parámetros de la terminal para poder leer las letras sin que se presione enter*/

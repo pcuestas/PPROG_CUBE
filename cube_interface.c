@@ -230,6 +230,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
             c_moves(c, solution);
             free(solution);
             solution=NULL;
+            firstmove=0;
         }
 
         else if (letter == 'A'){
@@ -323,13 +324,16 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
 
     free:
 
-    if(flag==0){
-        pthread_mutex_lock(&mutex);
-        pthread_detach(pth);
-        pthread_cancel(pth);
-        pthread_mutex_unlock(&mutex);
-    }
 
+    /*in case the loop gets any error*/
+    if (flag == 1)
+        exit(EXIT_FAILURE);
+
+    pthread_mutex_lock(&mutex);
+    pthread_detach(pth);
+    pthread_cancel(pth);
+    pthread_mutex_unlock(&mutex);
+    
     if (save_cube(c, save_game_file) == ERROR)
         printf("There was an error when saving the game.\n");
 
@@ -362,9 +366,6 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
     if(solution!=NULL)
         free(solution);
 
-    /*in case the loop gets any error*/
-    if (flag == 1)
-        exit(EXIT_FAILURE);
 
     return OK;
 }
