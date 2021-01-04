@@ -3,8 +3,8 @@
 #include "interface.h"
 #include <termios.h>
 
-
-
+extern int fileno(FILE *);
+extern int usleep(unsigned int);
 
 Status congratulations(counter_data *dat, char *buff){
 
@@ -53,4 +53,6 @@ Status congratulations(counter_data *dat, char *buff){
 
     tcsetattr(fileno(stdin), TCSAFLUSH, &initial); /*reestablece los valores iniciales de la terminal en la terminal*/
     _term_init();                                  /*modifica los parámetros de la terminal para poder leer las letras sin que se presione enter*/
+
+    return OK;
 }
