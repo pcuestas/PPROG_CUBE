@@ -55,7 +55,7 @@ void *counter(void *dat)
     strcpy(text, "");
 
     /* Inint TTF. */
-    window_clock = SDL_CreateWindow("", 440, 150, 300, 100, SDL_WINDOW_BORDERLESS);
+    window_clock = SDL_CreateWindow("", 440, 120, 300, 100, SDL_WINDOW_BORDERLESS);
     renderer = SDL_CreateRenderer(window_clock, -1, SDL_RENDERER_ACCELERATED);
 
     font = TTF_OpenFont(FONT_TTF, 50);

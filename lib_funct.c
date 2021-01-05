@@ -14,28 +14,31 @@
 
 #define MAX_CAD 500
 
+#define NUM_CAD 72
+
 char **separarCadenas(char *cad)
 {
 
-    char *texto = (char *)malloc(81);
-    char *texto2 = (char *)malloc(81);
-    char *texto3 = (char *)malloc(81);
-    char **textos = (char **)malloc(3 * sizeof(char *));
+    char *texto = (char *)calloc(81,1);
+    char *texto2 = (char *)calloc(81, 1);
+    char *texto3 = (char *)calloc(81, 1);
+    char **textos = (char **)calloc(3, sizeof(char *));
     int i, j, len;
     len = strlen(cad);
-    if (len < 81)
+    if (len <= NUM_CAD)
     {
         for (i = 0; i < len; i++)
         {
             texto[i] = cad[i];
         }
     }
-    else if (len < 161)
+    else if (len <= 2*NUM_CAD)
     {
-        for (i = 0; i < 80; i++)
+        for (i = 0; i < NUM_CAD; i++)
         {
             texto[i] = cad[i];
         }
+        texto[i]='\0';
         for (j = 0; i < len; i++, j++)
         {
             texto2[j] = cad[i];
@@ -45,14 +48,16 @@ char **separarCadenas(char *cad)
     }
     else
     {
-        for (i = 0; i < 80; i++)
+        for (i = 0; i < NUM_CAD; i++)
         {
             texto[i] = cad[i];
         }
-        for (j = 0; i < 160; i++, j++)
+        texto[i]='\0';
+        for (j = 0; i < 2*NUM_CAD; i++, j++)
         {
             texto2[j] = cad[i];
         }
+        texto2[j]='\0';
         for (j = 0; i < len; i++, j++)
         {
             texto3[j] = cad[i];
@@ -62,6 +67,9 @@ char **separarCadenas(char *cad)
         textos[2] = texto3;
     }
     textos[0] = texto;
+
+    textos[1] = texto2;
+    textos[2] = texto3;
 
     return textos;
 }
@@ -94,7 +102,7 @@ void SDL_DisplayText(SDL_Renderer *renderer, char *text, TTF_Font *font)
     int len_txt;
     char **cadenas;
     len_txt = strlen(text);
-    if (len_txt < 81)
+    /*if (len_txt <= NUM_CAD)
     {
         get_text_and_rect(renderer, 0, 0, text, font, &texture1, &rect1);
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
@@ -103,7 +111,7 @@ void SDL_DisplayText(SDL_Renderer *renderer, char *text, TTF_Font *font)
         SDL_RenderCopy(renderer, texture1, NULL, &rect1);
         SDL_RenderPresent(renderer);
     }
-    else if (len_txt < 161)
+    else if (len_txt <= NUM_CAD)
     {
         cadenas = separarCadenas(text);
         get_text_and_rect(renderer, 0, 0, cadenas[0], font, &texture1, &rect1);
@@ -120,18 +128,22 @@ void SDL_DisplayText(SDL_Renderer *renderer, char *text, TTF_Font *font)
         free(cadenas[1]);
         free(cadenas);
     }
-    else
+    else*/
     {
         cadenas = separarCadenas(text);
         get_text_and_rect(renderer, 0, 0, cadenas[0], font, &texture1, &rect1);
-        get_text_and_rect(renderer, 0, rect1.y + rect1.h, cadenas[1], font, &texture2, &rect2);
-        get_text_and_rect(renderer, 0, rect2.y + rect2.h, cadenas[2], font, &texture3, &rect3);
+        if(len_txt > NUM_CAD)
+            get_text_and_rect(renderer, 0, rect1.y + rect1.h, cadenas[1], font, &texture2, &rect2);
+        if(len_txt > 2 * NUM_CAD)
+            get_text_and_rect(renderer, 0, rect2.y + rect2.h, cadenas[2], font, &texture3, &rect3);
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
         SDL_RenderClear(renderer);
 
         SDL_RenderCopy(renderer, texture1, NULL, &rect1);
-        SDL_RenderCopy(renderer, texture2, NULL, &rect2);
-        SDL_RenderCopy(renderer, texture3, NULL, &rect3);
+        if(len_txt > NUM_CAD)
+            SDL_RenderCopy(renderer, texture2, NULL, &rect2);
+        if(len_txt > 2 * NUM_CAD)
+            SDL_RenderCopy(renderer, texture3, NULL, &rect3);
 
         free(cadenas[0]);
         free(cadenas[1]);
@@ -139,8 +151,10 @@ void SDL_DisplayText(SDL_Renderer *renderer, char *text, TTF_Font *font)
         free(cadenas);
 
         SDL_RenderPresent(renderer);
-        SDL_DestroyTexture(texture2);
-        SDL_DestroyTexture(texture3);
+        if(len_txt > NUM_CAD)
+            SDL_DestroyTexture(texture2);
+        if(len_txt > 2 * NUM_CAD)
+            SDL_DestroyTexture(texture3);
     }
 
     SDL_DestroyTexture(texture1);
@@ -355,7 +369,7 @@ void SDL_DisplayTextWRAPPER(SDL_Window **_window2, char *solution, SDL_Renderer 
     if ((*_window2) != NULL)
         SDL_DestroyWindow(*_window2);
 
-    (*_window2) = SDL_CreateWindow("Rubik Cube PPROG", 410, 250, 900, 80, SDL_WINDOW_BORDERLESS);
+    (*_window2) = SDL_CreateWindow("Rubik Cube PPROG", 410, 220, 900, 80, SDL_WINDOW_BORDERLESS);
 
     if (!(*_window2))
     {
