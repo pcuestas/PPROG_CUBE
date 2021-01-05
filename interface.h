@@ -20,8 +20,14 @@ typedef struct _rect rect;
  */
 rect *rect_init(int line,int column,int l,int h );
 
+
 void rect_free(rect*r);
 
+
+/**
+ * @brief allocates a new rectangle with the same data of the argument
+ * @param r rect to copy
+ */ 
 rect *rect_copy(rect*r);
 
 /**
@@ -83,8 +89,6 @@ Status print_buffer(char *buf, int size, rect *r);
 Status print_letter(char *filename, rect *r);
 
 
-
-
 /**
  * @brief Clears the screen using the C ANSI ESC code
  * */
@@ -133,15 +137,16 @@ int print_solution_2(char *sol, rect *r, char **l_buffer, int letters_per_line,i
 
 
 /**
- * @brief displys confetti in a rectangle
+ * @brief displays confetti in a rectangle
  * @param r if r is NULL the confetti is display in the whole terminal
  * @param ndots number of dots to be displyed
  */
-    Status print_confeti(rect *r, int ndots);
+Status print_confeti(rect *r, int ndots);
+
 
 /**
  * @brief returns the position of the array of buffers where the letter is stored
- * @param letter must be RUFLBDMESXYZ in capital or lower
+ * @param letter must be RUFLBDMESXYZ in capital and lower letters
  */ 
 int hash_letter(char letter);
 
@@ -164,6 +169,12 @@ Status fill_buffer_letter(char *letters, char **buff);
  */ 
 char **allocate_array_lettersbuffer(int size);
 
+
+/**
+ * @brief frees the array of buffers previously alocated 
+ * @param buff double array of chars to be freed
+ * @param size size of the array (should be the same used in allocate_arra_lettersbuffer)
+ */ 
 void free_array_lettersbuffer(char **buff, int size);
 
 

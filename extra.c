@@ -34,7 +34,7 @@ Status congratulations(counter_data *dat, char *buff){
     bcd_display(dat->min / 10, r[0]);
     fflush(stdout);
 
-    usleep(500000); /*wait a halve second, to avoid bugs*/
+    usleep(500000); /*wait for half a second, to avoid bugs*/
 
     tcsetattr(fileno(stdin), TCSAFLUSH, &initial); /*reestablishes the initial terminal */
     _term_init();                                  /*modifies the terminal so that keys can be read without 'enter'*/
@@ -49,7 +49,7 @@ Status congratulations(counter_data *dat, char *buff){
 
     fflush(stdin);
 
-    usleep(500000); /*wait a halve second, to avoid bugs*/
+    usleep(500000); /*wait for half a second, to avoid bugs*/
 
     tcsetattr(fileno(stdin), TCSAFLUSH, &initial);  /*reestablishes the initial terminal */
     _term_init();                                  /*modifies the terminal so that keys can be read without 'enter'*/

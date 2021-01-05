@@ -10,15 +10,15 @@ int MenusDisplay(int *use_saved_game, int *SDL_window);
 
 /**
  *@brief Deals with the main menu, reading the keyboard for moving the cursor and selecting an option
- *
+ *@param buff buffer contaning the arrow to be printed in the menus
  * 
  */
-int ShowMenu(char *);
+int ShowMenu(char * buff);
 int ShowMainMenu();
 
 /**
  * @brief Reads the keyboard for moving the key in the menu. Needs configuration of the terminal
- * @return 1 for DOWN_KEY, -1 if UP_KEY, 0 for ENTER
+ * @return 1 for DOWN_KEY, -1 if UP_KEY, 0 for ENTER (Macros already defined)
  */
 int read_keyMenu();
 
