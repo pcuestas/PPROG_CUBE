@@ -16,7 +16,7 @@ Status congratulations(counter_data *dat, char *buff){
     if (!dat||!buff)
         return ERROR;
 
-    if (!(r_aux = rect_init(-2+20, 50+20, 16*8, 10)))
+    if (!(r_aux = rect_init(-2+20, 50+20, 16*8, 9)))
         return ERROR;
 
     if(!(r_border=rect_expand(r_aux,4,4))){
