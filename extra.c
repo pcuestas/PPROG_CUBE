@@ -24,7 +24,7 @@ Status congratulations(counter_data *dat, char *buff){
         return ERROR;
     }
 
-    fade_to_color(WHITE);
+    fade_to_color(GREY);
     print_buffer(buff, -2,r_aux);
     rect_border(r_border);
 

@@ -10,6 +10,7 @@
 #define GREEN 42
 #define BLUE 44
 #define RED 41
+#define GREY 47
 
 typedef struct _rect rect;
 
