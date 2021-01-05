@@ -167,9 +167,11 @@ void free_array_lettersbuffer(char **buff, int size);
 
 
 /**
- * @brief Effect of fade to black starting from the center of the screen
+ * @brief Effect of fade to a color starting from the center of the screen
+ * @param color code of the color in ESC sequences
  */
-Status fade_to_black();
+
+Status fade_to_color(int color);
 
 
 

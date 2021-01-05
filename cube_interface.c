@@ -387,6 +387,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
     if(solution!=NULL)
         free(solution);
 
+    fade_to_color(WHITE);
 
     return OK;
 }

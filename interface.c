@@ -609,11 +609,14 @@ Status print_confeti(rect *r, int ndots){
     return OK;
 }
 
-Status fade_to_black(){
+Status fade_to_color(int color){
 
     int columns,lines,i, center[2];
     int incr_l,h,l, incr_h,times=15;
     rect *r;
+
+    if(color<0)
+        return ERROR;
 
     columns=get_columnsfromterm();
     lines=get_linesfromterm();
@@ -634,7 +637,7 @@ Status fade_to_black(){
     for(i=0;i<times;i++){
 
         if(i!=0){
-            rect_color(r, WHITE);
+            rect_color(r, color);
         }
         
         l+=incr_l;
@@ -645,7 +648,7 @@ Status fade_to_black(){
         
         rect_setline(r,center[1]-h);
         rect_setcolumn(r,center[0]-l);
-        usleep(60000);
+        usleep(50000);
     }
 
     terminal_clear();
