@@ -1,3 +1,5 @@
+/*terminal interface*/
+
 #include "cube_interface.h"
 
 #include <string.h>
@@ -21,12 +23,6 @@
 #ifndef SCRAMBLES_TXT
 #define SCRAMBLES_TXT "./txt_files/scrambles.txt"
 #endif
-
-/*
- * si se escribe cualquier letra que corresponda a un movimiento, se realizara en el cubo en pantalla
- * si se presiona 'w'. se mezclará el cubo con una mezcla aleatoria elegida de entre las mezclas del fichero SRAMBLES_TXT
- * si se presiona 'q', se terminará el programa.
-*/
 
 extern int fileno(FILE *);
 
@@ -134,7 +130,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
     counter_data *dat = NULL;
     int stop = 0, firstmove = 0;
 
-    _term_init(); /*modifica los parámetros de la terminal para poder leer las letras sin que se presione enter*/
+    _term_init(); /*modifies the terminal so that keys can be read without 'enter'*/
 
     if (!(dat = counter_data_init())){
         return -1;
@@ -216,16 +212,16 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
         }
             
 
-        if (letter == 'q'){/*salir de la interfaz*/
-            /*estas líneas son necesarias para que no se rompa el juego*/
+        if (letter == 'q'){/*leave the interface*/
+            /*these lines are to make sure everything is alright before leaving the game*/
             pthread_mutex_lock(&mutex);
             counter_data_set_mode(dat, 1);
             pthread_mutex_unlock(&mutex);
 
             usleep(50000); /*wait a bit, to avoid bugs*/
     
-            tcsetattr(fileno(stdin), TCSAFLUSH, &initial); /*reestablece los valores iniciales de la terminal en la terminal*/
-            _term_init(); /*modifica los parámetros de la terminal para poder leer las letras sin que se presione enter */
+            tcsetattr(fileno(stdin), TCSAFLUSH, &initial); /*undo changes by _term_init() - discarding unused input, this is important*/
+            _term_init(); /*modifies the terminal so that keys can be read without 'enter' */
             
             break;
         }
@@ -359,7 +355,7 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
         printf("There was an error when saving the game.\n");
 
 
-    tcsetattr(fileno(stdin), TCSANOW, &initial); /*deshace los cambios hechos por _term_init()*/
+    tcsetattr(fileno(stdin), TCSANOW, &initial); /*undo changes by _term_init()*/
     
     if(l_buff!=NULL)
         free_array_lettersbuffer(l_buff,34);
@@ -383,6 +379,9 @@ int c_interface(int option, int use_saved_game, char *save_game_file)
     
     if(cube_file!=NULL)
         free(cube_file);
+
+    if(victory != NULL)
+        free(victory);
 
     if(solution!=NULL)
         free(solution);

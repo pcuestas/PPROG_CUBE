@@ -36,8 +36,8 @@ Status congratulations(counter_data *dat, char *buff){
 
     usleep(500000); /*wait a halve second, to avoid bugs*/
 
-    tcsetattr(fileno(stdin), TCSAFLUSH, &initial); /*reestablece los valores iniciales de la terminal */
-    _term_init();                                  /*modifica los parámetros de la terminal para poder leer las letras sin que se presione enter*/
+    tcsetattr(fileno(stdin), TCSAFLUSH, &initial); /*reestablishes the initial terminal */
+    _term_init();                                  /*modifies the terminal so that keys can be read without 'enter'*/
 
     while (scanf("%c", &c) == 0){
         continue;
@@ -51,8 +51,8 @@ Status congratulations(counter_data *dat, char *buff){
 
     usleep(500000); /*wait a halve second, to avoid bugs*/
 
-    tcsetattr(fileno(stdin), TCSAFLUSH, &initial); /*reestablece los valores iniciales de la terminal */
-    _term_init();                                  /*modifica los parámetros de la terminal para poder leer las letras sin que se presione enter*/
-
+    tcsetattr(fileno(stdin), TCSAFLUSH, &initial);  /*reestablishes the initial terminal */
+    _term_init();                                  /*modifies the terminal so that keys can be read without 'enter'*/
+    
     return OK;
 }
