@@ -151,9 +151,11 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
     SDL_Event ev;
     TTF_Font *font2 = NULL;
 
+    Uint32 windowID;
+
     char text[MAX_CAD] = "", a = 0, *solution = NULL, scramble[MAX_LINE];
     double **stickers = NULL;
-    int flag = 0, j = 0, w, h;
+    int flag = 0, j = 0, w, h, w2, h2;
 
     int x, y;
 
@@ -196,6 +198,7 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
     /*Create window*/
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     window = SDL_CreateWindow("Rubik Cube PPROG", 400, 100, 940, 880, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+    windowID = SDL_GetWindowID(window);
 
     if (!window)
     {
@@ -220,10 +223,12 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
     gluLookAt(1.0, 1.0, 1.0, 0, 0, 0, 0.5, 0, 0);
     /* Main loop */
     SDL_StartTextInput();
+
     while (flag == 0)
     {
-
+        /* if we move the window, all windows will come back to their previous position */
         SDL_GetWindowPosition(window, &x, &y);
+
         if (x != 400 || y != 100)
         {
             SDL_SetWindowPosition(window, 400, 100);
@@ -240,6 +245,46 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
             case SDL_QUIT:
                 flag = 1;
                 break;
+
+            case SDL_WINDOWEVENT:
+            {
+                if (ev.window.windowID == windowID)
+                {
+                    switch (ev.window.event)
+                    {
+                    case SDL_WINDOWEVENT_MAXIMIZED:
+                        if (window2 != NULL)
+                            SDL_RaiseWindow(window2);
+                        SDL_RaiseWindow(window_clock);
+                        break;
+                    case SDL_WINDOWEVENT_MINIMIZED:
+                        if (window2 != NULL)
+                            SDL_MinimizeWindow(window2);
+                        SDL_MinimizeWindow(window_clock);
+                        break;
+                    /* cuando volvemos a "mostrar" la ventana despues de haberla minimizado   */
+                    case SDL_WINDOWEVENT_FOCUS_GAINED:
+                        if (window2 != NULL)
+                            SDL_RaiseWindow(window2);
+                        SDL_RaiseWindow(window_clock);
+                        break;
+                    /* cuando volvemos al tamaño habitual de ventana tras haberla maximizado   */
+                    case SDL_WINDOWEVENT_RESTORED:
+                        if (window2 != NULL)
+                            SDL_RaiseWindow(window2);
+                        SDL_RaiseWindow(window_clock);
+                        break;
+                    case SDL_WINDOWEVENT_RESIZED:
+                        SDL_GetWindowSize(window, &w2, &h2);
+                        if (w < 940 || h < 880)
+                            SDL_SetWindowSize(window, 940, 880);
+                        if (window2 != NULL)
+                            SDL_RaiseWindow(window2);
+                        SDL_RaiseWindow(window_clock);
+                        break;
+                    }
+                }
+            }
 
             case SDL_KEYDOWN:
                 switch (ev.key.keysym.sym)
