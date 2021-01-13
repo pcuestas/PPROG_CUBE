@@ -405,16 +405,16 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
     dat.mode = 2; /*To suicide thread*/
     pthread_mutex_unlock(&mutex_sdl);
 
-    pthread_detach(hilo);
     SDL_Delay(500);
-
-    colorSDL_free(stickers);
-    c_free(c);
+    pthread_detach(hilo);
 
     TTF_Quit();
     if ((ctx) != NULL)
         SDL_GL_DeleteContext(ctx);
     SDL_Quit();
+
+    colorSDL_free(stickers);
+    c_free(c);
 
     return 0;
 }
