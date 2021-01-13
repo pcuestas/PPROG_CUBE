@@ -290,6 +290,7 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
                 switch (ev.key.keysym.sym)
                 {
                 case SDLK_ESCAPE:
+                    SDL_Delay(1000);
                     flag = 1;
                     break;
                 }
@@ -311,7 +312,9 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
                         pthread_mutex_unlock(&mutex_sdl);
                         firstmove = 1;
                     }
+                    pthread_mutex_lock(&mutex_sdl);
                     Rot_full_move(&w, &h, stickers, a, window, ctx, option);
+                    pthread_mutex_unlock(&mutex_sdl);
                 }
                 if (a == 'w')
                 {
