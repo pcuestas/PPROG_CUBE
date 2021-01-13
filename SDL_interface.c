@@ -405,15 +405,11 @@ int SDL_interface(int option, int use_saved_game, char *save_game_file)
     dat.mode = 2; /*To suicide thread*/
     pthread_mutex_unlock(&mutex_sdl);
 
-    SDL_Delay(500);
     pthread_detach(hilo);
-    pthread_cancel(hilo);
+    SDL_Delay(500);
 
     colorSDL_free(stickers);
     c_free(c);
-
-    /*pthread_join(hilo,NULL); Ya no es necesario. con mode2 hacemos que el hilo haga return*/
-    /*pthread_cancel(hilo);*/
 
     TTF_Quit();
     if ((ctx) != NULL)
