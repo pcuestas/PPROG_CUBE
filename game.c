@@ -17,8 +17,6 @@ int main(void){
     int option=0, use_saved_game=TRUE, SDL_window=TRUE;
     struct termios ini__;
 
-    terminal_clear();
-
     tcgetattr(fileno(stdin), &ini__);  /*tomamos los valores iniciales de la terminal, como medida de seguridad-*/
 
     while ((option=MenusDisplay(&use_saved_game, &SDL_window))!=0){
