@@ -18,7 +18,7 @@ sudo apt-get install freeglut3-dev
 * XYZxyz: rotaciones del cubo completo (mayúscula horario, minúscula antihorario)
 * MESmes: mueven las capas centrales
 	
-Todos estos movimientos son considerados estándar y se conocen como "Singmaster notation".
+Todos estos movimientos son considerados estándar y se conocen como [Singmaster notation](https://es.wikipedia.org/wiki/Cubo_de_Rubik#Notaci%C3%B3n).
 
 **Además se puede usar**: 
 * w: selecciona (pseudo)aleatoriamente una de entre todas las mezclas en el fichero scrambles.txt y pone el cronómetro a cero
@@ -26,10 +26,11 @@ Todos estos movimientos son considerados estándar y se conocen como "Singmaster
 * A: muestra en la pantalla la string generada por el solver.h, si no cabe de una vez se puede ver la siguiente parte de la solución volviendo a pulsar 'A'.
 * a: resuelve el cubo ejecutando cada movimiento con una pequeña espera antes de cada uno para que se vea en la pantalla cómo el algoritmo utilizado resuelve el cubo.
 * espacio: para/reinicia el cronómetro. Si el cubo está resuelto, aparece u mensaje en la pantalla, del que se sale presionando cualquier tecla.
-* o: limpia la terminal y vuelve a imprimir el contenido por si hubiese ocurrido algún error.
+
 
 **Solo en la interfaz de la terminal**:
 * q: sale de la interfaz
+* o: limpia la terminal y vuelve a imprimir el contenido por si hubiese ocurrido algún error. Pensado para hacer `CTRL`+`+`, o `CTRL`+`-`; y luego utilizar `o` para actualizar la pantalla.
 
 **Solo en la interfaz de la biblioteca SDL**:
 *  ESC: sale de la interfaz
