@@ -18,7 +18,7 @@ sudo apt-get install freeglut3-dev
 * XYZxyz: rotaciones del cubo completo (mayúscula horario, minúscula antihorario)
 * MESmes: mueven las capas centrales
 	
-Todos estos movimientos son considerados estándar y se conocen como [Singmaster notation](https://es.wikipedia.org/wiki/Cubo_de_Rubik#Notaci%C3%B3n)--aunque nosotros utilizamos letras mayúsculas o minúsculas para movimientos horarios o antihorarios, respectivamente.
+Todos estos movimientos son considerados estándar y se conocen como [Singmaster notation](https://es.wikipedia.org/wiki/Cubo_de_Rubik#Notaci%C3%B3n) &mdash aunque nosotros utilizamos letras mayúsculas o minúsculas para movimientos horarios o antihorarios, respectivamente.
 
 **Además se puede usar**: 
 * w: selecciona (pseudo)aleatoriamente una de entre todas las mezclas en el fichero scrambles.txt y pone el cronómetro a cero
