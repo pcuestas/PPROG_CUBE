@@ -34,3 +34,8 @@ Todos estos movimientos son considerados estándar y se conocen como [Singmaster
 
 **Solo en la interfaz de la biblioteca SDL**:
 *  ESC: sale de la interfaz
+
+
+\section{hola}
+
+\subsection{hola2}
